@@ -1,0 +1,28 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  background-color: #E5E5E5;
+  font-family: 'RobotoDraft', sans-serif;
+}
+
+core-header-panel {
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.container {
+  width: 80%;
+  margin: 50px auto;
+}
+
+.appbrand {
+	background-color: #19293E;
+	padding: 10px 10px 10px 16px;
+	vertical-align: middle;
+}
+.appname {
+	margin-left: 10px;
+	margin-top:20px;
+	color: #FFF;
+}

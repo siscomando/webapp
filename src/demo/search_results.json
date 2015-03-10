@@ -1,0 +1,61 @@
+[
+{"messages": [
+    {
+    "thumbnail": "http://api.randomuser.me/portraits/thumb/men/70.jpg",
+    "short_header": "umnome_umadesc",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam commodo nisl in accumsan consequat. Donec vitae lectus tempor.",
+    "type_content": {
+        "name": "mural",
+        "icon_img": "http://lorempixel.com/16/16/",
+        "icon_html": "<i class='fb-icon fb-heart'>"
+    },
+    "dated": "21/03/2015 18h21"
+    },
+    {
+    "thumbnail": "http://api.randomuser.me/portraits/thumb/women/2.jpg",
+    "short_header": "smallpeacock240",
+    "description": "Vestibulum laoreet justo posuere, fermentum erat at, fermentum leo. Vivamus in erat at orci sollicitudin ultrices ac ac velit. Cras suscipit augue libero, sed rhoncus sem condimentum id",
+    "type_content": {
+        "name": "history",
+        "icon_img": "http://lorempixel.com/16/16/",
+        "icon_html": "<i class='fb-icon fb-history'>"
+    },
+    "dated": "22/03/2015 12h21"
+    },
+    {
+    "thumbnail": "http://api.randomuser.me/portraits/thumb/women/63.jpg",
+    "short_header": "brownwolf955",
+    "description": "Integer at erat erat. Ut ut sagittis nisi. Morbi ut ullamcorper orci. Proin ac bibendum nisi, eget sollicitudin erat.",
+    "type_content": {
+        "name": "history",
+        "icon_img": "http://lorempixel.com/16/16/",
+        "icon_html": "<i class='fb-icon fb-history'>"
+    },
+    "dated": "22/03/2015 12h31"
+    }
+]},
+{"files": [
+    {
+    "thumbnail": "http://api.randomuser.me/portraits/thumb/men/70.jpg",
+    "short_header": "Sheet with sales",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam commodo nisl in accumsan consequat. Donec vitae lectus tempor.",
+    "size": "20MB",
+    "dated": "11/03/2015 18h21"
+    },
+    {
+    "thumbnail": "http://api.randomuser.me/portraits/thumb/women/2.jpg",
+    "short_header": "Docs with personal info",
+    "description": "Vestibulum laoreet justo posuere.",
+    "size": "24MB",
+    "dated": "15/03/2015 12h21"
+    },
+    {
+    "thumbnail": "http://api.randomuser.me/portraits/thumb/women/63.jpg",
+    "short_header": "Image of vacation",
+    "description": "Integer at erat erat.",
+    "size": "12MB",
+    "dated": "19/03/2015 12h31"
+    }
+]}
+]
+
