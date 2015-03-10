@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*- 
-
+"""
+This is a generator of tickets to SisComando.
+created by horacioibrahim at gmail dot com
+"""
 import time, datetime, random
 from gevent import monkey; monkey.patch_all()
 from gevent import sleep
