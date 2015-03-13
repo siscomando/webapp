@@ -12,6 +12,8 @@
   <link rel="import" href="components/sc-header/sc-header.html">
   <link rel="import" href="components/sc-search/sc-search.html">
   <link rel="import" href="components/sc-navbar/sc-navbar.html">
+  <link rel="import" href="components/sc-timeline/sc-timeline.html">
+  <link rel="import" href="components/sc-input-hashtag/sc-input-hashtag.html">
   <link rel="stylesheet" href="assets/css/app.css">
 
 
@@ -31,14 +33,22 @@
             </div>
         </div>
         <!-- App context mini-header: END -->
-        <sc-navbar username="horacioibrahim" online="true" avatar="http://api.randomuser.me/portraits/thumb/women/79.jpg" url="demo/issues.json"></sc-navbar>
+        <sc-navbar 
+        username="horacioibrahim" 
+        online="true" 
+        url="demo/issues.json"
+        stream="http://localhost:8080/stream"
+        channel="message"></sc-navbar>
       </core-header-panel>
     </div>
     <div main>
       <core-header-panel>
         <sc-search url="search_results.json"></sc-search>
         <sc-header></sc-header>
-        <div>Content goes here...</div>
+        <div class="panelContent" vertical layout fit>
+          <sc-timeline></sc-timeline>  
+          <sc-input-hashtag></sc-input-hashtag>
+        </div>
       </core-header-panel>
     </div>
   </core-drawer-panel>

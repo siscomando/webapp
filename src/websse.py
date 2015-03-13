@@ -3,7 +3,8 @@
 This is a generator of tickets to SisComando.
 created by horacioibrahim at gmail dot com
 """
-import time, datetime, random
+
+import time, datetime, random, json
 from gevent import monkey; monkey.patch_all()
 from gevent import sleep
 from bottle import get, post, request, response
@@ -35,7 +36,7 @@ def generator_issues():
     issue = {"register": register, "title": title_sample[tittle_choose], 
     "uga": "SUPGS", "ugs": "SUNCE", "date": date_at, "icon": icon}    
 
-    return issue
+    return json.dumps(issue)
 
 @get('/stream')
 @enable_cors
@@ -46,13 +47,13 @@ def stream():
     # Set client side auto reconnect timeout, ms.
     yield 'retry: 100\n\n'
 
-    n = 1
     # keep connection alive n more then ... (s)
     end = time.time() + 60
     issue = generator_issues()
     while time.time() < end:
         yield 'data: %s\n\n' % issue
-        n +=1 
+        yield 'event: userlogon\n'
+        yield 'data: %s\n\n' % "horacioibrahim"
         sleep(10)
         issue = generator_issues()
 

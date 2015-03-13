@@ -1,21 +1,18 @@
 html, body {
   height: 100%;
   margin: 0;
-  background-color: #E5E5E5;
+  background-color: #F9F9F9;
   font-family: 'RobotoDraft', sans-serif;
 }
-
 core-header-panel {
   height: 100%;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
-
 .container {
   width: 80%;
   margin: 50px auto;
 }
-
 .appbrand {
 	background-color: #19293E;
 	padding: 10px 10px 10px 16px;
@@ -26,3 +23,10 @@ core-header-panel {
 	margin-top:20px;
 	color: #FFF;
 }
+.panelContent {
+}
+
+sc-input-hashtag {
+  padding: 0px 11px 17px 11px;
+}
+
