@@ -46,8 +46,8 @@
         <sc-search url="search_results.json"></sc-search>
         <sc-header></sc-header>
         <div class="panelContent" vertical layout fit>
-          <sc-timeline></sc-timeline>  
-          <sc-input-hashtag></sc-input-hashtag>
+          <sc-timeline urlservice="/demo/timeline_" sseurl="/stream/issues/"></sc-timeline>  
+          <sc-input-hashtag url="/issues/" method="POST"></sc-input-hashtag>
         </div>
       </core-header-panel>
     </div>

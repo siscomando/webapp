@@ -38,6 +38,42 @@ def generator_issues():
 
     return json.dumps(issue)
 
+def generator_comments():
+    comment =  {
+            "register": "2015RI/00001313",
+            "shottime": "6145'",
+            "username": "horacioibrahim",
+            "location": "SUPGS",
+            "content": "Operacao foi um sucesso.",
+            "avatar": {
+                "thumbnail": "http://api.randomuser.me/portraits/thumb/men/82.jpg"
+            },
+            "action": {
+                "icon": "communication:chat"
+            },
+            "issue": {
+                "register": "2015RI/00001313",
+                "title": "SICAP - SISTEMA"
+            },
+            "relevance_stars": 3
+        }
+    return json.dumps(comment)
+
+@get('/comments')
+def comments():
+    response.content_type = 'text/event-stream'
+    response.cache_control = 'no-cache'
+
+    # Set client side auto reconnect timeout, ms
+    yield 'retry: 100\n\n'
+    end = time.time() + 60
+    comment = generator_comments()
+    while time.time() < end:
+        yield 'data: %s\n\n' % comment
+        sleep(30);
+        comment = generator_comments()
+
+
 @get('/stream')
 @enable_cors
 def stream():
