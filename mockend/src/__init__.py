@@ -9,15 +9,17 @@ app = Flask(__name__)
  # See more #1
 app.config['SECRET_KEY'] = '$3cr0to'
 app.config['DEBUG'] = True
+app.config['TESTING'] = False
 app.config['USERNAME'] = 'admin'
 app.config['PASSWORD'] = 'default'
 
-if app.config['DEBUG']:
+if app.config['TESTING']:
 	# purpose tests
     app.config['MONGODB_SETTINGS'] = {'db':'test_mockend'}
 else:
 	# production
     app.config['MONGODB_SETTINGS'] = {'db':'mockend'}
+
 
 database = MongoEngine(app)
 
