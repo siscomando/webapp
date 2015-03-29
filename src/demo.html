@@ -36,9 +36,12 @@
         <sc-navbar 
         username="horacioibrahim" 
         online="true" 
-        url="demo/issues.json"
-        stream="http://localhost:8080/stream"
+        url="http://localhost:9003/api/v1/issues/"
+        
         channel="message"></sc-navbar>
+        <!--
+        stream="http://localhost:9003/api/v1/stream/issues/"
+        -->
       </core-header-panel>
     </div>
     <div main>
@@ -46,8 +49,9 @@
         <sc-search url="search_results.json"></sc-search>
         <sc-header></sc-header>
         <div class="panelContent" vertical layout fit>
-          <sc-timeline urlservice="/demo/timeline_" sseurl="/stream/issues/"></sc-timeline>  
-          <sc-input-hashtag url="/issues/" method="POST"></sc-input-hashtag>
+          <sc-timeline url="http://localhost:9003/api/v1/comments/" 
+          sseurl="http://localhost:9003/api/v1/stream/comments/"></sc-timeline>  
+          <sc-input-hashtag url="http://localhost:9003/api/v1/comments/" method="POST"></sc-input-hashtag>
         </div>
       </core-header-panel>
     </div>
