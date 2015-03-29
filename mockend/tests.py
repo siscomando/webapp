@@ -4,9 +4,14 @@ import unittest
 import tempfile
 import json
 import urllib
-from flask import jsonify
+import random
+from flask import jsonify, url_for
+from sseclient import SSEClient
+from tornado.testing import AsyncTestCase, AsyncHTTPTestCase
+from tornado.httpclient import AsyncHTTPClient
 #APP
 from src import app, database, models
+
 
 class SrcTestCase(unittest.TestCase):
 
@@ -19,7 +24,7 @@ class SrcTestCase(unittest.TestCase):
 		self.issue_default = {
 			'title': 'ALM - GERENCIAMENTO',
 			'body': 'O Problema eh que a de autenticação no sistema',
-			'register': '2015RI/0000124',
+			'register': '2015RI0000124',
 			'ugat': 'SUPOP',
 			'ugser': 'SUPGS', 
 		}		
@@ -38,16 +43,16 @@ class SrcTestCase(unittest.TestCase):
 		params = {
 			'title': 'ALM - GERENCIAMENTO',
 			'body': 'Problema de autenticação no sistema',
-			'register': '2015RI/0000124',
+			'register': '2015RI/0000125',
 			'ugat': 'SUPOP',
 			'ugser': 'SUPGS', 
 		}
 		json_data = json.dumps(params)
 		json_data_length = len(json_data)
-		res = self.app.post('/issues/', data=json_data, content_type='application/json',
+		res = self.app.post('/api/v1/issues/', data=json_data, content_type='application/json',
 			content_length=json_data_length)
 		# Persisted issue in database
-		issue = models.Issue.objects.get(register='2015RI0000124')
+		issue = models.Issue.objects.get(register='2015RI0000125')
 		register_normalized = params['register'].replace('/', '')
 		self.assertEqual(issue.register, register_normalized)
 		
@@ -57,7 +62,7 @@ class SrcTestCase(unittest.TestCase):
 		# add new issue
 		issue_db = models.Issue(**self.issue_default)
 		issue_db.save()
-		issues = self.app.get('/issues/')
+		issues = self.app.get('/api/v1/issues/')
 		data_json = issues.get_data()
 		data = json.loads(data_json)
 		self.assertIsInstance(data['issues'], list)
@@ -68,7 +73,7 @@ class SrcTestCase(unittest.TestCase):
 		# add new issue
 		issue_db = models.Issue(**self.issue_default)
 		issue_db.save()
-		issue = self.app.get('/issues/2015RI0000124')
+		issue = self.app.get('/api/v1/issues/2015RI0000124')
 		data = json.loads(issue.get_data())
 		self.assertEqual(data['issue']['register'], '2015RI0000124')
 
@@ -77,8 +82,8 @@ class SrcTestCase(unittest.TestCase):
 		# add new issue
 		issue_db = models.Issue(**self.issue_default)
 		issue_db.save()	
-		issue = self.app.delete('/issues/2015RI0000124')
-		not_found = self.app.get('/issues/2015RI0000124')
+		issue = self.app.delete('/api/v1/issues/2015RI0000124')
+		not_found = self.app.get('/api/v1/issues/2015RI0000124')
 		self.assertEqual(not_found.status_code, 404)
 
 	def test_url_api_issue_PUT(self):
@@ -95,7 +100,7 @@ class SrcTestCase(unittest.TestCase):
 		}
 		json_change_values = json.dumps(change_values)
 		json_change_values_length = len(json_change_values)
-		issue = self.app.put('/issues/', 
+		issue = self.app.put('/api/v1/issues/', 
 					data=json_change_values,
 					content_type='application/json', 
 					content_length=json_change_values_length)
@@ -118,21 +123,53 @@ class SrcTestCase(unittest.TestCase):
 		}
 		# add new issue
 		issue_db = models.Issue(**self.issue_default)
-		issue_db.save()			
+		issue_db.save()		
+		# to jsonify the params
 		json_data = json.dumps(params)
 		json_data_length = len(json_data)
-		res = self.app.post('/comments/', data=json_data, content_type='application/json',
+		# to send post
+		res = self.app.post('/api/v1/comments/', data=json_data, 
+			content_type='application/json',
 			content_length=json_data_length)
+		# get modified issue
 		issue = models.Issue.objects.get(register='2015RI0000124')
+		# get comment by issue
 		comments = models.Comment.objects(issue_id=issue.pk)
+		# tests
 		self.assertEqual(len(comments), 1)
 		self.assertEqual(issue.pk, comments[0].issue_id.pk)
 		body = u'Se for autenticação o problema é novamento o LDAP!'
 		self.assertEqual(comments[0].body, body)
 
+	def test_url_api_comments_POST_without_Register(self):
+		""" Tests if API handling post and persists the comments """
+		params = {
+			'body': 'Se for autenticação o problema é novamento o LDAP!',
+			'author': 'horacioibrahim',
+		}
+		# add new issue
+		issue_db = models.Issue(**self.issue_default)
+		issue_db.save()		
+		# to jsonify the params
+		json_data = json.dumps(params)
+		json_data_length = len(json_data)
+		# to send post
+		res = self.app.post('/api/v1/comments/', data=json_data, 
+			content_type='application/json',
+			content_length=json_data_length)
+		# get modified issue
+		issue = models.Issue.objects.get(register='2015RI0000124')
+		# get comment by issue
+		comments = models.Comment.objects(issue_id=issue.pk)
+		# tests
+		self.assertEqual(len(comments), 1)
+		self.assertEqual(issue.pk, comments[0].issue_id.pk)
+		body = u'Se for autenticação o problema é novamento o LDAP!'
+		self.assertEqual(comments[0].body, body)		
+
 	def test_url_api_comments_GET(self):
 		""" Tests if API gets all and general comments """		
-		res = self.app.get('/comments/')
+		res = self.app.get('/api/v1/comments/')
 		json_data = json.loads(res.get_data())
 		self.assertIsInstance(json_data['comments'], list)
 
@@ -146,7 +183,7 @@ class SrcTestCase(unittest.TestCase):
 		comment.author = 'maresiadasilva'		
 		comment.issue_id = issue_db
 		comment.save()
-		res = self.app.get('/comments/2015RI0000124/')
+		res = self.app.get('/api/v1/comments/2015RI0000124/')
 		json_data = json.loads(res.get_data())
 		self.assertIsInstance(json_data['comments'], list)
 		self.assertEqual(len(json_data['comments']), 1)
@@ -163,7 +200,7 @@ class SrcTestCase(unittest.TestCase):
 		comment.author = 'maresiadasilva'		
 		comment.issue_id = issue_db
 		comment.save()
-		URL = ''.join(['/comments/', str(comment.pk), '/'])
+		URL = ''.join(['/api/v1/comments/', str(comment.pk), '/'])
 		res = self.app.delete(URL)
 		json_data = json.loads(res.get_data())
 		self.assertEqual(json_data['msg'], 'Sucessful')
@@ -191,7 +228,7 @@ class SrcTestCase(unittest.TestCase):
 		}	
 		json_data = json.dumps(params)		
 		json_data_length = len(json_data)	
-		URL = ''.join(['/comments/', str(comment.pk), '/'])	
+		URL = ''.join(['/api/v1/comments/', str(comment.pk), '/'])	
 		res = self.app.put(URL, data=json_data, content_length=json_data_length,
 			content_type='application/json')	
 		# get comment persisted in database
@@ -233,17 +270,127 @@ class SrcTestCase(unittest.TestCase):
 		results = models.Comment.objects.search_text('um')
 		self.assertEqual(len(results), 0)		
 
-	# SSE EVENTS TESTS
-	"""
-	def test_url_sse_updates(self):
-		pass
+class SSETestCase(unittest.TestCase):
+	""" Tests behaviors of the SSE services
 
-	def test_url_sse_updates_comments(self):
-		pass
+	Requires:
+	* Redis server online
+	* Local server online (manage.py runserver)
+	  e.g:
+	  		$ gunicorn -w 4 -b 127.0.0.1:9003 src:app
 
-	def test_url_sse_updates_comments_register_number(self):
-		pass
+	* Local server listen port 9003
+
 	"""
+
+	# Message INFO:
+	print '######### IMPORTANT #########'
+	print "For not to cause an 'deadlock' to use gunicorn"
+	print "$ gunicorn -w 4 -b 127.0.0.1:9003 src:app"	
+	print '##############################'
+
+	def help_function_sse(self, url):
+	    # Simulator Request for SSE
+	    try:
+	    	messages = SSEClient(url)
+	    except:
+	    	raise TypeError('Required developer web server not running or.' \
+	    				'port not configured to 9003. See docstrings that class\n' \
+	    				'$ gunicorn -w 4 -b 127.0.0.1:9003 src:app' )
+
+	    return messages
+
+	def setUp(self):
+		app.config['DEBUG'] = True
+		self.dbname = app.config['MONGODB_SETTINGS']['db']
+		app.config['TESTING'] = True
+		app.config['WTF_CSRF_ENABLED'] = False
+		self.app = app.test_client()
+		int_seed = random.randint(1, 20)
+		register = ''.join(['2015RI00001', str(int_seed)])
+
+		self.issue_default = {
+			'title': 'ALM - GERENCIAMENTO',
+			'body': 'The problem with authentication on system',
+			'register': register,
+			'ugat': 'SUPOP',
+			'ugser': 'SUPGS', 
+		}		
+
+		self.sseclient = self.help_function_sse
+
+	def tearDown(self):
+		db = database.connect(self.dbname)
+		db.drop_database(self.dbname)	
+
+	def test_sse_get_issues(self):
+		""" Tests if can to get data when issue is created """
+
+		messages = self.sseclient('http://localhost:9003/api/v1/stream/issues/')
+		# Issue
+		issue_db = models.Issue(**self.issue_default)
+		issue_db.save()
+
+		for msg in messages:
+			try:
+				if '_id' in msg.data:
+					response = json.loads(msg.data)
+					break
+				else:
+					raise
+			except:
+				pass
+
+		self.assertEqual(response['body'], 
+					'The problem with authentication on system')		
+
+	def test_sse_get_comments(self):
+	    # Issue
+	    issue_db = models.Issue(**self.issue_default)
+	    issue_db.save()
+	    messages = self.sseclient('http://localhost:9003/api/v1/stream/comments/')
+
+	    c = models.Comment(body="Um teste para comments",
+	    			author="horacioibrahim", issue_id=issue_db)
+	    c.save()
+	    for msg in messages:
+	    	try:
+	    		if '_id' in msg.data:
+	    			response = json.loads(msg.data)
+	    			break
+	    		else:
+	    			raise
+	    	except:
+	    		pass
+
+	    self.assertEqual(response['body'], 'Um teste para comments')
+
+	def test_sse_get_by_issue_oid(self):
+	    # Issue
+	    issue_db = models.Issue(**self.issue_default)
+	    issue_db.save()
+
+	    url = ''.join(['http://localhost:9003/api/v1/stream/comments/', 
+	    	str(issue_db.pk), '/'])
+	    # Simulator Request for SSE
+	    messages = self.sseclient(url)
+	    # Simulating comment added
+	    c = models.Comment(body="Um teste para segundo",
+	    			author="horacioibrahim", issue_id=issue_db)
+	    c.save()
+	    # Simulating browsing listen SSE Channel
+	    for msg in messages:
+	    	try:
+	    		if '_id' in msg.data:
+	    			response = json.loads(msg.data)
+	    			break
+	    		else:
+	    			raise
+	    	except:
+	    		pass
+	    self.assertEqual(response['body'], 'Um teste para segundo')	    
+	    	
+
 
 	"""
 	# backend Operations 

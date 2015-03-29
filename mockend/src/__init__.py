@@ -1,8 +1,17 @@
 # -*- coding: utf-8 -*-
+import redis
 from flask import Flask
 from flask.ext.mongoengine import MongoEngine
+from flask.ext.cors import CORS
+
+# Pre-setup
+red = redis.StrictRedis()
 
 app = Flask(__name__)
+cors = CORS(app, resources=r'/api/*', origins='*', 
+	allow_headers=['Content-Type', 'Origin', 'Accept,', 'X-Requested-With', 
+				'X-CSRF-Token','Access-Control-Allow-Origin'])
+
 # import flask_debugtoolbar
 
 # Config. To separate this when you needing by using config.from_object
@@ -33,7 +42,7 @@ database = MongoEngine(app)
 from src import views
 
 if __name__ == '__main__':
-    app.run()
+    app.run(threaded=True) #
 
 
 #1 See more https://flask-mongoengine.readthedocs.org/en/latest/

@@ -1,8 +1,14 @@
 import datetime
+import json
 from flask import url_for
-
+from mongoengine import signals
 # APP
 from src import database as db
+from src import red
+
+# SSE Events support
+def publish_in_redis(channel, data):
+    return red.publish(channel, data)
 
 class Issue(db.Document):
     created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
@@ -16,6 +22,11 @@ class Issue(db.Document):
     ugser = db.StringField(max_length=12, required=True)
     deadline = db.IntField(default=120)
 
+    @classmethod
+    def post_save(cls, sender, document, **kwargs):
+        if 'created' in kwargs and kwargs['created']:
+            publish_in_redis('issues', document.to_json())
+
     def get_absolute_url(self):
         return url_for('issue', kwargs={'slug': self.slug})
 
@@ -25,7 +36,8 @@ class Issue(db.Document):
 
     def register_normalized(self):
         self.register_orig = self.register
-        self.register = self.register.replace('/', '')
+        if self.register:
+            self.register = self.register.replace('/', '')
 
     def slugfy(self):
         self.slug = '-'.join([self.title.lower(), self.register]) # TODO: fix it
@@ -65,6 +77,18 @@ class Comment(db.Document):
     # We can denormalization. See more 1-2-3 by starting here:
     # http://blog.mongodb.org/post/87200945828/6-rules-of-thumb-for-mongodb-schema-design-part-1
 
+    @classmethod
+    def post_save(cls, sender, document, **kwargs):
+        if 'created' in kwargs and kwargs['created']:
+            publish_in_redis('comments', document.to_json()) # TODO: private comments            
+            
+            # If has issue to publish in channel it.
+            if document.issue_id:
+                oid = str(document.issue_id.pk)
+                channel = ''.join(['comments', oid])
+                publish_in_redis(channel, document.to_json())
+            
+
     meta = {
             'indexes': [ '-created_at', {'fields': ['$body', 
                         '$author'],
@@ -74,4 +98,7 @@ class Comment(db.Document):
             'ordering': ['-created_at']        
     }
 
+# Signals
+signals.post_save.connect(Issue.post_save, sender=Issue)
+signals.post_save.connect(Comment.post_save, sender=Comment)
 
