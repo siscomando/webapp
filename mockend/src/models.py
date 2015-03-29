@@ -10,6 +10,27 @@ from src import red
 def publish_in_redis(channel, data):
     return red.publish(channel, data)
 
+class User(db.Document):
+    email = db.StringField(required=True)
+    first_name = db.StringField(max_length=50)
+    last_name = db.StringField(max_length=50)
+    password = db.StringField(required=True)
+
+    def is_authenticated(self):
+        return True
+    
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return unicode(self.pk)
+
+    def __repr__(self):
+        return '<User %r>' % (self.email)
+
 class Issue(db.Document):
     created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
     title = db.StringField(max_length=255, required=True)
