@@ -5,6 +5,7 @@ from mongoengine import signals
 # APP
 from src import database as db
 from src import red
+from src import login_manager
 
 # SSE Events support
 def publish_in_redis(channel, data):
@@ -15,6 +16,7 @@ class User(db.Document):
     first_name = db.StringField(max_length=50)
     last_name = db.StringField(max_length=50)
     password = db.StringField(required=True)
+    created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
 
     def is_authenticated(self):
         return True
@@ -30,6 +32,10 @@ class User(db.Document):
 
     def __repr__(self):
         return '<User %r>' % (self.email)
+
+@login_manager.user_loader
+def load_user(id):
+    return User.objects.get(pk=id)
 
 class Issue(db.Document):
     created_at = db.DateTimeField(default=datetime.datetime.now, required=True)

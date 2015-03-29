@@ -3,6 +3,7 @@ import redis
 from flask import Flask
 from flask.ext.mongoengine import MongoEngine
 from flask.ext.cors import CORS
+from flask.ext.login import LoginManager
 
 # Pre-setup
 red = redis.StrictRedis()
@@ -12,7 +13,9 @@ cors = CORS(app, resources=r'/api/*', origins='*',
 	allow_headers=['Content-Type', 'Origin', 'Accept,', 'X-Requested-With', 
 				'X-CSRF-Token','Access-Control-Allow-Origin'])
 
-# import flask_debugtoolbar
+# Load together Flask and Flask-login
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 # Config. To separate this when you needing by using config.from_object
  # See more #1

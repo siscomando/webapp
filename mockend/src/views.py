@@ -17,12 +17,26 @@ def internal_error(error):
 	output = {"error": 'Internal error'}
 	return make_response(jsonify(output), 500)
 
-# API REQUESTS 
+
 @app.route('/')
 @app.route('/index')
 def index():
+
+	# if user.is_authenticated():
+		# redirect to home
+	# else:
+		# to login or register user
 	return "Passed by here"
 
+@app.route('/login')
+def login():
+	pass
+
+@app.route('/register')
+def register():
+	pass
+
+# API REQUESTS 
 @app.route('/api/v1/issues/', methods=['GET'])
 def get_issues():
 	issues = models.Issue.objects()
