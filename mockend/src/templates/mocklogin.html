@@ -1,0 +1,53 @@
+<% extends 'base.html' %>
+
+<% block contentPage %>
+
+<div class="contentShowUsers">
+	<h2>Escolha um usuário:</h2>
+	<ul class="showUsers">
+		<% for user in users %>
+		<li>
+			<div class="avatar" 
+			style="background-image: url(%% user.avatar %%);
+  				-webkit-background-size: cover;
+  				-moz-background-size: cover;
+  				-o-background-size: cover;
+  				background-size: cover;">
+			</div>
+			<div class="username">%% user.shortname %%</div>
+			<button id="loginMock">login</button>
+			<div style="display: none;">
+				<span id="mockAvatar">%% user.avatar %%</span>
+				<span id="mockPK">%% user.pk %%</span>
+				<span id="mockShortname">%% user.shortname %%</span>
+				<span id="mockEmail">%% user.email %%</span>
+			</div>
+
+		</li>
+		<% endfor %>
+	</ul>
+</div>
+<script>
+	window.addEventListener('polymer-ready', function(){
+		var btn = document.querySelector('#loginMock');
+		var mockAvatar = document.querySelector('#mockAvatar');
+		mockAvatar = mockAvatar.innerHTML;
+		var mockPK = document.querySelector('#mockPK');
+		mockPK = mockPK.innerHTML;
+		var mockShortname = document.querySelector('#mockShortname');
+		mockShortname = mockShortname.innerHTML;
+		var mockEmail = document.querySelector('#mockEmail');
+		mockEmail = mockEmail.innerHTML;
+
+		btn.addEventListener('click', function(){
+			var userData = {}
+			userData['pk'] = mockPK;
+			userData['avatar'] = mockAvatar;
+			userData['shortname'] = mockShortname;
+			userData['email'] = mockEmail;
+			window.localStorage.setItem("User", JSON.stringify(userData));
+		});
+	});
+</script>
+
+<% endblock %>
