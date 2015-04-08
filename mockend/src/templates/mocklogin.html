@@ -4,9 +4,12 @@
 
 <div class="contentShowUsers">
 	<h2>Escolha um usuário:</h2>
+	<form>
 	<ul class="showUsers">
 		<% for user in users %>
 		<li>
+			<input type="radio" name="user" 
+			value="%% user.shortname, user.avatar, user.pk, user.email %%"/>
 			<div class="avatar" 
 			style="background-image: url(%% user.avatar %%);
   				-webkit-background-size: cover;
@@ -14,8 +17,7 @@
   				-o-background-size: cover;
   				background-size: cover;">
 			</div>
-			<div class="username">%% user.shortname %%</div>
-			<button id="loginMock">login</button>
+			<div class="username" style="position: relative; display: block; margin: 0 auto;">%% user.shortname %%</div>
 			<div style="display: none;">
 				<span id="mockAvatar">%% user.avatar %%</span>
 				<span id="mockPK">%% user.pk %%</span>
@@ -25,11 +27,14 @@
 
 		</li>
 		<% endfor %>
+		<button id="loginMock" type="button">login</button>		
 	</ul>
+	</form>
 </div>
 <script>
 	window.addEventListener('polymer-ready', function(){
 		var btn = document.querySelector('#loginMock');
+
 		var mockAvatar = document.querySelector('#mockAvatar');
 		mockAvatar = mockAvatar.innerHTML;
 		var mockPK = document.querySelector('#mockPK');
@@ -39,14 +44,25 @@
 		var mockEmail = document.querySelector('#mockEmail');
 		mockEmail = mockEmail.innerHTML;
 
-		btn.addEventListener('click', function(){
-			var userData = {}
-			userData['pk'] = mockPK;
-			userData['avatar'] = mockAvatar;
-			userData['shortname'] = mockShortname;
-			userData['email'] = mockEmail;
+		btn.addEventListener('click', function(e){
+			e.stopPropagation();
+			var userData = {};
+			var objs = document.querySelectorAll('input:checked');
+			var data = objs[0].value;
+			data = data.slice(1, data.length -1);
+			data = data.split(',');
+
+			// var valor = this.getAttribute('data-mockAvatar');
+			var pk = data[2] ;
+			pk = pk.replace('ObjectId(', '');
+			pk = pk.replace(')', '');
+			userData['pk'] = pk.replace(/'/g,'').replace(/ /g, '') // mockPK;
+			userData['avatar'] = data[1] // mockAvatar;
+			userData['shortname'] = data[0] // mockShortname;
+			userData['email'] = data[3] // mockEmail;
 			console.log(JSON.stringify(userData));
 			window.localStorage.setItem("User", JSON.stringify(userData));
+			location.href = '/app';
 		});
 	});
 </script>

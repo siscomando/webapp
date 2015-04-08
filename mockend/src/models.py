@@ -151,6 +151,10 @@ class Comment(db.Document):
                                 'avatar': self.author.avatar
                         }
         }
+        day, month, year = self.created_at.day, self.created_at.month, self.created_at.year  
+        hour, minute = self.created_at.hour, self.created_at.minute
+        data['created_at_human'] = "%sh%s %s/%s/%s" % (hour, minute, day, month, year)
+              
         return json_util.dumps(data)
 
     @classmethod

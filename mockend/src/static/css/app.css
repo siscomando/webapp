@@ -5,8 +5,10 @@ html, body {
   font-family: 'RobotoDraft', sans-serif;
 }
 core-header-panel {
+  display: block;
+  position: relative;
   height: 100%;
-  overflow: auto;
+  min-height: 500px;
   -webkit-overflow-scrolling: touch;
 }
 .container {
@@ -32,6 +34,38 @@ sc-input-hashtag {
 
 login-box {
   margin: 60px auto;
+}
+
+/* ONLY IN APP  */
+
+#loadData {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 9999;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+paper-spinner {
+  position: relative;
+  display: block;
+  width: 60px;
+  height: 60px;
+}
+paper-spinner.blue::shadow .circle {
+  border-color: #2A99D6;
+}
+.beta {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  background-color: rgb(249, 39, 84);
+  color: #FFF;
+  float: left;
+  font-size: 0.6em;
+  padding: 2px;
+  display: inline;
+  height: 1.1em;
+  margin-top: 6px;
 }
 
 .contentShowUsers {
@@ -64,7 +98,12 @@ login-box {
   float: left;
   margin-left: 50px;  
 }
-.showUsers li button {
+
+button#loginMock {
+  position: relative;
+  display: block;
+  margin: 40px auto; 
+  width: 100%;
   margin-top: 10px;
   background: #3498db;
   background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
@@ -85,7 +124,7 @@ login-box {
   text-decoration: none;
 }
 
-.showUsers li button:hover {
+button#loginMock:hover {
   background: #3cb0fd;
   background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
   background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);

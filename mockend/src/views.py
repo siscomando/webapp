@@ -145,8 +145,9 @@ def set_comments():
 	comment = models.Comment(issue_id=issue, body=body, author=author, stars=stars, 
     				origin=origin)
 	comment.save()
-
-	return jsonify({'comment': comment}), 201
+	json_data = json.loads(comment.to_json())
+	data = {'comments': json_data}
+	return jsonify(data), 201
 
 @app.route('/api/v1/comments/', methods=['GET'])	
 def get_comments():
@@ -183,8 +184,9 @@ def edit_comments(oid):
 	comment.origin = json_data.get('origin')
 	comment_edited = comment.save()
 
-	return jsonify({'comment': comment_edited}), 201	
-
+	json_data = json.loads(comment_edited.to_json())
+	data = {'comment': json_data}
+	return jsonify(data), 201	
 
 def event_stream(channel):
 	pubsub = red.pubsub()

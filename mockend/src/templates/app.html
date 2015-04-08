@@ -1107,6 +1107,8 @@ is required core-ajax.
 
 
 
+
+
 <style shim-shadowdom="">/*
 Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -11776,7 +11778,10 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
         // to turn public to use attributes or publish.
       },
       setIn: function() {
-        this.$.search.value = 'in: ';
+        var header = document.querySelector('sc-header');
+        if (header.style.display) {
+          this.$.search.value = 'in: ';  
+        }
       },
       unsetIn: function() {
         if (this.$.search.value == 'in: ') {
@@ -11854,6 +11859,7 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
       changeParamRegister: function(source, eventName, callback) {
         source.addEventListener(eventName, function(e){
               register = e.detail.issue;
+              console.log(e.detail.issue);
               register = register.replace('/', '');
               var ajax = callback.$.coreAjax;
               var params = JSON.parse(ajax.params);
@@ -12654,16 +12660,17 @@ core-toolbar paper-icon-button, core-toolbar paper-icon {
   </script>
 
 </polymer-element>
-<polymer-element name="sc-navbar" attributes="notitle url urlupdates author username avatar online method stream channel alias" assetpath="static/components/sc-navbar/">
+<polymer-element name="sc-navbar" attributes="notitle url urlupdates author username avatar online method stream channel alias filter" assetpath="static/components/sc-navbar/">
 
   <template>
     <style>:host {
-  height: 100%;
-  width: 100%;
   position: absolute;
   display: block;
+  width: 100%;
+  height: 100%;
   font-family: 'RobotoDraft', sans-serif;
   background-color: #3B4D64;
+  overflow: scroll;
  }
 
 /* To ensure your styling works under the Shadow DOM polyfill, see
@@ -12693,9 +12700,17 @@ paper-item core-icon {
 	border-radius: 25px;
 }
 .mainContent {
-    height: 100%;
+  height: 100%;
+  position: relative;    
+  display: block;
+  padding-right: 12px;
 }
 /* core-menu scope */
+
+core-menu {
+	overflow: scroll;
+	margin-bottom: 65px;
+}
 core-submenu {
 	font-family: 'RobotoDraft', sans-serif;
 	color: #FFF;
@@ -12710,13 +12725,15 @@ core-submenu.core-selected {
 /* box profile */
 .profileMenu {
 	font-size: 15px;
-	position: absolute;
+	position: fixed;
+	float: left;
+	left: 0;
 	bottom: 0;
 	padding: 12px; 	
 	height: 42px; /* height total is 54px */
-	width: 100%;
 	background-color: #19293E;
 	color: #FFF;
+	width: 231px;
 }
 #avatar {
 	width: 47px;
@@ -12746,6 +12763,13 @@ core-icon[icon="radio-button-on"] {
 	color: #A8A8A8;
 }
 
+paper-input-decorator {
+	margin-left: 12px;
+	padding: 0;
+	color: #D8D8D8;
+	font-weight: 100;
+}
+
 core-header-panel {
 	height: 100%;
 }
@@ -12761,24 +12785,31 @@ core-toolbar paper-icon-button {
 @media (min-width: 481px) {
 
 }
+
 </style>
+    <!-- get from remote -->
     <sc-sse stream="{{stream}}" channel="{{channel}}" alias="{{alias}}"></sc-sse>
-    <!-- get issues and to persist 
-    Please to implement an throttle to request issues from time in times. 
-    After this you can to remove auto. 
-    -->
     <core-ajax id="coreAjax" auto="" url="{{url}}" response="{{response}}" handleas="json" method="{{method ? method : 'GET'}}">
     </core-ajax>
 
     <!-- presentation issues -->
     <div class="mainContent">
+
+      <!-- start: Search section -->
+      <div id="inputFilter">
+        <!-- <paper-icon-button id="btnComment" icon="communication:chat"></paper-icon-button> -->
+        <paper-input-decorator raised="true" label="Filtrar...">
+          <input id="filterText" type="text" is="core-input" name="f" value="" autocorrect="off" on-keyup="{{setFilter}}">
+        </paper-input-decorator> 
+      </div>      
+      <!-- end: Search section -->
+
       <!-- menu item: This object fire core-select event -->
       <core-menu id="coreMenu">
           <template repeat="{{ issue in menuBySystem}}">
             <core-submenu>
                   <div class="item-content">
                     {{issue.name}}
-
                   </div>
                   <template repeat="{{ item in issue.issues }}">
                     <sc-item scid="{{ item }}">
@@ -12787,8 +12818,8 @@ core-toolbar paper-icon-button {
             </core-submenu>            
           </template>
       </core-menu>
-    </div>
-    
+
+    <!-- profile section -->
     <div class="profileMenu" horizontal="" layout="">
       <div id="avatar">
       </div>
@@ -12797,11 +12828,25 @@ core-toolbar paper-icon-button {
           <core-icon icon="radio-button-on" style="{{ online ? 'color: #B8E986;' : 'color: #CCC;' }}">
           </core-icon>{{online ? 'online' : 'offline' }}</span>
       </div>
-      
     </div>
+    <!-- profile section -->
+
+    </div>
+    
+
   </template>
 
   <script> 
+    function search(string, myList){
+        var newArray = [];
+        for (var i=0; i < myList.length; i++) {
+            if (myList[i].register.indexOf(string) > -1) {
+                newArray.push(myList[i]);
+            }
+        }
+        return newArray;
+      }
+
     Polymer('sc-navbar',{ 
        /**
        * Fired when a item is selected.
@@ -12889,19 +12934,12 @@ core-toolbar paper-icon-button {
         });
       },      
       responseChanged: function() {
-      	  this.issues = this.response['issues'];
+      	  this.issueOrig = this.issues = this.response['issues'];
       	  window.localStorage.setItem("dbIssues",JSON.stringify(this.issues));
           this.updateIssues();
           
       },
       updateIssues: function() {
-          // get issues
-
-          // check if new updates has the system/title existent
-
-          // if has ... add up
-
-          // if no ... create new item in navbar
 
           this.sortByScope();
 
@@ -12947,7 +12985,7 @@ core-toolbar paper-icon-button {
                var newField = issuesSaved[item][field]; // is value of the title
                obj[newField] = {};
                obj[newField]['name'] = newField; // monkey patch
-               obj[newField]['issues'] = []               
+               obj[newField]['issues'] = [];             
                
                if (scopeList.length === 0) {
                   scopeList.push(obj)
@@ -12974,6 +13012,30 @@ core-toolbar paper-icon-button {
         }
         // return scopeList; // to comment this in production enviroment 
     },
+      filterChanged: function(){
+        var issueOrig = this.issueOrig;
+        var issueRes = [];
+        if(this.filter) {
+          issuesFiltered = (search(this.filter, issueOrig).length > 0) ?
+          search(this.filter, issueOrig) : [];
+          window.localStorage.setItem("dbIssues", JSON.stringify(issuesFiltered));
+          this.updateIssues();
+        } else {
+          window.localStorage.setItem("dbIssues", JSON.stringify(issueOrig));
+          this.updateIssues();
+        }
+      },
+      /**
+       * The `setFilter` filters the issues listed in core-menu
+       *
+       * @method setFilter
+       */  
+      setFilter: function() {
+        this.filter = this.$.filterText.value;
+      },
+      showText: function() {
+        this.$.inputFilter.hidden = false;
+      }       
     });
   </script>
 
@@ -14422,6 +14484,10 @@ core-list {
   color: #888;
   font-size: 0.8em;
 }
+.timepost {
+  color: #C8C8C8;
+  font-size: 0.7em;
+}
 .post {
   font-weight: 400 !important; 
   color: #3D3C40;
@@ -14498,13 +14564,14 @@ core-icon .pallete-icon-color .autumn {
             <div class="columns content" flex="">
                 <div horizontal="" layout="">
                   <div class="thumbnail">
-                    <img src="{{ model.avatar.thumbnail || emptyavatar }}">
+                    <img src="{{ model.author.User.avatar || emptyavatar }}">
                   </div> 
                   <div class="author-info" flex="">
                     <div class="username">{{ model.author.User.shortname }} 
                       <span class="title">at {{ model.issue_id.Issue.title }} | <sc-link>{{model.issue_id.Issue.register}}</sc-link></span>
                     </div>
                     <div class="location">{{ model.author.User.location }}</div>
+                    <div class="timepost">{{ model.created_at_human }}</div>
                   </div>
                 </div>
                 <div class="stars">
@@ -14805,6 +14872,7 @@ polyfill-next-selector { content: ':host > h2'; }
                 <img src="static/img/logo_60.png">
               </span>
               <span class="appname">SisComando</span>
+              <span class="beta">beta</span>
             </div>
         </div>
         <!-- App context mini-header: END -->

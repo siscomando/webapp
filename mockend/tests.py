@@ -153,6 +153,8 @@ class SrcTestCase(unittest.TestCase):
 		# self.assertEqual(len(comments), 1)
 		self.assertEqual(issue.pk, comments[0].issue_id.pk)
 		body = u'Se for autenticação o problema é novamento o LDAP!'
+
+		print "HUMAN PRINT:", res.data
 		self.assertEqual(comments[0].body, body)
 		self.assertNotEqual(comments[0].shottime, -1)
 
