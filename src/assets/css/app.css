@@ -30,3 +30,25 @@ sc-input-hashtag {
   padding: 0px 11px 17px 11px;
 }
 
+login-box {
+  margin: 40px auto;
+}
+#loadData {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 9999;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+paper-spinner {
+  position: relative;
+  display: block;
+  width: 60px;
+  height: 60px;
+}
+paper-spinner.blue::shadow .circle {
+  border-color: #2A99D6;
+}
+.beta {
+
+}
