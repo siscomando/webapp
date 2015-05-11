@@ -1,6 +1,11 @@
 <!DOCTYPE html><html><head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-touch-fullscreen" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+         
   <title>SisComando - Mais fácil, mais social!</title>
 
   <script src="static/components/webcomponentsjs/webcomponents.min.js"></script>
@@ -11398,6 +11403,8 @@ the animation.
     <style>:host {
   display: none; /* bug: when initiated as none its not select tab */;
   font-family: 'RobotoDraft', sans-serif;
+  background: #47CACC;
+  padding-bottom: 12px; 
 }
 
 /*
@@ -11859,7 +11866,6 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
       changeParamRegister: function(source, eventName, callback) {
         source.addEventListener(eventName, function(e){
               register = e.detail.issue;
-              console.log(e.detail.issue);
               register = register.replace('/', '');
               var ajax = callback.$.coreAjax;
               var params = JSON.parse(ajax.params);
@@ -14404,7 +14410,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
     })();
   </script>
 </polymer-element>
-<polymer-element name="sc-timeline" attributes="notitle author data emptyavatar url sseurl ssechannel ssealias" assetpath="static/components/sc-timeline/">
+<polymer-element name="sc-timeline" attributes="notitle author data emptyavatar url sseurl ssechannel ssealias scope" assetpath="static/components/sc-timeline/">
 
   <template>
   <core-ajax auto="" url="{{url}}" handleas="json" response="{{response}}"></core-ajax>
@@ -14440,6 +14446,51 @@ polyfill-next-selector { content: ':host > h2'; }
   margin-bottom: 35px;
   /* min-height: 300px;  this is defined by shottime */
 }
+
+/* effects */
+.animated-off {
+  display: none !important;
+}
+.animated-on {
+    animation: fadein 0.5s;
+    -moz-animation: fadein 0.5s; /* Firefox */
+    -webkit-animation: fadein 0.5s; /* Safari and Chrome */
+    -o-animation: fadein 0.5s; /* Opera */
+}
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-moz-keyframes fadein { /* Firefox */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-webkit-keyframes fadein { /* Safari and Chrome */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-o-keyframes fadein { /* Opera */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+/* end effects */
+
 core-list {
  
 }
@@ -14556,7 +14607,8 @@ core-icon .pallete-icon-color .autumn {
       <br>
       <core-list data="{{response.comments}}" runwayfactor="12" flex="">
         <template>
-          <div class="row timeline-post {{ {selected: selected} | tokenList }}" horizontal="" layout="">
+          <!-- begin post -->
+          <div class="row timeline-post {{ {selected: selected} | tokenList }} item-{{ model._id.$oid }} {{ animateClass }}" horizontal="" layout="">
             <div class="columns shottime">{{ model.shottime }}</div>
             <div class="columns division-icon">
               <core-icon icon="{{ setIcon(model.origin) }}" class="pallete-icon-color autumn"></core-icon>
@@ -14580,11 +14632,15 @@ core-icon .pallete-icon-color .autumn {
                 <div class="post">{{ model.body }}</div>
             </div>
           </div>
+          <!-- end post -->
         </template>
       </core-list>
       
     </div>
-      <core-ajax id="coreAjaxIssues" url="" handleas="json" on-core-response="{{getIssue}}"></core-ajax>
+
+      <core-ajax id="coreAjaxIssues" url="" handleas="json" on-core-response="{{getIssue}}">
+      </core-ajax>
+         
   </template>
 
   <script>
@@ -14603,7 +14659,14 @@ core-icon .pallete-icon-color .autumn {
        * @attribute url
        * @type string
        * @default ''
-       */       
+       */ 
+      /**
+       * The `scope` attribute sets an scope for timeline (e.g: #wall, ticket)
+       *
+       * @attribute scope
+       * @type string
+       * @default null
+       */               
       author: 'Horacio Ibrahim',
       publish: {
         // publics properties
@@ -14613,8 +14676,8 @@ core-icon .pallete-icon-color .autumn {
         ssealias: 'sseTimeline',
         sseurlOriginal: null,
         urlOriginal: null,
-        response: '{"comments": "[]"}'
-
+        response: '{"comments": "[]"}',
+        scope: null,
       },
       /* the best place to the constructor for array or object */
       created: function() {
@@ -14650,6 +14713,7 @@ core-icon .pallete-icon-color .autumn {
               var ajaxLocal = callback.$.coreAjaxIssues;
               register = e.detail.issue;
               register = register.replace('/', '');
+              callback.scope = register;
               new_url = callback.urlOriginal + register + '/'; 
               callback.url = new_url;
               ajaxLocal.url = '/api/v1/issues/' + register;
@@ -14671,7 +14735,10 @@ core-icon .pallete-icon-color .autumn {
         source.addEventListener('sc-sse-response', function(e){
           if (currentElem.response == null) {
               currentElem.response = {"comments": []};
-          }           
+          }  
+
+          // Tests if the response has content valid or is only retry
+          // if newComment is true has response!         
           if (('alias' in e.detail) && (e.detail.alias == 'sseTimeline') && (e.detail.response != 1)
               && (e.detail.response != null) && (e.detail.response != undefined)) {
               switch(typeof(e.detail.response)) {
@@ -14680,26 +14747,41 @@ core-icon .pallete-icon-color .autumn {
                   break;
                 case 'object':
                   var newComment = e.detail.response;
+                  break;
                 default:
                   var newComment = false;
               }
 
+          // wrapper that fix dual newComment
+          if ('comments' in  newComment) {
+              newComment = newComment.comments;
+          }
+          // This point begins the real update
           if (!(newComment == false)) {
-            // start real update
-              var containsComment = false;
-              for (var item in currentElem.response.comments.length) {
-                item_id = item_id.$oid;
-                comment_id = newComment._id.$oid;
-                if (item_id == comment_id ) {
+              var containsComment = false; // content of the comment 
+              var order = null;
+              for (var i=0; i < currentElem.response.comments.length; i++) {
+                item = currentElem.response.comments[i];
+                itemId = item._id.$oid;
+                commentId = newComment._id ? newComment._id.$oid : null;
+                if (itemId == commentId ) {
                     containsComment = true;
+                    order = i;
                 }
               }
-              if (containsComment == false) {
-                currentElem.response.comments.unshift(newComment);  
-              }            
-            // end real update            
-          }
-                        
+              // check scope
+              if ((currentElem.scope === null) || (currentElem.scope == newComment.issue_id.Issue.register)) {
+                  if (containsComment == false) {
+                     currentElem.response.comments.unshift(newComment);
+                  } else {
+                     currentElem.response.comments[order] = newComment;                     
+                  }
+                   var lastPost = currentElem.shadowRoot.querySelector('.timeline-post');
+                   lastPost.style.opacity = "0.0";
+                   currentElem.fadeObject(lastPost, 0, 1, 1250);                    
+              }         
+              // end real update            
+            }                   
           }
         });
       },
@@ -14715,7 +14797,37 @@ core-icon .pallete-icon-color .autumn {
         }
         // default
         return 'communication:no-sim';
-      } 
+      },
+      /**
+      from: http://stackoverflow.com/a/9145985/2283488
+      */
+      fadeObject: function (el, start, end, duration) {
+          var range = end - start;
+          var goingUp = end > start;
+          var steps = duration / 20;   // arbitrarily picked 20ms for each step
+          var increment = range / steps;
+          var current = start;
+          var more = true;
+          function next() {
+              current = current + increment;
+              if (goingUp) {
+                  if (current > end) {
+                      current = end;
+                      more = false;
+                  }
+              } else {
+                  if (current < end) {
+                      current = end;
+                      more = false;
+                  }
+              }
+              el.style.opacity = current;
+              if (more) {
+                  setTimeout(next, 20);
+              }
+          }
+          next();
+      }      
     });
 
   </script>
