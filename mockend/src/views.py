@@ -147,6 +147,7 @@ def set_comments():
 	comment.save()
 	json_data = json.loads(comment.to_json())
 	data = {'comments': json_data}
+	
 	return jsonify(data), 201
 
 @app.route('/api/v1/comments/', methods=['GET'])	
