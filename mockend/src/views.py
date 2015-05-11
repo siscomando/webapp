@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 from flask.views import View
 from flask import jsonify, request, make_response, abort, Response
+from flask import render_template, flash, url_for, redirect
 import logging
+import json
 #APP
 from src import app, red
 from src import models
+
 
 # APP
 @app.errorhandler(404)
@@ -17,12 +20,47 @@ def internal_error(error):
 	output = {"error": 'Internal error'}
 	return make_response(jsonify(output), 500)
 
-# API REQUESTS 
+@app.route('/mocklogin', methods=['GET'])
+def mocklogin():
+	users = models.User.objects()
+	return render_template('mocklogin.html', users=users)
+
 @app.route('/')
 @app.route('/index')
 def index():
-	return "Passed by here"
 
+	# if user.is_authenticated():
+		# redirect to home
+	# else:
+		# to login or register user
+
+	return render_template('login.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+	if request.method == 'GET':
+		return render_template('login.html')
+
+	return jsonify({'msg': 'Sucessful'}), 201
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'GET':
+        return render_template('register.html')
+
+    user = models.User()
+    json_data = request.get_json()
+    user.email =  json_data.get('identifier')
+    user.password = json_data.get('password')
+    user.save()
+    flash('User successfully registered') # TODO name already exists
+    return jsonify({'msg': 'Sucessful'}), 201
+
+@app.route('/app', methods=['GET'])
+def application():
+	return render_template('app.html')
+
+# API REQUESTS 
 @app.route('/api/v1/issues/', methods=['GET'])
 def get_issues():
 	issues = models.Issue.objects()
@@ -101,24 +139,30 @@ def set_comments():
 	if register:
 		issue = models.Issue.objects.get_or_404(register=register)
 	else:
+		abort(400) # not issue found
 		issue = None
 
 	comment = models.Comment(issue_id=issue, body=body, author=author, stars=stars, 
     				origin=origin)
 	comment.save()
-
-	return jsonify({'comment': comment}), 201
+	json_data = json.loads(comment.to_json())
+	data = {'comments': json_data}
+	return jsonify(data), 201
 
 @app.route('/api/v1/comments/', methods=['GET'])	
 def get_comments():
 	comments = models.Comment.objects()
-	return jsonify({'comments': comments})
+	json_data = json.loads(comments.to_json())
+	data = {'comments': json_data}
+	return jsonify(data), 201
 
 @app.route('/api/v1/comments/<string:register>/', methods=['GET'])	
 def get_comments_from_register(register):
 	issue = models.Issue.objects.get_or_404(register=register)
 	comments = models.Comment.objects(issue_id=issue.pk)
-	return jsonify({'comments': comments}), 201
+	json_data = json.loads(comments.to_json())
+	data = {'comments': json_data}
+	return jsonify(data), 201
 
 @app.route('/api/v1/comments/<string:oid>/', methods=['DELETE'])	
 def del_comments(oid):
@@ -140,8 +184,9 @@ def edit_comments(oid):
 	comment.origin = json_data.get('origin')
 	comment_edited = comment.save()
 
-	return jsonify({'comment': comment_edited}), 201	
-
+	json_data = json.loads(comment_edited.to_json())
+	data = {'comment': json_data}
+	return jsonify(data), 201	
 
 def event_stream(channel):
 	pubsub = red.pubsub()
