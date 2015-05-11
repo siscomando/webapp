@@ -5,7 +5,10 @@ from src import models
 seed = random.randint(1000, 8000)
 sups = ['SUPOP', 'SUPCD', 'SUPDE', 'SUNFJ', 'SUNNE', 'SUNAF', 'COTEC']
 sort = random.randint(0, len(sups) - 1)
-sistemas = ['ALM - SISTEMA', 'SICAF', 'SIAFI', 'EXPRESSO', 'SISCOR', 'SICOV', 'SISCOMEX']
+sistemas = ['SIGEPE (SUNMP)', 'CENTRO DE DADOS (SUPCD)', 'SIAPNET (SUNMP)', 
+		'GUIA DE SERVIÇOS PÚBLICOS FEDERAL (SUNMP)', 'SICONV (SUNMP)', 
+		'SIORG (SUNMP)', 'SOTN (SUNAF)', 'DESTNET (SUNMP)', 
+		'TRANSPARENCIA PUBLICA CLIENTE (SUNFJ)', 'SNCR CCIR WEB (SUNCE)']
 sort_sistemas = random.randint(0, len(sistemas) -1)
 i = models.Issue()
 i.body = 'Problema na conexão de... '
