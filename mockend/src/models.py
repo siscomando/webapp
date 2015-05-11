@@ -27,6 +27,13 @@ class User(db.Document):
     shortname = db.StringField(max_length=80)
     avatar = db.StringField()
 
+    meta = {'queryset_class': CustomQuerySet}    
+
+    def to_json(self):
+        data = self.to_mongo()
+        data['password'] = None
+        return json_util.dumps(data)    
+
     def is_authenticated(self):
         return True
     
