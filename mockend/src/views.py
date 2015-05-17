@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask.views import View
 from flask import jsonify, request, make_response, abort, Response
-from flask import render_template, flash, url_for, redirect
+from flask import render_template, flash, url_for, redirect, session
 import logging
 import json
 #APP
@@ -38,8 +38,11 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-	if request.method == 'GET':
+	if request.method == 'POST':
+		print request.json # TODO: to send to GET or POST of the Pentaho
+	else:
 		return render_template('login.html')
+
 
 	return jsonify({'msg': 'Sucessful'}), 201
 
@@ -58,6 +61,14 @@ def register():
 
 @app.route('/app', methods=['GET'])
 def application():
+
+	#if user.is_authenticated():
+	#	return render_template('app.html')
+	# else:
+	#	return login()
+	print dir(session)
+	print "===="
+	print session
 	return render_template('app.html')
 
 # API REQUESTS 
@@ -102,6 +113,8 @@ def set_issues():
 @app.route('/api/v1/issues/', methods=['PUT'])
 def edit_issues():
 	""" Edits an issue
+
+	TODO: needs control access at resource
 	"""
 	if not request.json or 'register' not in request.json:
 		abort(404)
@@ -139,7 +152,7 @@ def set_comments():
 		abort(400)
 
 	json_data = request.get_json()
-	logging.info(json_data)
+	# logging.info(json_data)
 	register = json_data.get('register', None)
 	# create comment
 	body = json_data.get('body')
@@ -194,9 +207,9 @@ def edit_comments(oid):
 	comment.body = json_data.get('body')
 	comment.stars = json_data.get('stars')
 	comment.origin = json_data.get('origin')
-	comment_edited = comment.save()
+	comment.save()
 
-	json_data = json.loads(comment_edited.to_json())
+	json_data = json.loads(comment.to_json())
 	data = {'comment': json_data}
 	return jsonify(data), 201	
 

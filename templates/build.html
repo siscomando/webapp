@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-touch-fullscreen" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent" >
+         
+  <title>SisComando - Mais fácil, mais social!</title>
+
+  <script src="components/webcomponentsjs/webcomponents.min.js"></script>
+  <link rel="import" href="components/polymer/polymer.html">
+  <link rel="import" href="components/core-drawer-panel/core-drawer-panel.html">
+  <link rel="import" href="components/core-header-panel/core-header-panel.html">
+  <link rel="import" href="components/sc-header/sc-header.html">
+  <link rel="import" href="components/sc-search/sc-search.html">
+  <link rel="import" href="components/sc-navbar/sc-navbar.html">
+  <link rel="import" href="components/sc-timeline/sc-timeline.html">
+  <link rel="import" href="components/sc-input-hashtag/sc-input-hashtag.html">
+  <link rel="import" href="components/lp-input/lp-input.html">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+
+</head>
+<body fullbleed vertical layout unresolved>
+  <!--
+  <div id="loadData" layout vertical center-center>
+    <paper-spinner class="blue" active></paper-spinner>
+  </div>
+  -->
+  <core-drawer-panel>   
+    <div drawer>
+      <core-header-panel>
+        <!-- App context mini-header: you can to put logo app, name, etc.-->
+        <div class="core-header">
+            <div class="appbrand" horizontal layout>
+              <span class="logo"> 
+                <img src="assets/img/logo_60.png">
+              </span>
+              <span class="appname">SisComando</span>
+              <span class="beta">beta</span>
+            </div>
+        </div>
+        <!-- App context mini-header: END -->
+        <sc-navbar 
+        username="horacioibrahim" 
+        online="true" 
+        url="http://localhost:9003/api/v1/issues/"
+        stream="http://localhost:9003/api/v1/stream/issues/"
+        channel="message"
+        avatar="http://localhost:9003/static/img/avatar-empty.png"
+        ></sc-navbar>
+        <!--
+        stream="http://localhost:9003/api/v1/stream/issues/"
+        -->
+      </core-header-panel>
+    </div>
+    <div main>
+      <core-header-panel>
+        <sc-search url="search_results.json"></sc-search>
+        <sc-header></sc-header>
+        <div class="panelContent" vertical layout fit>
+          <sc-timeline url="http://localhost:9003/api/v1/comments/" 
+          sseurl="http://localhost:9003/api/v1/stream/comments/"></sc-timeline>  
+          <lp-input target="editable" mentionsURL="http://localhost:9003/api/v1/users/"
+          url="http://localhost:9003/api/v1/comments/" method="POST"></lp-input>          
+          <div class="sc-input-section" flex >
+            <!-- ver funcionamento do input-hashtags 
+            adicionar URL para o post do comentário
+            e o method ao lp-input
+            -->
+          <div id="editable" contenteditable="true"></div>
+          </div>
+        </div>
+      </core-header-panel>
+    </div>
+  </core-drawer-panel>
+
+</body>
+<script src="assets/js/app.js"></script>
+</html>

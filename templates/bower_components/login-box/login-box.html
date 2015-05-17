@@ -1,0 +1,168 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-input/paper-input-decorator.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../core-ajax/core-ajax.html">
+
+<!--
+This element can be used for general purpose login boxes (identification
+and password).
+
+##### Example
+
+    <login-box></login-box>
+
+@element login-box
+@blurb Login box
+@status alpha
+@homepage http://polymerlabs.github.io/login-box
+-->
+<polymer-element name="login-box" attributes="heading identification submit action">
+
+  <template>
+    <script type="text/javascript" src="web-animations.js"></script>
+    <link rel="stylesheet" href="login-box.css" />
+    <h2>{{heading}}</h2>
+    <content select="[top]"></content>
+    <content select="[identifierHeading]"></content>
+    <paper-input id="identifierInput" value="{{identifier}}" label="{{identification}}"></paper-input>
+    <content select="[passwordHeading]"></content>
+    
+    <!--
+    <paper-input id="passwordInput" value="{{password}}" label="password" type="password"></paper-input>
+    -->
+    <paper-input-decorator label="with password" floatingLabel>
+      <input is="core-input" type="password" id="passwordInput" value="{{password}}" label="password">
+    </paper-input-decorator>
+
+    <paper-button id="submitbutton" raised on-click="{{validate}}">{{submit}}</paper-button>
+    <content select="[bottom]"></content>
+
+    <core-ajax
+    id="coreAjaxLogin"
+    url="{{action}}"
+    method="POST"
+    handleAs="json"
+    contentType="application/json"
+    ></core-ajax>
+  </template>
+
+  <script>
+
+    Polymer('login-box', {
+      /**
+       * The `heading` attribute sets an initial heading
+       * 
+       * @attribute heading
+       * @type string
+       * @default 'Login'
+       */
+      heading: 'Login',
+
+      /**
+       * The `submit` attribute sets an initial submit
+       * 
+       * @attribute submit
+       * @type string
+       * @default 'Login'
+       */
+      submit: 'login',
+
+      /**
+       * The `identification` attribute sets an initial identification.
+       * 
+       * @attribute identification
+       * @type string
+       * @default 'Username'
+       */
+      identification: 'e-mail',
+
+      /**
+       * The `identifier` attribute sets an initial identifier.
+       * 
+       * @attribute identifier
+       * @type string
+       * @default ''
+       */
+      identifier: "",
+
+      /**
+       * The `password` attribute sets an initial password.
+       * 
+       * @attribute password
+       * @type string
+       * @default ''
+       */      
+      password: "",
+      /**
+       * The `action` url to send POST
+       * 
+       * @attribute action
+       * @type string
+       * @default ''
+       */
+      action: '',      
+
+      validate: function() {
+        this.$.identifierInput.invalid = !!!this.identifier;
+        this.$.passwordInput.invalid = !!!this.password;
+        if (!this.password || !this.password) return this.shake();
+        this.sendTo();
+        this.fireLoginTry();
+      },
+
+      /**
+       * The `shake` method will shake this element (negative behaviour).
+       * 
+       * @method shake
+       */
+      shake: function() {
+        var animation = new Animation(this, [
+            {transform: "translateX(-10px)"},
+            {transform: "translateX(10px)"}
+          ], {
+            direction: "alternate", duration: 50, iterations: 3
+          });
+        document.timeline.play(animation);
+      },
+
+      /**
+       * The `login-box-login-try` event is fired whenever we
+       * call fireLoginTry
+       * 
+       * @event login-box-login-try
+       * @param {Object} detail
+       *   @param {string} detail.identifier The identifying value (e.g. username)
+       *   @param {string} detail.password The password value
+       */
+
+      /**
+       * The `fireLoginTry` method will fire the login try event.
+       * 
+       * @method fireLoginTry
+       */
+      fireLoginTry: function() {
+        this.fire('login-box-login-try', {
+          identifier: this.identifier,
+          password: this.password
+        });
+      },
+      /**
+       * The `go` to submit login-box
+       * 
+       * @method go
+       */    
+      sendTo: function() {
+        var ajax = this.$.coreAjaxLogin;
+          var data = {};
+          data['identifier'] = this.identifier;  
+          data['password'] = this.password;  
+          ajax.body = JSON.stringify(data);
+          ajax.go();
+      }
+
+    });
+
+  </script>
+
+</polymer-element>

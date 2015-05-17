@@ -4042,13 +4042,13 @@ polyfill-next-selector {
   text-align: center;
 }
 
-:host paper-input{
+:host paper-input, :host paper-input-decorator{
   margin-left: auto;
   margin-right: auto;
   width: 90%;
 }
 
-:host paper-input::shadow > #input {
+:host paper-input::shadow > #input, :host paper-input-decorator::shadow > #input {
   text-align: center;
 }
 
@@ -4071,7 +4071,13 @@ content[select="[top]"]::content img.radial {
     <content select="[identifierHeading]"></content>
     <paper-input id="identifierInput" value="{{identifier}}" label="{{identification}}"></paper-input>
     <content select="[passwordHeading]"></content>
+    <!--
     <paper-input id="passwordInput" value="{{password}}" label="password" type="password"></paper-input>
+    -->
+    <paper-input-decorator label="password">
+      <input is="core-input" type="password" id="passwordInput" value="{{password}}" label="password">
+    </paper-input-decorator>
+
     <paper-button id="submitbutton" raised="" on-click="{{validate}}">{{submit}}</paper-button>
     <content select="[bottom]"></content>
     <p>{{response.msg}}</p>
