@@ -1254,6 +1254,27 @@ sc-input-hashtag a smart input that automagically change hashtag typed by links
 @homepage http://github.com/siscomando/sc-input-hashtag
 -->
 
+  
+
+
+
+<!--
+lp-input is a custom "fake input" to search users, hashtags by ajax and to 
+format the content by using ordinary div#editable. Works like twitter, facebook,
+slack inputs.
+
+##### Example
+      <div id="editable" contenteditable="true">
+      </div>
+      <lp-input target="editable"></lp-input>
+
+@element lp-input
+@blurb Element providing a ghost operator that makes input like twitter
+@status beta
+@homepage http://github.com/horacioibrahim/lp-input
+-->
+
+
   <link rel="stylesheet" href="static/css/app.css">
   <link rel="shortcut icon" href="static/favicon.ico" type="image/x-icon">
   <link rel="icon" href="static/favicon.ico" type="image/x-icon">
@@ -14400,7 +14421,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
         },
         ready: function () {
           this.addEventListener('click', function(e) {
-            this.fire(this.eventname, {issue: this.innerText});
+            this.fire(this.eventname, {issue: this.textContent});
             if (this.continue == true) {
               location.href = this.href;
             }
@@ -14446,51 +14467,6 @@ polyfill-next-selector { content: ':host > h2'; }
   margin-bottom: 35px;
   /* min-height: 300px;  this is defined by shottime */
 }
-
-/* effects */
-.animated-off {
-  display: none !important;
-}
-.animated-on {
-    animation: fadein 0.5s;
-    -moz-animation: fadein 0.5s; /* Firefox */
-    -webkit-animation: fadein 0.5s; /* Safari and Chrome */
-    -o-animation: fadein 0.5s; /* Opera */
-}
-@keyframes fadein {
-    from {
-        opacity:0;
-    }
-    to {
-        opacity:1;
-    }
-}
-@-moz-keyframes fadein { /* Firefox */
-    from {
-        opacity:0;
-    }
-    to {
-        opacity:1;
-    }
-}
-@-webkit-keyframes fadein { /* Safari and Chrome */
-    from {
-        opacity:0;
-    }
-    to {
-        opacity:1;
-    }
-}
-@-o-keyframes fadein { /* Opera */
-    from {
-        opacity:0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-/* end effects */
-
 core-list {
  
 }
@@ -14608,7 +14584,7 @@ core-icon .pallete-icon-color .autumn {
       <core-list data="{{response.comments}}" runwayfactor="12" flex="">
         <template>
           <!-- begin post -->
-          <div class="row timeline-post {{ {selected: selected} | tokenList }} item-{{ model._id.$oid }} {{ animateClass }}" horizontal="" layout="">
+          <div class="row timeline-post {{ {selected: selected} | tokenList }} item-{{ model._id.$oid }}" horizontal="" layout="">
             <div class="columns shottime">{{ model.shottime }}</div>
             <div class="columns division-icon">
               <core-icon icon="{{ setIcon(model.origin) }}" class="pallete-icon-color autumn"></core-icon>
@@ -14774,11 +14750,11 @@ core-icon .pallete-icon-color .autumn {
                   if (containsComment == false) {
                      currentElem.response.comments.unshift(newComment);
                   } else {
-                     currentElem.response.comments[order] = newComment;                     
+                     currentElem.response.comments[order] = newComment;
                   }
                    var lastPost = currentElem.shadowRoot.querySelector('.timeline-post');
                    lastPost.style.opacity = "0.0";
-                   currentElem.fadeObject(lastPost, 0, 1, 1250);                    
+                   currentElem.fadeObject(lastPost, 0, 1, 1250);                  
               }         
               // end real update            
             }                   
@@ -14885,17 +14861,25 @@ polyfill-next-selector { content: ':host > h2'; }
 #inputComments #comment {
   margin-left: 30px;
 }</style>
+    
     <core-ajax id="coreAjaxInput" url="{{url}}" handleas="json" response="{{response}}" method="{{ method ? method : 'POST'}}" contenttype="application/json">
     </core-ajax>
 
     <div id="inputComments">
       <form id="commentForm">
+      
         <paper-icon-button id="btnComment" icon="communication:chat"></paper-icon-button>
+      
         <paper-input-decorator raised="true" label="Você tem ideias para resolver problemas...?">
+         
           <input id="comment" is="core-input" name="c" value="" autocorrect="off" autocomplete="off">
+         
           <core-a11y-keys target="{{}}" keys="Enter" on-keys-pressed="{{sendTo}}"></core-a11y-keys>
+         
           <input hidden="true" type="submit">
+        
         </paper-input-decorator>       
+      
       </form>
     </div>    
 
@@ -14968,6 +14952,598 @@ polyfill-next-selector { content: ':host > h2'; }
   </script>
 
 </polymer-element>
+
+<polymer-element name="lp-input" attributes="target mentionsURL url method" assetpath="static/components/lp-input/">
+  <template>
+
+      <style> :host {
+  width: 100%;
+  display: block;
+  font-family: 'RobotoDraft', sans-serif;
+ }
+ #mentionsContainer {
+  display: none;
+  -webkit-box-shadow: 0px -1px 5px 0px rgba(50, 50, 50, 0.31);
+  -moz-box-shadow: 0px -1px 5px 0px rgba(50, 50, 50, 0.31);
+  box-shadow: 0px -1px 5px 0px rgba(50, 50, 50, 0.31); 
+  -webkit-border-radius: 5px 5px 0px 0px;
+  -moz-border-radius: 5px 5px 0px 0px;
+  border-radius: 5px 5px 0px 0px;            
+  margin-bottom: 0px;
+  background-color: #FFF;
+  border: 0px solid #CCC;
+  z-index: 10;            
+  box-sizing: border-box;
+  width: 100%;
+  right: auto;
+  left: 0;
+ }
+
+ ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+ }  
+ ul li {
+  min-height: 37px;
+  padding: 8px;
+ }
+ ul li:hover {
+  background-color: #47CACC;
+  color: #FFF;
+ }
+ ul li:first-child:hover {
+  background-color: #47CACC;
+  color: #FFF;
+ }
+ .mentions .avatar {
+      float: left;
+ }    
+ .mentions .avatar img {
+   width: 33px;
+   height: 33px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;              
+ } 
+ .mentions .info {
+      display: inline-block;
+      position: relative;
+      margin-left: 8px;
+      font-size: 1em;
+ }
+ .mentions .info .username {
+      font-weight: 700;
+ }
+ .mentions .info .details {
+      opacity: 0.65;
+      font-size: 0.8em;
+      margin-top: 2px;
+ }</style>
+
+      <!-- dropdown list of users 
+           init search by @na...
+      -->
+      <div id="mentionsContainer">
+          <ul id="ulMentionsContainer">
+            <template repeat="{{user in Users}}">
+              <li on-click="{{ selectedUser }}" data-shortname="{{ user.shortname }}" data-location="{{ user.location }}" data-avatar="{{ user.avatar }}">
+                  <div class="mentions">
+                      <div class="avatar">
+                          <img src="{{user.avatar}}">
+                      </div>
+                      <div class="info">
+                        <div class="username">{{ user.shortname }}</div>
+                        <div class="details">{{ user.location }}</div> 
+                      </div>
+                  </div>          
+              </li> 
+            </template>
+          </ul>
+      </div>
+
+      <!-- shortcut -->
+      <core-a11y-keys target="{{_targetElem}}" keys="Enter" on-keys-pressed="{{sendTo}}"></core-a11y-keys>
+
+      <!-- dropdown list of hashtags -->
+      <div class="hashtags"></div>
+
+      <!-- This elements will be a copy of the contentEditable passed by user. --> 
+      <div id="editableFilter" contenteditable="true" hidden="">
+        <br>
+      </div> 
+
+      <!-- ajax -->
+      <core-ajax auto="true" id="mentionsAjax" url="{{ mentions }}" response="{{responseUsers}}"></core-ajax>
+      <core-ajax id="tagsAjax" url="{{ tagsURL }}" response="{{responseTags}}"></core-ajax>
+      <core-ajax id="coreAjaxInput" url="{{url}}" handleas="json" response="{{responseComments}}" method="{{ method }}" contenttype="application/json">
+      </core-ajax>
+
+
+  </template>
+  <script>
+    (function () {
+      Polymer('lp-input', {
+        /**
+        * Fired when a user is selected in mentions box.
+        *
+        * @event selected-user
+        */        
+        publish: {
+          /**
+          * The target is ID's value of the div.contentEditable.
+          *
+          * @attribute target
+          * @type string
+          * @default 'editable'
+          */          
+          target: "editable",
+          _targetElem: null,
+          tagRegex: /(#){1}([A-Z]+[A-Z0-9]+)/ig,
+          userRegex: /(@){1}([A-Z]+[A-Z0-9]+)/ig,
+          /**
+          * The mentionsSearch is an URL to search users.
+          *
+          * @attribute mentionsSearch
+          * @type string
+          * @default ''
+          */           
+          mentionsURL: '',
+          /*
+          * The isNewNode persists boolean that contains info if the typed data 
+          * must be to generate a new node. This occurs when the user types 
+          * white-space inner a node-hashtag.
+          *
+          * @attribute isNewNode
+          * @type boolean
+          * @default false
+          */ 
+          isNewNode: false,
+          /*
+          * The isChar is used together with "isKey" to check if the input inserted
+          * by user is a char or only a key pressed. Because accents "aren't"
+          * chars.
+          *
+          * @attribute isChar
+          * @type boolean
+          * @default false
+          */ 
+          isChar: false,
+          /*
+          * The isKey is used together with "isChar" to check if the input inserted
+          * by user is a char or only a key pressed. Because accents "aren't"
+          * chars.
+          *
+          * @attribute isChar
+          * @type boolean
+          * @default false
+          */           
+          isKey: false,
+          valueText: null,
+          Users: [],
+          /*
+          * The `register` is the ID to post comments.
+          *
+          * @attribute register
+          * @type string
+          * @default null
+          */ 
+          register: null, 
+          /**
+          * The `url` is the place where data will be sent based in the method.
+          *
+          * @attribute url
+          * @type string
+          * @default ''
+          */           
+          url: '',
+          /**
+          * The `method` is HTML method used to send data from target input.
+          *
+          * @attribute method
+          * @type string
+          * @default 'POST'
+          */           
+          method: 'POST', 
+        },    
+        created: function() {
+          // initialize but it not is turned public to use by users of the element
+          // to turn public to use attributes or publish.
+        },        
+        ready: function () {
+          // get the div#editable passed by user
+          this._targetElem = document.querySelector('#' + this.target);
+          // get current custom element object
+          var fakeThis = document.querySelector('lp-input');
+          // listen by inputs
+          this._targetElem.addEventListener('input', function(event) {
+             fakeThis.checkInput();
+          });          
+          this._targetElem.addEventListener('keyup', function(event) {
+             // fakeThis.isKey = true;
+             fakeThis.valueText = this.textContent; 
+          });                  
+
+          this.setRegister(document, 'sc-select', fakeThis);
+        },
+        /*
+        * Checks if textContent of the contentEditable was changed. If the input
+        * is a char isKey and isChar will be true, therefore the "checkIinput" is
+        * called.
+        *
+        * @method valueTextChanged
+        */          
+        valueTextChanged: function() {
+          // console.log("# Entrou valueTextChanged");
+         /*  if (this.isKey == this.isChar) {
+            this.checkInput();  
+          }
+          this.isKey = false;
+          this.isChar = false;
+          */
+          var selection = document.getSelection();
+          var range = selection.getRangeAt(0);
+          var currentNode = range.startContainer;
+          // get current node index. "You are here". Before normalized.
+          var indexCurrent = this.currentNodeIndexIs(currentNode, this._targetElem.childNodes);
+          var nodeValue = currentNode.nodeValue;
+          if (/^@/g.test(nodeValue) && nodeValue.length > 3 ) {
+              this.getMentions(nodeValue);
+              this.addEventListener('selected-user', function(ev) {
+                currentNode.nodeValue = '@' + ev.detail.response.shortname;
+                this._restoreSelection(indexCurrent, currentNode.nodeValue.length);
+              });
+          }
+        }, 
+        /*
+        * Gets data from user selected/tapped in mentions list. Fires the 
+        * 'selected-user' event.
+        *
+        * @method selectedUser
+        */        
+        selectedUser: function(ev, detail, target) {
+            shortname = target.attributes['data-shortname'].value;
+            avatar = target.attributes['data-avatar'].value;
+            section = target.attributes['data-location'].value;
+            this.hideMentions(); // hide box
+            this.fire('selected-user', {response: {'shortname': shortname, 'avatar': avatar, 'section': section}})
+        },    
+        /*
+        * Show Mentions Box.
+        *
+        * @method showMentions
+        */             
+        showMentions: function() {
+          this.$.mentionsContainer.style.display = "block";
+        },
+        /*
+        * Hide Mentions Box.
+        *
+        * @method hideMentions
+        */          
+        hideMentions: function() {        
+            this.$.mentionsContainer.style.display = "none";
+        },
+        /*
+        * Emits the responseUsers's updates. Creates an URL to access the user's 
+        * data from a services, like RestAPI, and changes the attribute of 
+        * core-ajax called "#mentionsAjax".
+        *
+        * @method getMentions
+        */        
+        getMentions: function(expr) {
+            var mentionsAjax = this.$.mentionsAjax;
+            var url = '';
+                        
+            if (/\/$/.test(this.mentionsURL)) {
+              url = this.mentionsURL + expr;
+            } else {
+              url = this.mentionsURL.concat('/', expr);
+            }
+            this.mentions = url;            
+        },
+        responseUsersChanged: function() {
+           data = JSON.parse(this.responseUsers);
+           this.Users = data.Users;
+           this.showMentions();
+        },
+        /*
+        * Emits the responseTags's updates. Creates an URL to access the tag's 
+        * data from a services, like RestAPI, and changes the attribute of 
+        * core-ajax called "#tagsAjax".
+        *
+        * @method getTags
+        */         
+        getTags: function() {   
+            // TODO        
+            var tagsAjax = this.$.tagsAjax;
+            var json_data = tagsAjax.response;
+            return json_data;
+        },
+        /*
+        * Returns true if a formatted hashtag has blank space or false if not.
+        *
+        * @method _hasWhiteSpace
+        */ 
+        _hasWhiteSpace: function(node) {
+          var str = 'full';
+          // Is need to have childNodes because this method is to test 'formatted'
+          // hashtag
+          if (node !== undefined && node.hasChildNodes()) {
+              str = node.childNodes[0].textContent;
+          }
+          return /\s|&nbsp;/g.test(str);
+        },  
+        /*
+        * Restores the Caret to original position after changes.
+        *
+        * @param {Number} nodeIndex - The index of the node.
+        * @param {Number} nodeOffset - The offset within the node.
+        * @method restoreSelection
+        */            
+        _restoreSelection: function (nodeIndex, nodeOffset) {
+            var textNode = null;
+            var newNode = null;
+            this._targetElem.focus();
+
+       
+            if (window.getSelection) //non IE and there is already a selection
+            {
+                var s = window.getSelection();
+
+                // if pressed space within a hashtag (eg.: <em>XYZ</em>)
+                if (this.isNewNode) { 
+                  newNode = document.createTextNode('');
+                }     
+
+                if (this._targetElem.childNodes.length > 0) {  
+                    
+                    if (this._targetElem.childNodes[nodeIndex].hasChildNodes()) {
+                      textNode = this._targetElem.childNodes[nodeIndex].childNodes[0];
+                    } else {
+                      textNode = this._targetElem.childNodes[nodeIndex];
+                    }
+                   
+                    // get range
+                    range = s.getRangeAt(0);
+
+                    if (newNode) {
+                      textNode = this._targetElem.childNodes[nodeIndex + 1]; // forward one
+                      
+                      if (textNode === undefined) {
+                        textNode = this._targetElem.childNodes[nodeIndex]
+                        range.setStartAfter(textNode);  
+                        range.insertNode(newNode);
+                        range.setStart(textNode, 1);
+                      } else {
+                        range.setStartBefore(textNode);
+                        range.insertNode(newNode);
+                        range.setStart(textNode, 1);
+                      }
+
+                    } else {
+                      range.setStart(textNode, nodeOffset);
+                    }
+                    // applied changes
+                    s.removeAllRanges();
+                    range.collapse(true); // Inpired by God! ;)
+                    s.addRange(range);
+                }
+            }
+        }, 
+        /*
+        * Gets the current index. We have based in selection.anchorNode to catch
+        * the currentNode and childNodes to get listNodes.
+        *
+        * TODO: This method can be improved because this runs two for. 
+        *
+        @param {Node} currentNode - It's selection.anchorNode
+        @param {ChildNodes} listNodes -  It's childNodes of the div#editable
+        @method currentNodeIndexIs
+        */        
+        currentNodeIndexIs: function(currentNode, listNodes) {
+          var nodeIndex = null;
+          var node = null;
+
+          // trying to verify in target
+          for (var i = 0; i < listNodes.length; i++) {
+            
+            if (listNodes[i].hasChildNodes()) {
+              node = listNodes[i].childNodes[0];
+              
+            } else {
+              node = listNodes[i];  
+            }
+            
+            if (node === currentNode) {
+              nodeIndex = i;
+              break;
+            } else {
+              nodeIndex = null;
+            }
+
+          }
+          // trying to verify in shadow of the target. Shadow of the target is
+          // the element "editableFilter" that receives a copy before changes.
+          if (nodeIndex === null) {
+            for (var j = 0; j < this.$.editableFilter.childNodes.length; j++) {
+              
+              if (this.$.editableFilter.childNodes[j].hasChildNodes()) {
+                node = this.$.editableFilter.childNodes[j].childNodes[0];
+              } else {
+                node = this.$.editableFilter.childNodes[j];  
+              }
+                  
+              if (node === currentNode) {
+                nodeIndex = j;
+                break;
+              } else {
+                nodeIndex = null;
+              }
+
+            }            
+          }
+
+          return nodeIndex
+        },
+        /*
+        * Gets the caret position in plain text independently if (or not) exists 
+        * node. The motivation this method is because the offset returned by Web
+        * API is dependent of the node where is the caret. This is node agnostic!
+        *
+        @param {Number} nodeIndex 
+        @param {Number} nodeOffset
+        @param {ChildNodes} oldChildNodes
+        @method inlinePosition
+        */          
+        inlinePosition: function(nodeIndex, nodeOffset, oldChildNodes) {
+          // pressuponha onde vai cai basedo nos novos filhos
+          this.superPos = 0;
+          var sumBefore = 0;
+          for (var i = nodeIndex - 1; i >= 0; i--) { // loop on nodes
+              n = oldChildNodes[i];
+              sumBefore = sumBefore + oldChildNodes[i].textContent.length;
+          }
+          this.superPos = sumBefore + nodeOffset;
+        },  
+        /*
+        * Returns the pair [index, offset] that is the caret position within of 
+        * an element with nodes.
+        *
+        * @param {Number} superPos - the position of the caret in plain text view
+        * @param {childNodes} newChildNodes - list of nodes returned by childNodes attrs.
+        * @method inNodePosition
+        */        
+        inNodePosition: function(superPos, newChildNodes) {
+          var childLengths = [];
+          var segment = 0;
+          var index, offset;
+
+          for (var i = 0; i < newChildNodes.length; i++) {
+            childLengths[i] = newChildNodes[i].textContent.length;
+          }
+
+          function indexAndOffset(point, line) {
+            for (var i = 0; i < line.length; i++) {
+                offset = point - segment;
+                segment = segment + line[i];
+                if (point <= segment) {
+                  index = i;
+                  break;
+                }
+            }
+            segment = 0; // guarantee
+            return [index, offset];
+          }
+
+          return indexAndOffset(superPos, childLengths);
+        },
+        checkInput: function () {
+            var currentText = this._targetElem.textContent; // sanitize
+            var newText = this.formatter(currentText);
+            var nodeIndex = null;
+            var indexCurrent = null;
+            var selection = document.getSelection();
+            var range = selection.getRangeAt(0);
+            var currentNode = range.startContainer
+            var nodeOffset = range.startOffset;
+
+            // check numbers of nodes
+            nodes = this._targetElem.childNodes.length;
+            // get current node index. "You are here". Before normalized.
+            var indexCurrent = this.currentNodeIndexIs(currentNode, this._targetElem.childNodes);  
+            // The target element is copied here
+            this.$.editableFilter.innerHTML = this._targetElem.innerHTML;
+            // The changes of the target element occurs here  
+            this._targetElem.innerHTML =  String(newText);
+            // Defines the nodeIndex. Together with offset defines the position
+            // of the caret.
+            nodesCurrent = this._targetElem.childNodes.length;
+            // Gets node index and offset
+            this.inlinePosition(indexCurrent, nodeOffset, this.$.editableFilter.childNodes);
+            inNodePosition = this.inNodePosition(this.superPos, this._targetElem.childNodes);
+            nodeIndex = inNodePosition[0];
+            nodeOffset = inNodePosition[1]; 
+            // check if exists blank space in formatted hashtag
+            this.isNewNode = this._hasWhiteSpace(this.$.editableFilter.childNodes[indexCurrent]);  
+            // By last...changes the shadow/copy of the target
+            this.$.editableFilter.innerHTML = newText;
+            // Restores the caret with this function
+            // console.log("[checkInput] nodeIndex and nodeOffset: ", + nodeIndex + " " + nodeOffset);
+            // console.log("[checkInput] nodes (before) and nodes (after): ", + nodes + " " + this._targetElem.childNodes.length);            
+            this._restoreSelection(nodeIndex, nodeOffset);
+        }, 
+        /*
+        * Formats the string typed by user.
+        * 
+        * @param text: the string will be formatted
+        * @method formatter
+        * @return formatted string
+        */                                 
+        formatter: function(text) {
+          var unameHtagRegex = /(#|@){1}([A-Z]+[A-Z0-9]+)/ig;
+
+          function wrapEm(match) {
+              return "<em>" + match + "</em>";
+          }
+          function replaceHash(text) {
+              return text.replace(unameHtagRegex, wrapEm);
+          }
+          newText = replaceHash(text);
+          newText = newText.replace(/\s/g, '&nbsp;'); // use <meta charset="UTF-8">
+          return newText;
+        },
+        /*
+        * Sets the keyCode attribute.
+        * 
+        * @param {Number} e - event returned by pressed key
+        * @method keysPressed
+        */       
+        keysPressed: function(e) {
+          if (e.keyCode == 27) {
+            this.unshowyMentionsBox();
+          }
+          this.keyCode = e.keyCode;
+        }, 
+        sendTo: function(){
+            var ajax = this.$.coreAjaxInput;
+            var data = {};
+            var dataUser = JSON.parse(window.localStorage.getItem('User'));              
+            if (!dataUser) {
+              var dataUser = {}
+              dataUser['pk'] = 'DEMOWRAPPER';  
+            }
+            
+            body = this._targetElem.textContent;
+            data['body'] = body;
+            data['register'] = this.register;
+            data['author'] = dataUser['pk']; // TODO: fix it
+            if (body.length > 0 && this.register) {
+              ajax.body = JSON.stringify(data);  
+              ajax.go();
+              this._targetElem.innerHTML = '';
+            }
+
+            if(!this.register) {
+              this.fire('sc-error-handling', {error: "Not selected register"});
+            }
+        },
+        setRegister: function(source, eventName, elem) {
+            source.addEventListener(eventName, function(e) {
+              register = e.detail.issue;
+              register = register.replace('/', '');
+              elem.register = register;
+            });
+        },
+        responseCommentsChanged: function() {
+          // to fire a 'sc-sse-response' fake similar at sc-sse 
+          this.fire('sc-sse-response', {response: this.responseComments, alias: 'sseTimeline'});
+        },
+
+      });
+    })();
+  </script>
+</polymer-element>
 </div>
   <!--
   <div id="loadData" layout vertical center-center>
@@ -15000,7 +15576,14 @@ polyfill-next-selector { content: ':host > h2'; }
         <sc-header></sc-header>
         <div class="panelContent" vertical="" layout="" fit="">
           <sc-timeline url="http://localhost:9003/api/v1/comments/" sseurl="http://localhost:9003/api/v1/stream/comments/"></sc-timeline>  
-          <sc-input-hashtag url="http://localhost:9003/api/v1/comments/" method="POST"></sc-input-hashtag>
+          <lp-input target="editable" mentionsurl="http://localhost:9003/api/v1/users/" url="http://localhost:9003/api/v1/comments/" method="POST"></lp-input>          
+          <div class="sc-input-section" flex="">
+            <!-- ver funcionamento do input-hashtags 
+            adicionar URL para o post do comentário
+            e o method ao lp-input
+            -->
+          <div id="editable" contenteditable="true"></div>
+          </div>
         </div>
       </core-header-panel>
     </div>

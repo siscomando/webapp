@@ -101,7 +101,7 @@ class SrcTestCase(unittest.TestCase):
 		change_values = {
 			'title': 'ALM - GERENCIAMENTO',
 			'body': 'Problema de autenticação no LDAP',
-			'register': '2015RI0000124',
+			'register': issue_db.register,
 			'ugat': 'SUPTI',
 			'ugser': 'SUPRE', 
 		}
@@ -111,7 +111,7 @@ class SrcTestCase(unittest.TestCase):
 					data=json_change_values,
 					content_type='application/json', 
 					content_length=json_change_values_length)
-		issue_recent = models.Issue.objects.get(register='2015RI0000124')
+		issue_recent = models.Issue.objects.get(register=issue_db.register)
 		issue = json.loads(issue.get_data())
 		self.assertEqual(issue_recent['register'], issue['issue']['register'])
 		self.assertEqual(issue['issue']['ugat'], 'SUPTI')
@@ -154,7 +154,6 @@ class SrcTestCase(unittest.TestCase):
 		self.assertEqual(issue.pk, comments[0].issue_id.pk)
 		body = u'Se for autenticação o problema é novamento o LDAP!'
 
-		print "HUMAN PRINT:", res.data
 		self.assertEqual(comments[0].body, body)
 		self.assertNotEqual(comments[0].shottime, -1)
 
@@ -213,7 +212,7 @@ class SrcTestCase(unittest.TestCase):
 		comment.author = u		
 		comment.issue_id = issue_db
 		comment.save()
-		res = self.app.get('/api/v1/comments/2015RI0000124/')
+		res = self.app.get('/api/v1/comments/%s/' % (issue_db.register))
 		json_data = json.loads(res.get_data())
 		self.assertIsInstance(json_data['comments'], list)
 		#self.assertEqual(len(json_data['comments']), 1)
@@ -319,7 +318,34 @@ class SrcTestCase(unittest.TestCase):
 		comment.save()		
 		# .order_by('$text_score')
 		results = models.Comment.objects.search_text('um')
-		self.assertEqual(len(results), 0)	
+		self.assertEqual(len(results), 0)
+
+	def test_api_get_users(self):
+		"""	Tests the search of the users for mentions feature. A json with as
+		sample bellow must be returned:
+
+			{
+			    "Users": [
+			        {
+			            "avatar": "http://www.gravatar.com/avatar/7b02b4e3a6f2217cb5731e9d8c1c8191?d=http://asteps.org/wp-content/plugins/buddypress/bp-core/images/mystery-man.jpg&s=150&r=G",
+			            "location": "SUPGS/GSIAI/GSAUT",
+			            "shortname": "horacioibrahim"
+			        },
+			        {
+			            "avatar": "http://api.randomuser.me/portraits/thumb/women/80.jpg",
+			            "location": "SUPGS/GSIAI/GSAUT",
+			            "shortname": "mmissias"
+			        }        
+			    ]
+			}		
+		"""
+		term = 'xxx' # term of search
+		url = '/api/v1/users/' + term
+		res = self.app.get(url)
+		json_data = json.loads(res.get_data())
+		self.assertIsInstance(json_data['Users'], list)
+		self.assertIn(term, json_data['Users'][0]['shortname'])
+
 
 class CustomsTestCase(unittest.TestCase):
 	""" Tests created custom codes, adaptations, monkeys patch """
@@ -343,18 +369,20 @@ class CustomsTestCase(unittest.TestCase):
 		db.drop_database(self.dbname)
 
 	def test_get_comments_to_json_modified(self):
+		""" Tests if custom method to_json work fine """
+		register = "2015RI/0000002%d" % (random.randint(0, 3458))
 		# add issue
 		o = models.Issue()
 		o.body = "Problema na rede SigaRede"
 		o.title = "SICAP - SISTEMA"
 		o.slug = "sicap-sistema"
-		o.register = "2015RI/00000023456"
+		o.register = register
 		o.ugat = "SUPOP"
 		o.ugser = "SUPGS"
 		o.save()
 		# add user
 		u = models.User()
-		u.email = "horacioibrahim1@gmail.com"
+		u.email = "horacioibrahim%d@gmail.com" % (random.randint(11, 9999))
 		u.password = "secr3t"
 		u.save()
 		# add comment
@@ -366,7 +394,9 @@ class CustomsTestCase(unittest.TestCase):
 		# get json comment
 		json_data = c.to_json()
 		data = json.loads(json_data)
-		self.assertEqual(data['issue_id']['Issue']['register'], '2015RI00000023456')
+		# The tests the json generated
+		register = register.replace('/', '')
+		self.assertEqual(str(data['issue_id']['Issue']['register']), str(register))
 
 
 class SSETestCase(unittest.TestCase):

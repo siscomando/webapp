@@ -190,6 +190,14 @@ class Comment(db.Document):
         self.set_shottime()
         super(Comment, self).save(*args, **kwargs)
 
+
+class Tags(db.Document):
+    tag = db.StringField(max_length=200);
+    obj_linked = db.StringField(max_length=20, required=False) # It's objects linked with tag.
+    obj_oid = db.StringField(required=False)
+    obj_pk = db.StringField(required=False)
+
+
 # Signals
 signals.post_save.connect(Issue.post_save, sender=Issue)
 signals.post_save.connect(Comment.post_save, sender=Comment)
