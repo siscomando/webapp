@@ -1,13 +1,21 @@
 # -*- coding: utf-8 -*-
 from flask.views import View
-from flask import jsonify, request, make_response, abort, Response
-from flask import render_template, flash, url_for, redirect, session
+from flask import jsonify, request, make_response, abort, Response, flash
+from flask import render_template, flash, url_for, redirect, session, g
+from flask.ext.login import login_required, current_user, login_user, logout_user
 import logging
 import json
-#APP
-from src import app, red
-from src import models
+# APP
+from src import app, red, models, login_manager
 
+# Setup flask-login
+@login_manager.user_loader
+def load_user(id):
+    return models.User.objects.get(pk=id)
+
+@app.before_request
+def before_request():
+    g.user = current_user    
 
 # APP
 @app.errorhandler(404)
@@ -34,45 +42,71 @@ def index():
 	# else:
 		# to login or register user
 
-	return render_template('login.html')
+	return redirect(url_for('login')) # TODO: landingpage
+
+@app.route('/logout')
+@login_required
+def logout():
+	u = current_user
+	u.status_online = False
+	logout_user()
+	return redirect(url_for('index'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+	# TODO: FAZER LOGIN
+	# TODO: REDIRECT HOME
 	if request.method == 'POST':
-		print request.json # TODO: to send to GET or POST of the Pentaho
-	else:
-		return render_template('login.html')
+		email = request.form['identifier']
+		password = request.form['password']
+		registered_user = models.User.objects.filter(email=email, 
+				password=password).first()
+		if registered_user is None:
+			flash('Username or Password is invalid', 'error') # TODO
+			return redirect(url_for('login'))
 
-
-	return jsonify({'msg': 'Sucessful'}), 201
+		login_user(registered_user, remember=True)
+		flash('Logged in successfully')
+		return redirect(request.args.get('next') or url_for('application'))
+	
+	# return jsonify({'msg': 'Sucessful'}), 201
+	return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+	# TODO: TESTAR LOGIN REDIRECT
+	# TODO: RESETAR SENHA
     if request.method == 'GET':
         return render_template('register.html')
 
     user = models.User()
-    json_data = request.get_json()
-    user.email =  json_data.get('identifier')
-    user.password = json_data.get('password')
-    user.save()
-    flash('User successfully registered') # TODO name already exists
-    return jsonify({'msg': 'Sucessful'}), 201
+    user.email =  request.form.get('identifier', None)
+    user.password = request.form.get('password', None)
 
+    if user.email is None or user.password is None:
+    	flash('The typed User or Password is invalid', 'error')
+
+    try:
+    	user.save()
+    except:
+    	flash('User or password is invalid or already exists', 'error')
+
+    flash('User successfully registered') # TODO name already exists
+    return redirect(url_for('login'))
+    
 @app.route('/app', methods=['GET'])
+@login_required
 def application():
 
 	#if user.is_authenticated():
 	#	return render_template('app.html')
 	# else:
 	#	return login()
-	print dir(session)
-	print "===="
-	print session
 	return render_template('app.html')
 
 # API REQUESTS 
 @app.route('/api/v1/users/<string:expr>')
+@login_required
 def get_users(expr):
 	""" Gets users from string of the mentions typed by users."""
 	if expr.startswith('@'):
@@ -84,16 +118,19 @@ def get_users(expr):
 	return jsonify(data), 201
 
 @app.route('/api/v1/issues/', methods=['GET'])
+@login_required
 def get_issues():
 	issues = models.Issue.objects()
 	return jsonify({'issues': issues}), 201
 
 @app.route('/api/v1/issues/<string:register>', methods=['GET'])
+@login_required
 def get_issue(register):
 	issue = models.Issue.objects.get_or_404(register=register)
 	return jsonify({'issue': issue})	
 
 @app.route('/api/v1/issues/', methods=['POST'])
+@login_required
 def set_issues():
 	""" Persists the JSON from request in database
 	"""
@@ -111,6 +148,7 @@ def set_issues():
 	return jsonify({'issue': new_issue}), 201
 
 @app.route('/api/v1/issues/', methods=['PUT'])
+@login_required
 def edit_issues():
 	""" Edits an issue
 
@@ -133,6 +171,7 @@ def edit_issues():
 	return jsonify({'issue': issue}), 201
 
 @app.route('/api/v1/issues/<string:register>', methods=['DELETE'])
+@login_required
 def del_issues(register):
 	issue = models.Issue.objects.get_or_404(register=register)
 	issue.delete()
@@ -141,6 +180,7 @@ def del_issues(register):
 
 # Comments
 @app.route('/api/v1/comments/', methods=['POST'])
+@login_required
 def set_comments():
 	""" Creates a comment in database
 
@@ -174,14 +214,16 @@ def set_comments():
 	
 	return jsonify(data), 201
 
-@app.route('/api/v1/comments/', methods=['GET'])	
+@app.route('/api/v1/comments/', methods=['GET'])
+@login_required	
 def get_comments():
 	comments = models.Comment.objects()
 	json_data = json.loads(comments.to_json())
 	data = {'comments': json_data}
 	return jsonify(data), 201
 
-@app.route('/api/v1/comments/<string:register>/', methods=['GET'])	
+@app.route('/api/v1/comments/<string:register>/', methods=['GET'])
+@login_required	
 def get_comments_from_register(register):
 	issue = models.Issue.objects.get_or_404(register=register)
 	comments = models.Comment.objects(issue_id=issue.pk)
@@ -189,13 +231,15 @@ def get_comments_from_register(register):
 	data = {'comments': json_data}
 	return jsonify(data), 201
 
-@app.route('/api/v1/comments/<string:oid>/', methods=['DELETE'])	
+@app.route('/api/v1/comments/<string:oid>/', methods=['DELETE'])
+@login_required	
 def del_comments(oid):
 	comment = models.Comment.objects.get_or_404(pk=oid)
 	comment.delete()
 	return jsonify({'msg': 'Sucessful'}), 201
 
-@app.route('/api/v1/comments/<string:oid>/', methods=['PUT'])	
+@app.route('/api/v1/comments/<string:oid>/', methods=['PUT'])
+@login_required	
 def edit_comments(oid):
 	comment = models.Comment.objects.get_or_404(pk=oid)
 	
@@ -222,6 +266,7 @@ def event_stream(channel):
 		yield 'data: %s\n\n' % message['data']
 
 @app.route('/api/v1/stream/comments/', methods=['GET'])
+@login_required
 def stream_comments():
 	""" Gets new issues and fire it in the Redis. 
 
@@ -231,6 +276,7 @@ def stream_comments():
 		headers=[('cache_control', 'no-cache')])
 
 @app.route('/api/v1/stream/comments/<string:issueoid>/', methods=['GET'])
+@login_required
 def stream_comments_by_issue(issueoid):
 	""" Gets new comments based in Issue Object ID and fire it in the Redis. 
 	""" 
@@ -239,6 +285,7 @@ def stream_comments_by_issue(issueoid):
 		headers=[('cache_control', 'no-cache')])	
 
 @app.route('/api/v1/stream/issues/')
+@login_required
 def stream_by_issues():
 	""" Gets new issues
 
