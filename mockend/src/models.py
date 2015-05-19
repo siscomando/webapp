@@ -1,5 +1,6 @@
 import datetime
 import json
+import md5
 from flask import url_for
 from mongoengine import signals, CASCADE, DENY
 from flask.ext.mongoengine import BaseQuerySet
@@ -26,6 +27,8 @@ class User(db.Document):
     location = db.StringField(max_length=25)
     shortname = db.StringField(max_length=80)
     avatar = db.StringField()
+    status_online = db.BooleanField(default=True)
+    md5_email = db.StringField()
 
     meta = {'queryset_class': CustomQuerySet}    
 
@@ -62,12 +65,9 @@ class User(db.Document):
     def save(self, *args, **kwargs):
         self.validate_email()
         self.set_shortname()
+        self.md5_email = md5.md5(self.email).hexdigest()
         super(User, self).save(*args, **kwargs)
 
-
-@login_manager.user_loader
-def load_user(id):
-    return User.objects.get(pk=id)
 
 class Issue(db.Document):
     created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
@@ -155,7 +155,9 @@ class Comment(db.Document):
         data['author'] = {'User': {
                                 'shortname': self.author.shortname,
                                 'location': self.author.location,
-                                'avatar': self.author.avatar
+                                'avatar': self.author.avatar,
+                                'status_online': self.author.status_online,
+                                'md5_email': self.author.md5_email
                         }
         }
         day, month, year = self.created_at.day, self.created_at.month, self.created_at.year  

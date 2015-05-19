@@ -3,7 +3,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <title>SisComando - Mais fácil, mais social!</title>
 
-  <script src="static/components/webcomponentsjs/webcomponents.min.js"></script>
+  <script src="/static/components/webcomponentsjs/webcomponents.min.js"></script>
   <style shim-shadowdom="">
 /*******************************
           Flex Layout
@@ -283,7 +283,7 @@ html /deep/ [segment], html /deep/ segment {
 
 </style>
 
-<script src="static/components/polymer/polymer.js"></script>
+<script src="/static/components/polymer/polymer.js"></script>
 
   
 
@@ -331,6 +331,7 @@ html /deep/ core-icon {
   height: 24px;
   width: 24px;
 }</style>
+
 
 
 
@@ -430,8 +431,8 @@ html /deep/ .paper-shadow-bottom-z-5 {
 
 
 
-<script src="static/components/core-focusable/polymer-mixin.js"></script>
-<script src="static/components/core-focusable/core-focusable.js"></script>
+<script src="/static/components/core-focusable/polymer-mixin.js"></script>
+<script src="/static/components/core-focusable/core-focusable.js"></script>
 
 
 
@@ -459,14 +460,14 @@ and password).
 @homepage http://polymerlabs.github.io/login-box
 -->
 
-  <link rel="stylesheet" href="static/css/app.css">
-  <link rel="shortcut icon" href="static/favicon.ico" type="image/x-icon">
-  <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/static/assets/css/app.css">
+  <link rel="shortcut icon" href="/static/assets/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/static/assets/favicon.ico" type="image/x-icon">
 
 </head>
 
 <body fullbleed="" vertical="" layout="" unresolved=""><div hidden="">
-<polymer-element name="core-header-panel" assetpath="static/components/core-header-panel/">
+<polymer-element name="core-header-panel" assetpath="/static/components/core-header-panel/">
 <template>
 
   <style>/*
@@ -752,7 +753,7 @@ mode: cover
 </script>
 </polymer-element>
 
-<polymer-element name="core-input" extends="input" assetpath="static/components/core-input/">
+<polymer-element name="core-input" extends="input" assetpath="/static/components/core-input/">
 
 <script>
 
@@ -847,7 +848,7 @@ mode: cover
 
 </polymer-element>
 
-<polymer-element name="core-meta" attributes="label type" hidden="" assetpath="static/components/core-meta/">
+<polymer-element name="core-meta" attributes="label type" hidden="" assetpath="/static/components/core-meta/">
 <script>
 
   (function() {
@@ -933,7 +934,7 @@ mode: cover
   
 </script>
 </polymer-element>
-<polymer-element name="core-iconset" extends="core-meta" attributes="src width icons iconSize" assetpath="static/components/core-iconset/">
+<polymer-element name="core-iconset" extends="core-meta" attributes="src width icons iconSize" assetpath="/static/components/core-iconset/">
   
   <script>
   
@@ -1112,7 +1113,7 @@ mode: cover
   </script>
 
 </polymer-element>
-<polymer-element name="core-icon" attributes="src icon alt" assetpath="static/components/core-icon/">
+<polymer-element name="core-icon" attributes="src icon alt" assetpath="/static/components/core-icon/">
 <script>
 (function() {
   
@@ -1254,7 +1255,7 @@ mode: cover
 
 </polymer-element>
 
-<polymer-element name="core-iconset-svg" extends="core-meta" attributes="iconSize" assetpath="static/components/core-iconset-svg/">
+<polymer-element name="core-iconset-svg" extends="core-meta" attributes="iconSize" assetpath="/static/components/core-iconset-svg/">
 
   <script>
 
@@ -1616,7 +1617,7 @@ mode: cover
 </defs></svg>
 </core-iconset-svg>
 
-<polymer-element name="core-style" hidden="" assetpath="static/components/core-style/">
+<polymer-element name="core-style" hidden="" assetpath="/static/components/core-style/">
 <script>
 (function() {
 
@@ -1946,7 +1947,7 @@ Polymer('core-style', {
 
 </core-style>
 
-<polymer-element name="paper-input-decorator" layout="" vertical="" on-transitionend="{{transitionEndAction}}" on-webkittransitionend="{{transitionEndAction}}" on-input="{{inputAction}}" on-down="{{downAction}}" on-tap="{{tapAction}}" on-char-counter-error="{{charCounterErrorAction}}" assetpath="static/components/paper-input/">
+<polymer-element name="paper-input-decorator" layout="" vertical="" on-transitionend="{{transitionEndAction}}" on-webkittransitionend="{{transitionEndAction}}" on-input="{{inputAction}}" on-down="{{downAction}}" on-tap="{{tapAction}}" on-char-counter-error="{{charCounterErrorAction}}" assetpath="/static/components/paper-input/">
 
   <template>
 
@@ -2446,7 +2447,7 @@ polyfill-next-selector {
   </script>
 
 </polymer-element>
-<polymer-element name="paper-input" assetpath="static/components/paper-input/">
+<polymer-element name="paper-input" assetpath="/static/components/paper-input/">
 
 <template>
 
@@ -2540,7 +2541,7 @@ polyfill-next-selector {
 
 </polymer-element>
 
-<polymer-element name="paper-shadow" assetpath="static/components/paper-shadow/">
+<polymer-element name="paper-shadow" assetpath="/static/components/paper-shadow/">
 
 <template>
 
@@ -2599,7 +2600,7 @@ polyfill-next-selector {
 </script>
 </polymer-element>
 
-<polymer-element name="core-a11y-keys" assetpath="static/components/core-a11y-keys/">
+<polymer-element name="core-a11y-keys" assetpath="/static/components/core-a11y-keys/">
 <script>
   (function() {
     /*
@@ -2852,7 +2853,7 @@ polyfill-next-selector {
 </polymer-element>
 
 
-<polymer-element name="paper-ripple" attributes="initialOpacity opacityDecayVelocity" assetpath="static/components/paper-ripple/">
+<polymer-element name="paper-ripple" attributes="initialOpacity opacityDecayVelocity" assetpath="/static/components/paper-ripple/">
 <template>
 
   <style>
@@ -3258,7 +3259,7 @@ polyfill-next-selector {
 
 </script>
 </polymer-element>
-<polymer-element name="paper-button-base" tabindex="0" assetpath="static/components/paper-button/">
+<polymer-element name="paper-button-base" tabindex="0" assetpath="/static/components/paper-button/">
 
 <script>
 
@@ -3399,7 +3400,7 @@ polyfill-next-selector {
 
 </script>
 </polymer-element>
-<polymer-element name="paper-button" extends="paper-button-base" attributes="raised recenteringTouch fill" role="button" assetpath="static/components/paper-button/">
+<polymer-element name="paper-button" extends="paper-button-base" attributes="raised recenteringTouch fill" role="button" assetpath="/static/components/paper-button/">
 
   <template>
 
@@ -3533,7 +3534,7 @@ polyfill-next-selector {
   </script>
 </polymer-element>
 
-<polymer-element name="core-xhr" hidden="" assetpath="static/components/core-ajax/">
+<polymer-element name="core-xhr" hidden="" assetpath="/static/components/core-ajax/">
 
   <script>
 
@@ -3625,7 +3626,7 @@ polyfill-next-selector {
   </script>
   
 </polymer-element>
-<polymer-element name="core-ajax" hidden="" attributes="url handleAs auto params response error method headers body contentType withCredentials progress loading" assetpath="static/components/core-ajax/">
+<polymer-element name="core-ajax" hidden="" attributes="url handleAs auto params response error method headers body contentType withCredentials progress loading" assetpath="/static/components/core-ajax/">
 <script>
 
   Polymer('core-ajax', {
@@ -4025,10 +4026,10 @@ polyfill-next-selector {
 
 </script>
 </polymer-element>
-<polymer-element name="login-box" attributes="heading identification submit action" assetpath="static/components/login-box/">
+<polymer-element name="login-box" attributes="heading identification submit action" assetpath="/static/components/login-box/">
 
   <template>
-    <script type="text/javascript" src="static/components/login-box/web-animations.js"></script>
+    <script type="text/javascript" src="/static/components/login-box/web-animations.js"></script>
     <style>:host {
   display: block;
   -moz-box-shadow: 0 0 10px #888;
@@ -4042,13 +4043,13 @@ polyfill-next-selector {
   text-align: center;
 }
 
-:host paper-input{
+:host paper-input, :host paper-input-decorator{
   margin-left: auto;
   margin-right: auto;
   width: 90%;
 }
 
-:host paper-input::shadow > #input {
+:host paper-input::shadow > #input, :host paper-input-decorator::shadow > #input {
   text-align: center;
 }
 
@@ -4071,11 +4072,21 @@ content[select="[top]"]::content img.radial {
     <content select="[identifierHeading]"></content>
     <paper-input id="identifierInput" value="{{identifier}}" label="{{identification}}"></paper-input>
     <content select="[passwordHeading]"></content>
+    
+    <!--
     <paper-input id="passwordInput" value="{{password}}" label="password" type="password"></paper-input>
+    -->
+    <paper-input-decorator label="with password" floatinglabel="">
+      <input is="core-input" type="password" id="passwordInput" value="{{password}}" label="password">
+    </paper-input-decorator>
+
     <paper-button id="submitbutton" raised="" on-click="{{validate}}">{{submit}}</paper-button>
     <content select="[bottom]"></content>
 
-    <core-ajax id="coreAjaxLogin" url="{{action}}" method="POST" handleas="json" contenttype="application/json"></core-ajax>
+    <form id="form" name="form" action="{{action}}" method="POST" style="display: none;">
+      <input type="text" name="identifier">
+      <input type="password" name="password">
+    </form>
   </template>
 
   <script>
@@ -4141,7 +4152,9 @@ content[select="[top]"]::content img.radial {
         this.sendTo();
         this.fireLoginTry();
       },
-
+      ready: function() {
+      
+      },
       /**
        * The `shake` method will shake this element (negative behaviour).
        * 
@@ -4184,14 +4197,10 @@ content[select="[top]"]::content img.radial {
        * @method go
        */    
       sendTo: function() {
-        var ajax = this.$.coreAjaxLogin;
-          var data = {};
-          data['identifier'] = this.identifier;  
-          data['password'] = this.password;  
-          ajax.body = JSON.stringify(data);
-          ajax.go();
+          this.$.form.elements[0].value = this.identifier;
+          this.$.form.elements[1].value = this.password;
+          this.$.form.submit();
       }
-
     });
 
   </script>
@@ -4204,7 +4213,7 @@ content[select="[top]"]::content img.radial {
       <div class="core-header">
           <div class="appbrand" horizontal="" layout="">
             <span class="logo"> 
-              <img src="static/img/logo_60.png">
+              <img src="/static/assets/img/logo_60.png">
             </span>
             <span class="appname">SisComando</span>
           </div>

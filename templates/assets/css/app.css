@@ -82,3 +82,7 @@ paper-spinner.blue::shadow .circle {
 font-style: normal;
 color: #47CACC !important;
 } 
+
+.user-data{
+  display: none;
+}
