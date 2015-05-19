@@ -8,7 +8,7 @@
          
   <title>SisComando - Mais fácil, mais social!</title>
 
-  <script src="static/components/webcomponentsjs/webcomponents.min.js"></script>
+  <script src="/static/components/webcomponentsjs/webcomponents.min.js"></script>
   <style shim-shadowdom="">
 /*******************************
           Flex Layout
@@ -288,7 +288,7 @@ html /deep/ [segment], html /deep/ segment {
 
 </style>
 
-<script src="static/components/polymer/polymer.js"></script>
+<script src="/static/components/polymer/polymer.js"></script>
 
   
 
@@ -394,8 +394,8 @@ html /deep/ .paper-shadow-bottom-z-5 {
 
 
 
-<script src="static/components/core-focusable/polymer-mixin.js"></script>
-<script src="static/components/core-focusable/core-focusable.js"></script>
+<script src="/static/components/core-focusable/polymer-mixin.js"></script>
+<script src="/static/components/core-focusable/core-focusable.js"></script>
 
 
 
@@ -800,7 +800,7 @@ object like this: `{v: 'top', h: 'right'}`.
 
 
 
-<script src="static/components/web-animations-js/web-animations-next-lite.min.js"></script>
+<script src="/static/components/web-animations-js/web-animations-next-lite.min.js"></script>
 
 
 
@@ -1275,13 +1275,13 @@ slack inputs.
 -->
 
 
-  <link rel="stylesheet" href="static/css/app.css">
-  <link rel="shortcut icon" href="static/favicon.ico" type="image/x-icon">
-  <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/static/assets/css/app.css">
+  <link rel="shortcut icon" href="/static/assets/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/static/assets/favicon.ico" type="image/x-icon">
 
 </head>
 <body fullbleed="" vertical="" layout="" unresolved=""><div hidden="">
-<polymer-element name="core-media-query" attributes="query queryMatches" assetpath="static/components/core-media-query/">
+<polymer-element name="core-media-query" attributes="query queryMatches" assetpath="/static/components/core-media-query/">
   <template>
     <style>
       :host {
@@ -1333,7 +1333,7 @@ slack inputs.
   </script>
 </polymer-element>
 
-<polymer-element name="core-selection" attributes="multi" hidden="" assetpath="static/components/core-selection/">
+<polymer-element name="core-selection" attributes="multi" hidden="" assetpath="/static/components/core-selection/">
   <script>
     Polymer('core-selection', {
       /**
@@ -1408,7 +1408,7 @@ slack inputs.
     });
   </script>
 </polymer-element>
-<polymer-element name="core-selector" attributes="selected multi valueattr selectedClass selectedProperty selectedAttribute selectedItem selectedModel selectedIndex notap excludedLocalNames target itemsSelector activateEvent" assetpath="static/components/core-selector/">
+<polymer-element name="core-selector" attributes="selected multi valueattr selectedClass selectedProperty selectedAttribute selectedItem selectedModel selectedIndex notap excludedLocalNames target itemsSelector activateEvent" assetpath="/static/components/core-selector/">
 
   <template>
     <core-selection id="selection" multi="{{multi}}" on-core-select="{{selectionSelect}}"></core-selection>
@@ -1888,7 +1888,7 @@ slack inputs.
     });
   </script>
 </polymer-element>
-<polymer-element name="core-drawer-panel" touch-action="auto" assetpath="static/components/core-drawer-panel/">
+<polymer-element name="core-drawer-panel" touch-action="auto" assetpath="/static/components/core-drawer-panel/">
 <template>
 
   <style>/*
@@ -2387,7 +2387,7 @@ core-selector:not(.narrow-layout) ::content [core-drawer-toggle] {
 </script>
 </polymer-element>
 
-<polymer-element name="core-header-panel" assetpath="static/components/core-header-panel/">
+<polymer-element name="core-header-panel" assetpath="/static/components/core-header-panel/">
 <template>
 
   <style>/*
@@ -2674,7 +2674,7 @@ mode: cover
 </polymer-element>
 
 
-<polymer-element name="core-toolbar" attributes="justify middleJustify bottomJustify" assetpath="static/components/core-toolbar/">
+<polymer-element name="core-toolbar" attributes="justify middleJustify bottomJustify" assetpath="/static/components/core-toolbar/">
 <template>
 
   <style>/*
@@ -2879,7 +2879,7 @@ polyfill-next-selector { content: ':host .indent'; }
 </script>
 </polymer-element>
 
-<polymer-element name="paper-shadow" assetpath="static/components/paper-shadow/">
+<polymer-element name="paper-shadow" assetpath="/static/components/paper-shadow/">
 
 <template>
 
@@ -2938,7 +2938,7 @@ polyfill-next-selector { content: ':host .indent'; }
 </script>
 </polymer-element>
 
-<polymer-element name="core-a11y-keys" assetpath="static/components/core-a11y-keys/">
+<polymer-element name="core-a11y-keys" assetpath="/static/components/core-a11y-keys/">
 <script>
   (function() {
     /*
@@ -3191,7 +3191,7 @@ polyfill-next-selector { content: ':host .indent'; }
 </polymer-element>
 
 
-<polymer-element name="paper-ripple" attributes="initialOpacity opacityDecayVelocity" assetpath="static/components/paper-ripple/">
+<polymer-element name="paper-ripple" attributes="initialOpacity opacityDecayVelocity" assetpath="/static/components/paper-ripple/">
 <template>
 
   <style>
@@ -3597,7 +3597,7 @@ polyfill-next-selector { content: ':host .indent'; }
 
 </script>
 </polymer-element>
-<polymer-element name="paper-button-base" tabindex="0" assetpath="static/components/paper-button/">
+<polymer-element name="paper-button-base" tabindex="0" assetpath="/static/components/paper-button/">
 
 <script>
 
@@ -3738,7 +3738,7 @@ polyfill-next-selector { content: ':host .indent'; }
 
 </script>
 </polymer-element>
-<polymer-element name="paper-button" extends="paper-button-base" attributes="raised recenteringTouch fill" role="button" assetpath="static/components/paper-button/">
+<polymer-element name="paper-button" extends="paper-button-base" attributes="raised recenteringTouch fill" role="button" assetpath="/static/components/paper-button/">
 
   <template>
 
@@ -3872,7 +3872,7 @@ polyfill-next-selector { content: ':host .indent'; }
   </script>
 </polymer-element>
 
-<polymer-element name="paper-radio-button" role="radio" tabindex="0" aria-checked="false" assetpath="static/components/paper-radio-button/">
+<polymer-element name="paper-radio-button" role="radio" tabindex="0" aria-checked="false" assetpath="/static/components/paper-radio-button/">
 <template>
 
   <style>/*
@@ -4087,7 +4087,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   
 </script>
 </polymer-element>
-<polymer-element name="paper-checkbox" extends="paper-radio-button" role="checkbox" assetpath="static/components/paper-checkbox/">
+<polymer-element name="paper-checkbox" extends="paper-radio-button" role="checkbox" assetpath="/static/components/paper-checkbox/">
   <template>
 
     <style>/*
@@ -4277,7 +4277,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </script>
 </polymer-element>
 
-<polymer-element name="core-meta" attributes="label type" hidden="" assetpath="static/components/core-meta/">
+<polymer-element name="core-meta" attributes="label type" hidden="" assetpath="/static/components/core-meta/">
 <script>
 
   (function() {
@@ -4363,7 +4363,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   
 </script>
 </polymer-element>
-<polymer-element name="core-transition" extends="core-meta" assetpath="static/components/core-transition/">
+<polymer-element name="core-transition" extends="core-meta" assetpath="/static/components/core-transition/">
   
   <script>
     Polymer('core-transition', {
@@ -4434,7 +4434,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </polymer-element>
 
 
-<polymer-element name="core-key-helper" assetpath="static/components/core-overlay/">
+<polymer-element name="core-key-helper" assetpath="/static/components/core-overlay/">
   <script>
     Polymer('core-key-helper', {
       ENTER_KEY: 13,
@@ -4443,7 +4443,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </script>
 </polymer-element>
 
-<polymer-element name="core-overlay-layer" assetpath="static/components/core-overlay/">
+<polymer-element name="core-overlay-layer" assetpath="/static/components/core-overlay/">
 <template>
   <style>
     :host {
@@ -4546,7 +4546,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 })();
 </script>
 </polymer-element>
-<polymer-element name="core-overlay" assetpath="static/components/core-overlay/">
+<polymer-element name="core-overlay" assetpath="/static/components/core-overlay/">
 <script>
 (function() {
 
@@ -5208,7 +5208,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </script>
 </polymer-element>
 
-<polymer-element name="core-transition-css" extends="core-transition" attributes="transitionType" assetpath="static/components/core-transition/">
+<polymer-element name="core-transition-css" extends="core-transition" attributes="transitionType" assetpath="/static/components/core-transition/">
 <template>
   <style no-shim="">/* Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -5367,7 +5367,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <core-transition-css id="core-transition-bottom" transitiontype="bottom"></core-transition-css>
 <core-transition-css id="core-transition-left" transitiontype="left"></core-transition-css>
 <core-transition-css id="core-transition-right" transitiontype="right"></core-transition-css>
-<polymer-element name="paper-dialog-base" extends="core-overlay" role="dialog" on-core-overlay-open="{{openAction}}" assetpath="static/components/paper-dialog/">
+<polymer-element name="paper-dialog-base" extends="core-overlay" role="dialog" on-core-overlay-open="{{openAction}}" assetpath="/static/components/paper-dialog/">
 
 <script>
 
@@ -5422,7 +5422,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </script>
 
 </polymer-element>
-<polymer-element name="paper-action-dialog" extends="paper-dialog-base" role="dialog" layout="" vertical="" assetpath="static/components/paper-dialog/">
+<polymer-element name="paper-action-dialog" extends="paper-dialog-base" role="dialog" layout="" vertical="" assetpath="/static/components/paper-dialog/">
 
 <template>
 
@@ -5488,7 +5488,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 </polymer-element>
 
-<polymer-element name="paper-dialog" extends="paper-dialog-base" role="dialog" layout="" vertical="" assetpath="static/components/paper-dialog/">
+<polymer-element name="paper-dialog" extends="paper-dialog-base" role="dialog" layout="" vertical="" assetpath="/static/components/paper-dialog/">
 
 <template>
 
@@ -5526,7 +5526,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <script>Polymer('paper-dialog');</script></polymer-element>
 
-<polymer-element name="core-dropdown" extends="core-overlay" assetpath="static/components/core-dropdown/">
+<polymer-element name="core-dropdown" extends="core-overlay" assetpath="/static/components/core-dropdown/">
 <script>
 
 (function() {
@@ -5745,7 +5745,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </script>
 </polymer-element>
 
-<polymer-element name="paper-dropdown-transition" extends="core-transition-css" assetpath="static/components/paper-dropdown/">
+<polymer-element name="paper-dropdown-transition" extends="core-transition-css" assetpath="/static/components/paper-dropdown/">
   <template>
     <style no-shim="">/* Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -5900,7 +5900,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </script>
 </polymer-element>
 
-<paper-dropdown-transition id="paper-dropdown-transition"></paper-dropdown-transition><polymer-element name="paper-dropdown" extends="core-dropdown" assetpath="static/components/paper-dropdown/">
+<paper-dropdown-transition id="paper-dropdown-transition"></paper-dropdown-transition><polymer-element name="paper-dropdown" extends="core-dropdown" assetpath="/static/components/paper-dropdown/">
 <template>
 
   <style>
@@ -5965,7 +5965,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 </script>
 </polymer-element>
-<polymer-element name="core-dropdown-base" tabindex="0" assetpath="static/components/core-dropdown/">
+<polymer-element name="core-dropdown-base" tabindex="0" assetpath="/static/components/core-dropdown/">
 <script>
 
   Polymer('core-dropdown-base',{
@@ -6058,7 +6058,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </script>
 </polymer-element>
 
-<polymer-element name="core-iconset" extends="core-meta" attributes="src width icons iconSize" assetpath="static/components/core-iconset/">
+<polymer-element name="core-iconset" extends="core-meta" attributes="src width icons iconSize" assetpath="/static/components/core-iconset/">
   
   <script>
   
@@ -6237,7 +6237,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </script>
 
 </polymer-element>
-<polymer-element name="core-icon" attributes="src icon alt" assetpath="static/components/core-icon/">
+<polymer-element name="core-icon" attributes="src icon alt" assetpath="/static/components/core-icon/">
 <script>
 (function() {
   
@@ -6379,7 +6379,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 </polymer-element>
 
-<polymer-element name="core-iconset-svg" extends="core-meta" attributes="iconSize" assetpath="static/components/core-iconset-svg/">
+<polymer-element name="core-iconset-svg" extends="core-meta" attributes="iconSize" assetpath="/static/components/core-iconset-svg/">
 
   <script>
 
@@ -6740,7 +6740,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <g id="work"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"></path></g>
 </defs></svg>
 </core-iconset-svg>
-<polymer-element name="paper-dropdown-menu" extends="core-dropdown-base" relative="" layout="" inline="" horizontal="" center="" tabindex="0" assetpath="static/components/paper-dropdown-menu/">
+<polymer-element name="paper-dropdown-menu" extends="core-dropdown-base" relative="" layout="" inline="" horizontal="" center="" tabindex="0" assetpath="/static/components/paper-dropdown-menu/">
 <template>
 
   <style>
@@ -6845,7 +6845,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </script>
 </polymer-element>
 
-<polymer-element name="paper-fab" extends="paper-button-base" attributes="src icon mini" role="button" assetpath="static/components/paper-fab/">
+<polymer-element name="paper-fab" extends="paper-button-base" attributes="src icon mini" role="button" assetpath="/static/components/paper-fab/">
 
   <template>
 
@@ -6958,7 +6958,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </script>
 </polymer-element>
 
-<polymer-element name="paper-icon-button" extends="paper-button-base" attributes="src icon" role="button" assetpath="static/components/paper-icon-button/">
+<polymer-element name="paper-icon-button" extends="paper-button-base" attributes="src icon" role="button" assetpath="/static/components/paper-icon-button/">
 
   <template>
 
@@ -7042,7 +7042,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 </polymer-element>
 
-<polymer-element name="core-input" extends="input" assetpath="static/components/core-input/">
+<polymer-element name="core-input" extends="input" assetpath="/static/components/core-input/">
 
 <script>
 
@@ -7137,7 +7137,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 </polymer-element>
 
-<polymer-element name="core-style" hidden="" assetpath="static/components/core-style/">
+<polymer-element name="core-style" hidden="" assetpath="/static/components/core-style/">
 <script>
 (function() {
 
@@ -7467,7 +7467,7 @@ Polymer('core-style', {
 
 </core-style>
 
-<polymer-element name="paper-input-decorator" layout="" vertical="" on-transitionend="{{transitionEndAction}}" on-webkittransitionend="{{transitionEndAction}}" on-input="{{inputAction}}" on-down="{{downAction}}" on-tap="{{tapAction}}" on-char-counter-error="{{charCounterErrorAction}}" assetpath="static/components/paper-input/">
+<polymer-element name="paper-input-decorator" layout="" vertical="" on-transitionend="{{transitionEndAction}}" on-webkittransitionend="{{transitionEndAction}}" on-input="{{inputAction}}" on-down="{{downAction}}" on-tap="{{tapAction}}" on-char-counter-error="{{charCounterErrorAction}}" assetpath="/static/components/paper-input/">
 
   <template>
 
@@ -7967,7 +7967,7 @@ polyfill-next-selector {
   </script>
 
 </polymer-element>
-<polymer-element name="paper-input" assetpath="static/components/paper-input/">
+<polymer-element name="paper-input" assetpath="/static/components/paper-input/">
 
 <template>
 
@@ -8061,7 +8061,7 @@ polyfill-next-selector {
 
 </polymer-element>
 
-<polymer-element name="paper-item" extends="paper-button-base" assetpath="static/components/paper-item/">
+<polymer-element name="paper-item" extends="paper-button-base" assetpath="/static/components/paper-item/">
 
   <template>
 
@@ -8161,7 +8161,7 @@ polyfill-next-selector {
   </script>
 </polymer-element>
 
-<polymer-element name="paper-menu-button" extends="core-dropdown-base" relative="" assetpath="static/components/paper-menu-button/">
+<polymer-element name="paper-menu-button" extends="core-dropdown-base" relative="" assetpath="/static/components/paper-menu-button/">
 <template>
 
   <style>
@@ -8203,7 +8203,7 @@ polyfill-next-selector {
 </script>
 </polymer-element>
 
-<polymer-element name="core-range" attributes="value min max step ratio" assetpath="static/components/core-range/">
+<polymer-element name="core-range" attributes="value min max step ratio" assetpath="/static/components/core-range/">
 <script>
 
   Polymer('core-range', {
@@ -8284,7 +8284,7 @@ polyfill-next-selector {
   
 </script>
 </polymer-element>
-<polymer-element name="paper-progress" extends="core-range" attributes="secondaryProgress indeterminate" assetpath="static/components/paper-progress/">
+<polymer-element name="paper-progress" extends="core-range" attributes="secondaryProgress indeterminate" assetpath="/static/components/paper-progress/">
 
   <template>
   
@@ -8424,7 +8424,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   
 </polymer-element>
 
-<polymer-element name="paper-radio-group" extends="core-selector" role="radiogroup" assetpath="static/components/paper-radio-group/">
+<polymer-element name="paper-radio-group" extends="core-selector" role="radiogroup" assetpath="/static/components/paper-radio-group/">
 
   <template>
 
@@ -8490,7 +8490,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   
 </polymer-element>
 
-<polymer-element name="paper-slider" extends="core-range" attributes="snaps pin disabled secondaryProgress editable immediateValue" role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" assetpath="static/components/paper-slider/">
+<polymer-element name="paper-slider" extends="core-range" attributes="snaps pin disabled secondaryProgress editable immediateValue" role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" assetpath="/static/components/paper-slider/">
 <template>
 
   <style>/*
@@ -9030,7 +9030,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </script>
 </polymer-element>
 
-<polymer-element name="paper-spinner" attributes="active alt" role="progressbar" assetpath="static/components/paper-spinner/">
+<polymer-element name="paper-spinner" attributes="active alt" role="progressbar" assetpath="/static/components/paper-spinner/">
   <template>
     <style>/*
     @license
@@ -9466,7 +9466,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </script>
 </polymer-element>
 
-<polymer-element name="paper-tab" attributes="noink" role="tab" inline="" flex="" center-center="" horizontal="" layout="" assetpath="static/components/paper-tabs/">
+<polymer-element name="paper-tab" attributes="noink" role="tab" inline="" flex="" center-center="" horizontal="" layout="" assetpath="/static/components/paper-tabs/">
 <template>
 
   <style>/*
@@ -9571,7 +9571,7 @@ polyfill-next-selector { content: '.tab-content > a'; }
   
 </script>
 </polymer-element>
-<polymer-element name="paper-tabs" extends="core-selector" attributes="noink nobar noslide scrollable hideScrollButton alignBottom" role="tablist" horizontal="" center="" layout="" assetpath="static/components/paper-tabs/">
+<polymer-element name="paper-tabs" extends="core-selector" attributes="noink nobar noslide scrollable hideScrollButton alignBottom" role="tablist" horizontal="" center="" layout="" assetpath="/static/components/paper-tabs/">
 <template>
 
   <style>/*
@@ -9917,7 +9917,7 @@ polyfill-next-selector { content: '#tabsContent > *:not(#selectionBar)'; }
 </script>
 </polymer-element>
 
-<polymer-element name="paper-toast" attributes="text duration opened responsiveWidth swipeDisabled autoCloseDisabled" role="status" assetpath="static/components/paper-toast/">
+<polymer-element name="paper-toast" attributes="text duration opened responsiveWidth swipeDisabled autoCloseDisabled" role="status" assetpath="/static/components/paper-toast/">
 
 <template>
 
@@ -10206,7 +10206,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </script>
 </polymer-element>
 
-<polymer-element name="paper-toggle-button" attributes="checked disabled" role="button" aria-pressed="false" tabindex="0" assetpath="static/components/paper-toggle-button/">
+<polymer-element name="paper-toggle-button" attributes="checked disabled" role="button" aria-pressed="false" tabindex="0" assetpath="/static/components/paper-toggle-button/">
 <template>
 
   <style>/*
@@ -10420,7 +10420,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </script>
 </polymer-element>
 
-<polymer-element name="core-xhr" hidden="" assetpath="static/components/core-ajax/">
+<polymer-element name="core-xhr" hidden="" assetpath="/static/components/core-ajax/">
 
   <script>
 
@@ -10512,7 +10512,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </script>
   
 </polymer-element>
-<polymer-element name="core-ajax" hidden="" attributes="url handleAs auto params response error method headers body contentType withCredentials progress loading" assetpath="static/components/core-ajax/">
+<polymer-element name="core-ajax" hidden="" attributes="url handleAs auto params response error method headers body contentType withCredentials progress loading" assetpath="/static/components/core-ajax/">
 <script>
 
   Polymer('core-ajax', {
@@ -10913,7 +10913,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </script>
 </polymer-element>
 
-<polymer-element name="core-animation" constructor="CoreAnimation" attributes="target keyframes customEffect composite duration fill easing iterationStart iterationCount delay direction autoplay targetSelector" assetpath="static/components/core-animation/">
+<polymer-element name="core-animation" constructor="CoreAnimation" attributes="target keyframes customEffect composite duration fill easing iterationStart iterationCount delay direction autoplay targetSelector" assetpath="/static/components/core-animation/">
   <script>
     (function() {
 
@@ -11316,7 +11316,7 @@ the animation.
 @status beta
 @homepage github.io
 -->
-<polymer-element name="core-animation-keyframe" attributes="offset" assetpath="static/components/core-animation/">
+<polymer-element name="core-animation-keyframe" attributes="offset" assetpath="/static/components/core-animation/">
   <script>
     Polymer('core-animation-keyframe',{
       publish: {
@@ -11351,7 +11351,7 @@ the animation.
 @status beta
 @homepage github.io
 -->
-<polymer-element name="core-animation-prop" attributes="name value" assetpath="static/components/core-animation/">
+<polymer-element name="core-animation-prop" attributes="name value" assetpath="/static/components/core-animation/">
   <script>
     Polymer('core-animation-prop',{
       publish: {
@@ -11418,7 +11418,7 @@ the animation.
 <g id="vpn-key"><path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"></path></g>
 </defs></svg>
 </core-iconset-svg>
-<polymer-element class="core-header" name="sc-header" attributes="notitle author issueInfo" assetpath="static/components/sc-header/">
+<polymer-element class="core-header" name="sc-header" attributes="notitle author issueInfo" assetpath="/static/components/sc-header/">
 
   <template>
     <style>:host {
@@ -11668,7 +11668,7 @@ core-toolbar paper-icon-button {
 
 </polymer-element>
 
-<polymer-element class="core-header" name="sc-search" attributes="notitle author url method" assetpath="static/components/sc-search/">
+<polymer-element class="core-header" name="sc-search" attributes="notitle author url method" assetpath="/static/components/sc-search/">
 
   <template>
     <style>:host {
@@ -12042,7 +12042,7 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
 </defs></svg>
 </core-iconset-svg>
 
-<polymer-element name="core-menu" extends="core-selector" assetpath="static/components/core-menu/">
+<polymer-element name="core-menu" extends="core-selector" assetpath="/static/components/core-menu/">
 <template>
 
   <style>/*
@@ -12074,7 +12074,7 @@ polyfill-next-selector { content: ':host > core-item'; }
 </template>
 <script>Polymer('core-menu');</script></polymer-element>
 
-<polymer-element name="core-item" attributes="label icon src" horizontal="" center="" layout="" assetpath="static/components/core-item/">
+<polymer-element name="core-item" attributes="label icon src" horizontal="" center="" layout="" assetpath="/static/components/core-item/">
 <template>
   <style>/*
 Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
@@ -12161,7 +12161,7 @@ polyfill-next-selector { content: ':host > a'; }
 </script>
 </polymer-element>
 
-<polymer-element name="core-collapse" attributes="target horizontal opened duration fixedSize allowOverflow" assetpath="static/components/core-collapse/">
+<polymer-element name="core-collapse" attributes="target horizontal opened duration fixedSize allowOverflow" assetpath="/static/components/core-collapse/">
 <template>
 
   <content></content>
@@ -12409,7 +12409,7 @@ polyfill-next-selector { content: ':host > a'; }
 
 </script>
 </polymer-element>
-<polymer-element name="core-submenu" attributes="selected selectedItem selectedAttribute label icon src valueattr" assetpath="static/components/core-menu/">
+<polymer-element name="core-submenu" attributes="selected selectedItem selectedAttribute label icon src valueattr" assetpath="/static/components/core-menu/">
 <template>
 
   <style>/*
@@ -12516,7 +12516,7 @@ core-item {
 </script>
 </polymer-element>
 
-<polymer-element name="sc-item" attributes="notitle icon scid" extends="paper-item" assetpath="static/components/sc-item/">
+<polymer-element name="sc-item" attributes="notitle icon scid" extends="paper-item" assetpath="/static/components/sc-item/">
   <template>
     <style>:host {
   width: 100%;
@@ -12618,7 +12618,7 @@ core-toolbar paper-icon-button, core-toolbar paper-icon {
 
 </polymer-element>
 
-<polymer-element name="sc-sse" hidden="" attributes="notitle author stream channel alias" assetpath="static/components/sc-sse/">
+<polymer-element name="sc-sse" hidden="" attributes="notitle author stream channel alias" assetpath="/static/components/sc-sse/">
   <script>
     Polymer('sc-sse', { 
        /**
@@ -12687,7 +12687,7 @@ core-toolbar paper-icon-button, core-toolbar paper-icon {
   </script>
 
 </polymer-element>
-<polymer-element name="sc-navbar" attributes="notitle url urlupdates author username avatar online method stream channel alias filter" assetpath="static/components/sc-navbar/">
+<polymer-element name="sc-navbar" attributes="notitle url urlupdates author username avatar avatarSize gravatarEnabled online method stream channel alias filter" assetpath="/static/components/sc-navbar/">
 
   <template>
     <style>:host {
@@ -12719,6 +12719,24 @@ paper-item.core-selected {
 }
 paper-item core-icon {
 	margin-right: 0.2em;
+}
+/* MENU DROPDOWN */
+paper-dropdown paper-item {
+	color: #000;
+	font-weight: 300;
+}
+paper-dropdown paper-item.core-selected {
+	background-color: #CCC;
+}
+paper-dropdown paper-item core-icon {
+	margin-right: 0.2em;
+}
+paper-dropdown paper-item a {
+	text-decoration: none;
+	color: inherit;
+}
+paper-dropdown core-menu {
+	margin: 0;
 }
 .badge {
 	font-size: 0.8em;
@@ -12855,6 +12873,16 @@ core-toolbar paper-icon-button {
           <core-icon icon="radio-button-on" style="{{ online ? 'color: #B8E986;' : 'color: #CCC;' }}">
           </core-icon>{{online ? 'online' : 'offline' }}</span>
       </div>
+      <paper-menu-button>
+          <paper-icon-button icon="menu" noink=""></paper-icon-button>
+          <paper-dropdown class="dropdown" valign="bottom">
+              <core-menu class="menu">
+                  <paper-item>Share</paper-item>
+                  <paper-item><a href="/settings">Settings</a></paper-item>
+                  <paper-item><a href="/logout">Logout</a></paper-item>
+              </core-menu>
+          </paper-dropdown>
+      </paper-menu-button>      
     </div>
     <!-- profile section -->
 
@@ -12880,7 +12908,7 @@ core-toolbar paper-icon-button {
        *
        *
        * @event sc-select
-       */     
+       */    
       /**
        * The `method` attribute sets an HTTP method to get issues.
        *
@@ -12912,7 +12940,9 @@ core-toolbar paper-icon-button {
           displaySearch: {value: false, reflect: true},  
           select: 0, 
           menuBySystem: [],
-          avatar: null
+          avatar: null,
+          avatarSize: "42px",
+          gravatarEnabled: true,
       },
       /* the best place to the constructor for array or object */
       created: function() {
@@ -12987,7 +13017,16 @@ core-toolbar paper-icon-button {
       },
       showAvatar: function() {
         if (this.avatar) {
-          this.$.avatar.innerHTML = '<img src="' + this.avatar + '">';
+
+          if (this.gravatarEnabled) {
+            // this.avatar is the md5 of the email
+            gravatarUrl = '//www.gravatar.com/avatar/' + this.avatar + "?s=" + this.avatarSize;
+            this.$.avatar.innerHTML = '<img src="' + gravatarUrl+ '">';
+          } else {
+            // this.avatar must be a link to image in media files
+            this.$.avatar.innerHTML = '<img src="' + this.avatar + '">';
+          }
+    
         } else {
           this.$.avatar.innerHTML = '<core-icon icon="account-box"></core-icon>';
         }
@@ -13068,7 +13107,7 @@ core-toolbar paper-icon-button {
 
 </polymer-element>
 
-<polymer-element name="core-list" tabindex="-1" assetpath="static/components/core-list/">
+<polymer-element name="core-list" tabindex="-1" assetpath="/static/components/core-list/">
 <template>
   <core-selection id="selection" multi="{{multi}}" on-core-select="{{selectedHandler}}"></core-selection>
   <style>:host {
@@ -14234,7 +14273,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
 </script>
 </polymer-element>
 
-<polymer-element name="star-rating" attributes="starCount votes votesSum url readyOnly" assetpath="static/components/star-rating/">
+<polymer-element name="star-rating" attributes="starCount votes votesSum url readyOnly" assetpath="/static/components/star-rating/">
 
   <template>
     <div id="starRating">
@@ -14250,7 +14289,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
         width: 18px;
         height: 17px;
         margin-right: 5px;
-        background: url("static/components/star-rating/images/rating.png") no-repeat 0 -17px;
+        background: url("/static/components/star-rating/images/rating.png") no-repeat 0 -17px;
       }
 
       .star.check {
@@ -14397,7 +14436,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
 
 </polymer-element>
 
-<polymer-element name="sc-link" attributes="eventname continue href colorlink" assetpath="static/components/sc-link/">
+<polymer-element name="sc-link" attributes="eventname continue href colorlink" assetpath="/static/components/sc-link/">
   <template>
     <style>
     :host {
@@ -14431,7 +14470,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
     })();
   </script>
 </polymer-element>
-<polymer-element name="sc-timeline" attributes="notitle author data emptyavatar url sseurl ssechannel ssealias scope" assetpath="static/components/sc-timeline/">
+<polymer-element name="sc-timeline" attributes="notitle author data emptyavatar url sseurl ssechannel ssealias scope gravatarEnabled" assetpath="/static/components/sc-timeline/">
 
   <template>
   <core-ajax auto="" url="{{url}}" handleas="json" response="{{response}}"></core-ajax>
@@ -14592,7 +14631,13 @@ core-icon .pallete-icon-color .autumn {
             <div class="columns content" flex="">
                 <div horizontal="" layout="">
                   <div class="thumbnail">
-                    <img src="{{ model.author.User.avatar || emptyavatar }}">
+                    <!-- if gravatarEnabled -->
+                    <template bind="" if="{{ gravatarEnabled == 'true' }}">
+                      <img src="{{ getGravatarUrl(model.author.User.md5_email) }}">
+                    </template>
+                    <template bind="" if="{{ gravatarEnabled != 'true' }}">
+                      <img src="{{ model.author.User.avatar || emptyavatar }}">
+                    </template>
                   </div> 
                   <div class="author-info" flex="">
                     <div class="username">{{ model.author.User.shortname }} 
@@ -14646,7 +14691,7 @@ core-icon .pallete-icon-color .autumn {
       author: 'Horacio Ibrahim',
       publish: {
         // publics properties
-        emptyavatar: "static/img/avatar-empty.png",
+        emptyavatar: "static/assets/img/avatar-empty.png",
         url: '',
         sseurl: '',
         ssealias: 'sseTimeline',
@@ -14803,14 +14848,18 @@ core-icon .pallete-icon-color .autumn {
               }
           }
           next();
-      }      
+      },
+      getGravatarUrl: function(md5) {
+        gravatarUrl = '//www.gravatar.com/avatar/' + md5 + "?s=" + 48;
+        return gravatarUrl
+      }     
     });
 
   </script>
 
 </polymer-element>
 
-<polymer-element name="sc-input-hashtag" attributes="notitle author url method" assetpath="static/components/sc-input-hashtag/">
+<polymer-element name="sc-input-hashtag" attributes="notitle author url method" assetpath="/static/components/sc-input-hashtag/">
 
   <template>
     <style>:host {
@@ -14953,7 +15002,7 @@ polyfill-next-selector { content: ':host > h2'; }
 
 </polymer-element>
 
-<polymer-element name="lp-input" attributes="target mentionsURL url method" assetpath="static/components/lp-input/">
+<polymer-element name="lp-input" attributes="target mentionsURL url method" assetpath="/static/components/lp-input/">
   <template>
 
       <style> :host {
@@ -15068,7 +15117,14 @@ polyfill-next-selector { content: ':host > h2'; }
         * Fired when a user is selected in mentions box.
         *
         * @event selected-user
-        */        
+        */   
+        /**
+        * The `sc-error-handling` fires when user try to post comments without
+        * the number of the register. To handling this events to show pop-up
+        * messages.
+        *
+        * @event sc-error-handling
+        */              
         publish: {
           /**
           * The target is ID's value of the div.contentEditable.
@@ -15122,7 +15178,7 @@ polyfill-next-selector { content: ':host > h2'; }
           valueText: null,
           Users: [],
           /*
-          * The `register` is the ID to post comments.
+          * The `register` is the Issue's ID to post comments.
           *
           * @attribute register
           * @type string
@@ -15130,7 +15186,7 @@ polyfill-next-selector { content: ':host > h2'; }
           */ 
           register: null, 
           /**
-          * The `url` is the place where data will be sent based in the method.
+          * The `url` to post comments.
           *
           * @attribute url
           * @type string
@@ -15138,13 +15194,13 @@ polyfill-next-selector { content: ':host > h2'; }
           */           
           url: '',
           /**
-          * The `method` is HTML method used to send data from target input.
+          * The `method` used to send ajax's data.
           *
           * @attribute method
           * @type string
           * @default 'POST'
           */           
-          method: 'POST', 
+          method: 'POST',            
         },    
         created: function() {
           // initialize but it not is turned public to use by users of the element
@@ -15549,7 +15605,7 @@ polyfill-next-selector { content: ':host > h2'; }
   <div id="loadData" layout vertical center-center>
     <paper-spinner class="blue" active></paper-spinner>
   </div>
-  -->
+  -->  
   <core-drawer-panel>   
     <div drawer="">
       <core-header-panel>
@@ -15557,14 +15613,14 @@ polyfill-next-selector { content: ':host > h2'; }
         <div class="core-header">
             <div class="appbrand" horizontal="" layout="">
               <span class="logo"> 
-                <img src="static/img/logo_60.png">
+                <img src="/static/assets/img/logo_60.png">
               </span>
               <span class="appname">SisComando</span>
               <span class="beta">beta</span>
             </div>
         </div>
         <!-- App context mini-header: END -->
-        <sc-navbar username="horacioibrahim" online="true" url="http://localhost:9003/api/v1/issues/" stream="http://localhost:9003/api/v1/stream/issues/" channel="message" avatar="http://localhost:9003/static/img/avatar-empty.png"></sc-navbar>
+        <sc-navbar username="%% g.user.shortname %%" avatar="%% g.user.md5_email %%" gravatarenabled="true" online="%% g.user.status_online %%" url="http://localhost:9003/api/v1/issues/" stream="http://localhost:9003/api/v1/stream/issues/" channel="message"></sc-navbar>
         <!--
         stream="http://localhost:9003/api/v1/stream/issues/"
         -->
@@ -15575,7 +15631,7 @@ polyfill-next-selector { content: ':host > h2'; }
         <sc-search url="search_results.json"></sc-search>
         <sc-header></sc-header>
         <div class="panelContent" vertical="" layout="" fit="">
-          <sc-timeline url="http://localhost:9003/api/v1/comments/" sseurl="http://localhost:9003/api/v1/stream/comments/"></sc-timeline>  
+          <sc-timeline url="http://localhost:9003/api/v1/comments/" sseurl="http://localhost:9003/api/v1/stream/comments/" gravatarenabled="true"></sc-timeline>  
           <lp-input target="editable" mentionsurl="http://localhost:9003/api/v1/users/" url="http://localhost:9003/api/v1/comments/" method="POST"></lp-input>          
           <div class="sc-input-section" flex="">
             <!-- ver funcionamento do input-hashtags 
@@ -15589,7 +15645,16 @@ polyfill-next-selector { content: ':host > h2'; }
     </div>
   </core-drawer-panel>
 
-
-<script src="static/js/app.js"></script>
+  <!-- <script src="assets/js/app.js"></script> -->
+  <script>
+      var userData = {};
+      var pk = "%% g.user.pk %%";
+      userData['pk'] = pk.replace(/'/g,'').replace(/ /g, '') // mockPK;
+      userData['avatar'] = "%% g.user.avatar %%";
+      userData['shortname'] = "%% g.user.shortname %%";
+      userData['email'] = "%% g.user.email %%";
+      console.log(JSON.stringify(userData));
+      window.localStorage.setItem("User", JSON.stringify(userData));  
+  </script>
 
 </body></html>
