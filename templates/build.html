@@ -31,7 +31,7 @@
   <div id="loadData" layout vertical center-center>
     <paper-spinner class="blue" active></paper-spinner>
   </div>
-  -->
+  -->  
   <core-drawer-panel>   
     <div drawer>
       <core-header-panel>
@@ -47,12 +47,13 @@
         </div>
         <!-- App context mini-header: END -->
         <sc-navbar 
-        username="horacioibrahim" 
-        online="true" 
-        url="http://localhost:9003/api/v1/issues/"
-        stream="http://localhost:9003/api/v1/stream/issues/"
-        channel="message"
-        avatar="http://localhost:9003/static/img/avatar-empty.png"
+         username="%% g.user.shortname %%"
+         avatar="%% g.user.md5_email %%"
+         gravatarEnabled="true"
+         online="%% g.user.status_online %%"
+         url="http://localhost:9003/api/v1/issues/"
+         stream="http://localhost:9003/api/v1/stream/issues/"
+         channel="message"
         ></sc-navbar>
         <!--
         stream="http://localhost:9003/api/v1/stream/issues/"
@@ -65,7 +66,8 @@
         <sc-header></sc-header>
         <div class="panelContent" vertical layout fit>
           <sc-timeline url="http://localhost:9003/api/v1/comments/" 
-          sseurl="http://localhost:9003/api/v1/stream/comments/"></sc-timeline>  
+          sseurl="http://localhost:9003/api/v1/stream/comments/"
+          gravatarEnabled="true"></sc-timeline>  
           <lp-input target="editable" mentionsURL="http://localhost:9003/api/v1/users/"
           url="http://localhost:9003/api/v1/comments/" method="POST"></lp-input>          
           <div class="sc-input-section" flex >
@@ -80,6 +82,16 @@
     </div>
   </core-drawer-panel>
 
+  <!-- <script src="assets/js/app.js"></script> -->
+  <script>
+      var userData = {};
+      var pk = "%% g.user.pk %%";
+      userData['pk'] = pk.replace(/'/g,'').replace(/ /g, '') // mockPK;
+      userData['avatar'] = "%% g.user.avatar %%";
+      userData['shortname'] = "%% g.user.shortname %%";
+      userData['email'] = "%% g.user.email %%";
+      console.log(JSON.stringify(userData));
+      window.localStorage.setItem("User", JSON.stringify(userData));  
+  </script>
 </body>
-<script src="assets/js/app.js"></script>
 </html>
