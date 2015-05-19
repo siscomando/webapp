@@ -17,4 +17,5 @@ share
 .DS_Store
 .idea
 src/bower_components/
-src/components
+src/components/
+templates/bower_components/
