@@ -75,6 +75,8 @@ paper-spinner.blue::shadow .circle {
   resize: none !important;  
   width: 100%;
   margin: 0;
+  word-wrap: break-word; /* firefox */
+  word-break: break-all; /* firefox */
 }
 
 #editable em {
