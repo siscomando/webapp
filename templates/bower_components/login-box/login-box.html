@@ -25,26 +25,26 @@ and password).
     <h2>{{heading}}</h2>
     <content select="[top]"></content>
     <content select="[identifierHeading]"></content>
-    <paper-input id="identifierInput" value="{{identifier}}" label="{{identification}}"></paper-input>
+    
+    <!-- <paper-input id="identifierInput" value="{{identifier}}" label="{{identification}}" floatingLabel></paper-input>-->
+
+    <paper-input-decorator label="E-mail" floatingLabel>
+      <input is="core-input" type="email" id="identifierInput" value="{{identifier}}" label="E-mail" floatingLabel>
+    </paper-input-decorator>    
+    
     <content select="[passwordHeading]"></content>
     
-    <!--
-    <paper-input id="passwordInput" value="{{password}}" label="password" type="password"></paper-input>
-    -->
-    <paper-input-decorator label="with password" floatingLabel>
+    <paper-input-decorator label="Password" floatingLabel>
       <input is="core-input" type="password" id="passwordInput" value="{{password}}" label="password">
     </paper-input-decorator>
 
     <paper-button id="submitbutton" raised on-click="{{validate}}">{{submit}}</paper-button>
     <content select="[bottom]"></content>
 
-    <core-ajax
-    id="coreAjaxLogin"
-    url="{{action}}"
-    method="POST"
-    handleAs="json"
-    contentType="application/json"
-    ></core-ajax>
+    <form  id="form" name="form" action="{{action}}" method="POST" style="display: none;">
+      <input type="text" name="identifier">
+      <input type="password" name="password">
+    </form>
   </template>
 
   <script>
@@ -110,7 +110,9 @@ and password).
         this.sendTo();
         this.fireLoginTry();
       },
-
+      ready: function() {
+      
+      },
       /**
        * The `shake` method will shake this element (negative behaviour).
        * 
@@ -153,14 +155,10 @@ and password).
        * @method go
        */    
       sendTo: function() {
-        var ajax = this.$.coreAjaxLogin;
-          var data = {};
-          data['identifier'] = this.identifier;  
-          data['password'] = this.password;  
-          ajax.body = JSON.stringify(data);
-          ajax.go();
+          this.$.form.elements[0].value = this.identifier;
+          this.$.form.elements[1].value = this.password;
+          this.$.form.submit();
       }
-
     });
 
   </script>

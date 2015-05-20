@@ -28,10 +28,10 @@ def internal_error(error):
 	output = {"error": 'Internal error'}
 	return make_response(jsonify(output), 500)
 
-@app.route('/mocklogin', methods=['GET'])
-def mocklogin():
-	users = models.User.objects()
-	return render_template('mocklogin.html', users=users)
+#@app.route('/mocklogin', methods=['GET'])
+#def mocklogin():
+#	users = models.User.objects()
+#	return render_template('mocklogin.html', users=users)
 
 @app.route('/')
 @app.route('/index')
