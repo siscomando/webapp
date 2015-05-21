@@ -1,6 +1,7 @@
 import datetime
 import json
 import md5
+import re
 from flask import url_for
 from mongoengine import signals, CASCADE, DENY
 from flask.ext.mongoengine import BaseQuerySet
@@ -129,19 +130,35 @@ class Comment(db.Document):
     # if empty the comment is not associated with issue (or hashtag)
     issue_id = db.ReferenceField('Issue', reverse_delete_rule=DENY)
     created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
-    shottime = db.IntField(default=-1)
+    shottime = db.StringField(default=None)
     body = db.StringField(verbose_name='Comment', required=True)
     author = db.ReferenceField('User', required=True, reverse_delete_rule=DENY)
     stars = db.IntField(default=0)
     origin = db.IntField(choices=CHOICES_SOURCE, default=0)
+    hashtags = db.ListField(db.StringField(max_length=100))
+    title = db.StringField(max_length=255)
     # We can denormalization. See more 1-2-3 by starting here:
     # http://blog.mongodb.org/post/87200945828/6-rules-of-thumb-for-mongodb-schema-design-part-1
 
     def set_shottime(self):
         """ Shottime is the time from event of the comment in minutes """
-        if self.issue_id and self.shottime == -1:
+        if self.issue_id and self.shottime == None:
             deltatime = self.created_at - self.issue_id.created_at
-            self.shottime = deltatime.total_seconds() / 60 
+            self.shottime = str(int(deltatime.total_seconds() / 60))
+
+        if self.issue_id is None:
+            self.shottime = str(datetime.datetime.today().hour) + 'h'
+
+    def set_hashtags(self):
+        self.hashtags = re.findall(r'(#\w+)', self.body)
+
+    def set_title(self):
+        # Validation: It's required the users to provide comments with issue or 
+        # at least one hashtag within body message.
+        if self.issue_id is None and len(self.hashtags) == 0:
+            raise TypeError(u"It's required to provider an issue or hashtags")
+
+        self.title = self.issue_id.title if self.issue_id else self.hashtags[0]
 
     def to_json(self):
         data = self.to_mongo()
@@ -190,6 +207,8 @@ class Comment(db.Document):
 
     def save(self, *args, **kwargs):
         self.set_shottime()
+        self.set_hashtags()
+        self.set_title()
         super(Comment, self).save(*args, **kwargs)
 
 

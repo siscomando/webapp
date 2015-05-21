@@ -203,12 +203,17 @@ def set_comments():
 	if register:
 		issue = models.Issue.objects.get_or_404(register=register)
 	else:
-		abort(400) # not issue found
 		issue = None
 
 	comment = models.Comment(issue_id=issue, body=body, author=author, stars=stars, 
-    				origin=origin)
-	comment.save()
+    				origin=origin)	
+	try:
+		comment.save()
+	except:
+		data = {'errors': "Selecione um chamado no menu ou escreva colocando " \
+				"uma #hashtag para definir o #Assunto."}
+		return jsonify(data), 400
+
 	json_data = json.loads(comment.to_json())
 	data = {'comments': json_data}
 	

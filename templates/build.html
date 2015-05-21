@@ -37,7 +37,7 @@
       <core-header-panel>
         <!-- App context mini-header: you can to put logo app, name, etc.-->
         <div class="core-header">
-            <div class="appbrand" horizontal layout>
+            <div class="appbrand" horizontal layout onclick="reload();">
               <span class="logo"> 
                 <img src="assets/img/logo_60.png">
               </span>
@@ -79,9 +79,15 @@
           </div>
         </div>
       </core-header-panel>
-    </div>
+    </div>    
+  
   </core-drawer-panel>
 
+  <paper-action-dialog id="dialogMessage" heading="Info" backdrop="true">
+    <p>Some content</p>
+    <paper-button affirmative autofocus>OK</paper-button>
+  </paper-action-dialog>  
+  
   <!-- <script src="assets/js/app.js"></script> -->
   <script>
       var userData = {};
@@ -90,8 +96,19 @@
       userData['avatar'] = "%% g.user.avatar %%";
       userData['shortname'] = "%% g.user.shortname %%";
       userData['email'] = "%% g.user.email %%";
-      console.log(JSON.stringify(userData));
-      window.localStorage.setItem("User", JSON.stringify(userData));  
+      window.localStorage.setItem("User", JSON.stringify(userData)); 
+
+      // Handling error messages
+      var dialogMessage = document.querySelector('#dialogMessage');
+      window.addEventListener('core-error', function(e) {
+        dialogMessage.querySelector('p').textContent = e.detail.response.response.errors;
+        dialogMessage.opened = true;
+      });  
+
+      // Reload page
+      function reload() {
+        location.href = "/app";
+      }           
   </script>
 </body>
 </html>

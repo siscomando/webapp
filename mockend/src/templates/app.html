@@ -1280,7 +1280,7 @@ slack inputs.
   <link rel="icon" href="/static/assets/favicon.ico" type="image/x-icon">
 
 </head>
-<body fullbleed="" vertical="" layout="" unresolved=""><div hidden="">
+<body vertical="" layout="" unresolved=""><div hidden="">
 <polymer-element name="core-media-query" attributes="query queryMatches" assetpath="/static/components/core-media-query/">
   <template>
     <style>
@@ -14652,7 +14652,7 @@ core-icon .pallete-icon-color .autumn {
                   </div> 
                   <div class="author-info" flex="">
                     <div class="username">{{ model.author.User.shortname }} 
-                      <span class="title">at {{ model.issue_id.Issue.title }} | <sc-link>{{model.issue_id.Issue.register}}</sc-link></span>
+                      <span class="title">at {{ model.title }} <template if="{{model.issue_id.Issue.register}}">|</template> <sc-link>{{model.issue_id.Issue.register}}</sc-link></span>
                     </div>
                     <div class="location">{{ model.author.User.location }}</div>
                     <div class="timepost">{{ model.created_at_human }}</div>
@@ -15585,15 +15585,14 @@ polyfill-next-selector { content: ':host > h2'; }
             data['body'] = body;
             data['register'] = this.register;
             data['author'] = dataUser['pk']; // TODO: fix it
-            if (body.length > 0 && this.register) {
+            if (body.length > 0) {
               ajax.body = JSON.stringify(data);  
               ajax.go();
-              this._targetElem.innerHTML = '';
+              this.addEventListener('core-response', function(){
+                this._targetElem.innerHTML = '';  
+              });
             }
 
-            if(!this.register) {
-              this.fire('sc-error-handling', {error: "Not selected register"});
-            }
         },
         setRegister: function(source, eventName, elem) {
             source.addEventListener(eventName, function(e) {
@@ -15622,7 +15621,7 @@ polyfill-next-selector { content: ':host > h2'; }
       <core-header-panel>
         <!-- App context mini-header: you can to put logo app, name, etc.-->
         <div class="core-header">
-            <div class="appbrand" horizontal="" layout="">
+            <div class="appbrand" horizontal="" layout="" onclick="reload();">
               <span class="logo"> 
                 <img src="/static/assets/img/logo_60.png">
               </span>
@@ -15653,9 +15652,15 @@ polyfill-next-selector { content: ':host > h2'; }
           </div>
         </div>
       </core-header-panel>
-    </div>
+    </div>    
+  
   </core-drawer-panel>
 
+  <paper-action-dialog id="dialogMessage" heading="Info" backdrop="true">
+    <p>Some content</p>
+    <paper-button affirmative="" autofocus="">OK</paper-button>
+  </paper-action-dialog>  
+  
   <!-- <script src="assets/js/app.js"></script> -->
   <script>
       var userData = {};
@@ -15664,8 +15669,19 @@ polyfill-next-selector { content: ':host > h2'; }
       userData['avatar'] = "%% g.user.avatar %%";
       userData['shortname'] = "%% g.user.shortname %%";
       userData['email'] = "%% g.user.email %%";
-      console.log(JSON.stringify(userData));
-      window.localStorage.setItem("User", JSON.stringify(userData));  
+      window.localStorage.setItem("User", JSON.stringify(userData)); 
+
+      // Handling error messages
+      var dialogMessage = document.querySelector('#dialogMessage');
+      window.addEventListener('core-error', function(e) {
+        dialogMessage.querySelector('p').textContent = e.detail.response.response.errors;
+        dialogMessage.opened = true;
+      });  
+
+      // Reload page
+      function reload() {
+        location.href = "/app";
+      }           
   </script>
 
 

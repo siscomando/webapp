@@ -17,6 +17,7 @@ core-header-panel {
 	background-color: #19293E;
 	padding: 10px 10px 10px 16px;
 	vertical-align: middle;
+  cursor: pointer;
 }
 .appname {
 	margin-left: 10px;
