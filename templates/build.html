@@ -21,6 +21,7 @@
   <link rel="import" href="components/sc-timeline/sc-timeline.html">
   <link rel="import" href="components/sc-input-hashtag/sc-input-hashtag.html">
   <link rel="import" href="components/lp-input/lp-input.html">
+  <link rel="import" href="components/sc-boxselect/sc-boxselect.html">
   <link rel="stylesheet" href="assets/css/app.css">
   <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
   <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
@@ -67,10 +68,11 @@
         <div class="panelContent" vertical layout fit>
           <sc-timeline url="http://localhost:9003/api/v1/comments/" 
           sseurl="http://localhost:9003/api/v1/stream/comments/"
-          gravatarEnabled="true"></sc-timeline>  
-          <lp-input target="editable" mentionsURL="http://localhost:9003/api/v1/users/"
+          gravatarEnabled="true"></sc-timeline>
+          <lp-input target="editable" boxTarget="editableRect" 
+          mentionsURL="http://localhost:9003/api/v1/users/"
           url="http://localhost:9003/api/v1/comments/" method="POST"></lp-input>          
-          <div class="sc-input-section" flex >
+          <div id="editableRect" class="sc-input-section" flex >
             <!-- ver funcionamento do input-hashtags 
             adicionar URL para o post do comentário
             e o method ao lp-input
@@ -81,12 +83,7 @@
       </core-header-panel>
     </div>    
   
-  </core-drawer-panel>
-
-  <paper-action-dialog id="dialogMessage" heading="Info" backdrop="true">
-    <p>Some content</p>
-    <paper-button affirmative autofocus>OK</paper-button>
-  </paper-action-dialog>  
+  </core-drawer-panel> 
   
   <!-- <script src="assets/js/app.js"></script> -->
   <script>
@@ -97,13 +94,6 @@
       userData['shortname'] = "%% g.user.shortname %%";
       userData['email'] = "%% g.user.email %%";
       window.localStorage.setItem("User", JSON.stringify(userData)); 
-
-      // Handling error messages
-      var dialogMessage = document.querySelector('#dialogMessage');
-      window.addEventListener('core-error', function(e) {
-        dialogMessage.querySelector('p').textContent = e.detail.response.response.errors;
-        dialogMessage.opened = true;
-      });  
 
       // Reload page
       function reload() {

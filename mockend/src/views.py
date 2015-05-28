@@ -105,14 +105,18 @@ def application():
 	return render_template('app.html')
 
 # API REQUESTS 
+@app.route('/api/v1/users/<string:expr>/<string:limit>')
 @app.route('/api/v1/users/<string:expr>')
 @login_required
-def get_users(expr):
+def get_users(expr, limit=None):
 	""" Gets users from string of the mentions typed by users."""
 	if expr.startswith('@'):
 		expr = expr[1:]
 
-	users = models.User.objects(shortname__icontains=expr) # TODO: to deploy FTS
+	if limit is None:
+		limit = 100
+
+	users = models.User.objects(shortname__icontains=expr).limit(int(limit)) # TODO: to deploy FTS
 	json_data = json.loads(users.to_json())
 	data = {'Users': json_data}
 	return jsonify(data), 201

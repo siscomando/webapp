@@ -1258,6 +1258,24 @@ sc-input-hashtag a smart input that automagically change hashtag typed by links
 
 
 
+
+
+
+
+
+<!--
+sc-boxselect is custom input select element
+
+##### Example
+
+    <sc-boxselect></sc-boxselect>
+
+@element sc-boxselect is custom input select element
+@blurb Element provinding an input select easiest
+@status beta
+@homepage http://github.com/siscomando/sc-boxselect
+-->
+
 <!--
 lp-input is a custom "fake input" to search users, hashtags by ajax and to 
 format the content by using ordinary div#editable. Works like twitter, facebook,
@@ -1275,6 +1293,7 @@ slack inputs.
 -->
 
 
+  
   <link rel="stylesheet" href="/static/assets/css/app.css">
   <link rel="shortcut icon" href="/static/assets/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/static/assets/favicon.ico" type="image/x-icon">
@@ -15013,7 +15032,223 @@ polyfill-next-selector { content: ':host > h2'; }
 
 </polymer-element>
 
-<polymer-element name="lp-input" attributes="target mentionsURL url method" assetpath="/static/components/lp-input/">
+<polymer-element name="sc-boxselect" attributes="author showThumbs opened target limit" assetpath="/static/components/sc-boxselect/">
+  <template>
+    <style>:host {
+width: 100%;
+display: block;
+}
+core-menu {
+ margin: 0;
+}
+.expo {
+	float: left;
+}
+.thumb  {
+	width: 32px; 
+	height: 32px; 
+}
+.content {
+	margin-left: 8px; 
+	padding-top: 2px; 
+	font-size: 0.98em;
+}
+#dropdop {
+	font-family: 'RobotoDraft', sans-serif; 
+	display: none; 
+	z-index:1000; 
+	float: left; 
+	position: absolute; 
+	background: white;
+    box-shadow: 0 13px 25px 0 rgba(0, 0, 0, 0.3);"
+}
+#dropdop paper-item {
+	min-height: 60.7813px;
+}</style>     
+    <core-a11y-keys target="{{coreMenu}}" keys="enter" on-keys-pressed="{{selection}}"></core-a11y-keys>
+
+      <div id="dropdop" class="boxselect">
+        <core-menu id="coreMenu" class="menu"> 
+          <template repeat="{{item in iterable}}">
+            <paper-item on-blur="{{close}}">
+              <template bind="" if="{{showThumbs}}">
+                <div class="expo thumb" style="background: url({{item.thumbnail}}); 
+                background-size: cover; background-repeat: no-repeat;">
+                </div>
+              </template>
+              <div class="expo content">{{item.content}}</div>
+            </paper-item>
+          </template>
+        </core-menu>
+      </div>
+  
+  </template>
+  <script>
+    Polymer('sc-boxselect', { 
+       /**
+       * Fired when an item is selected.
+       *
+       *
+       * @event selected-user
+       */        
+      /*
+       * The `author` attribute sets an initial author
+       *
+       * @attribute author
+       * @type String
+       * @default 'Horacio Ibrahim'
+       */ 
+      /**
+       * The `showThumbs` attribute show/hide thumbnail before the content.
+       *
+       * @attribute showThumbs
+       * @type Boolean
+       * @default true
+       */  
+      /**
+       * The `opened` attribute sets if show (open) or not the box dialog.
+       *
+       * @attribute opened
+       * @type Boolean
+       * @default false
+       */ 
+      /**
+       * The `target` attribute sets an element for align the box dialog.
+       *
+       * @attribute target
+       * @type String
+       * @default null
+       */ 
+      /**
+       * The `limit` attribute sets the limit lines.
+       *
+       * @attribute limit
+       * @type integer
+       * @default 5
+       */               
+      author: 'Horacio Ibrahim',                  
+      publish: {
+        showThumbs: true,
+        iterable: [],
+        opened: false,
+        target: null,
+        limit: 5, // each item has 60.7813px
+        maxHeight: 60.7813 * this.limit, // 4 x 60.7813 = 243
+      },
+      ready: function() {
+        this.coreMenu = this.$.coreMenu;
+        this.$.dropdop.style.margin = 0;
+        this.$.coreMenu.style.margin = 0;  
+        this.targetElem = document.querySelector('#' + this.target);
+        
+        // ACAO QUANDO SELECIONADO ATIVO
+        this.addEventListener('core-activate', function(){
+          // var mythis = this.querySelector('sc-boxselect');
+          this.selection();
+        });
+
+      }, 
+      iterableChanged: function() {
+        this.renewMaxHeight();
+        this.setPosition(this.target, this.$.dropdop);
+      },
+      limitChanged: function() {
+        this.renewMaxHeight();
+      },
+      renewMaxHeight: function() {
+        this.maxHeight = 60.7813 * this.iterable.length;
+      },
+      openedChanged: function() {
+        if (this.opened == true) {
+          this.$.dropdop.style.display = "block";  
+          this.setPosition(this.target, this.$.dropdop);
+        } else {
+          this.$.dropdop.style.display = "none";
+        }
+        
+      },
+      /**
+      * Close box dialog. Useful also to simulate blur event.
+      *
+      * @method close
+      */
+      close: function() {
+        this.opened = false;
+      },
+      /**
+      * Selects previous item.
+      *
+      * @method selectPrevious
+      */
+      selectPrevious: function() {
+        this.$.coreMenu.selectPrevious();
+      },  
+      /**
+      * Selects next item.
+      *
+      * @method selectNext
+      */
+      selectNext: function() {
+        this.$.coreMenu.selectNext();
+      },         
+      selection: function() {
+        var model = this.$.coreMenu.selectedModel;
+        this.opened = false;
+        try {
+            this.fire('selected-user', {response: {'content': model.item.content, 
+                                        'thumbnail': model.item.thumbnail}});
+        } catch (err) {
+          console.log("Warning: " + err + "(User not selected.)"); // TODO error-handling
+        }
+      },
+      /**
+       * Adds one-time elements in box dialog but limited at limit attribute.
+       *
+       * @param thumbnail - sets the thumbnail 
+       * @param content - sets the content 
+       * @method setItem
+       */ 
+      setItem: function(thumbnail, content) {
+        var data = {'thumbnail': thumbnail, 'content': content};
+        this.iterable.unshift(data); // TODO add/push testesj
+        this.iterable = this.iterable.slice(0, this.limit);
+      },
+      /**
+       * Adds elements in box dialog but limited at limit attribute.
+       *
+       * @param thumbnail - sets the thumbnail 
+       * @param content - sets the content 
+       * @method setItems
+       */ 
+      setItems: function(arrayOfHash) {
+        this.iterable = arrayOfHash;
+        this.iterable = this.iterable.slice(0, this.limit);
+      },      
+      /**
+       * Clear all elements in box dialog.
+       *
+       * @method clearItems
+       */       
+      clearItems: function() {
+        this.iterable = [];
+      },      
+      setPosition: function(targetElem, overlay) {
+        var targetElem = targetElem;
+
+        if (typeof targetElem == "string") {
+          targetElem = document.querySelector('#' + targetElem);
+        }
+                
+        topTarget = targetElem.offsetTop;
+        overlay.style.top = (topTarget - this.maxHeight) +  "px";
+        overlay.style.left = targetElem.offsetLeft + "px";
+        overlay.style.width = targetElem.offsetWidth + "px";
+      },
+    });
+  </script>
+
+</polymer-element>
+<polymer-element name="lp-input" attributes="target mentionsURL url method boxTarget" assetpath="/static/components/lp-input/">
   <template>
 
       <style> :host {
@@ -15084,26 +15319,14 @@ polyfill-next-selector { content: ':host > h2'; }
       <!-- dropdown list of users 
            init search by @na...
       -->
-      <div id="mentionsContainer">
-          <ul id="ulMentionsContainer">
-            <template repeat="{{user in Users}}">
-              <li on-click="{{ selectedUser }}" data-shortname="{{ user.shortname }}" data-location="{{ user.location }}" data-avatar="{{ user.avatar }}">
-                  <div class="mentions">
-                      <div class="avatar">
-                          <img src="{{user.avatar}}">
-                      </div>
-                      <div class="info">
-                        <div class="username">{{ user.shortname }}</div>
-                        <div class="details">{{ user.location }}</div> 
-                      </div>
-                  </div>          
-              </li> 
-            </template>
-          </ul>
-      </div>
+      <sc-boxselect id="boxSelect" target="{{boxTarget}}" showthumbs="true"></sc-boxselect>      
 
       <!-- shortcut -->
       <core-a11y-keys target="{{_targetElem}}" keys="Enter" on-keys-pressed="{{sendTo}}"></core-a11y-keys>
+      <core-a11y-keys target="{{_targetElem}}" keys="esc" on-keys-pressed="{{boxclose}}"></core-a11y-keys>        
+      <core-a11y-keys target="{{_targetElem}}" keys="up" on-keys-pressed="{{selectPrevious}}"></core-a11y-keys>
+      <core-a11y-keys target="{{_targetElem}}" keys="down" on-keys-pressed="{{selectNext}}"></core-a11y-keys>   
+
 
       <!-- dropdown list of hashtags -->
       <div class="hashtags"></div>
@@ -15113,8 +15336,14 @@ polyfill-next-selector { content: ':host > h2'; }
         <br>
       </div> 
 
+      <!-- dialogs -->
+      <paper-action-dialog id="dialogMessage" heading="Info" backdrop="true">
+        <p>Some content</p>
+        <paper-button affirmative="" autofocus="">OK</paper-button>
+      </paper-action-dialog> 
+
       <!-- ajax -->
-      <core-ajax auto="true" id="mentionsAjax" url="{{ mentions }}" response="{{responseUsers}}"></core-ajax>
+      <core-ajax auto="true" id="mentionsAjax" url="{{ _mentions }}" response="{{responseUsers}}"></core-ajax>
       <core-ajax id="tagsAjax" url="{{ tagsURL }}" response="{{responseTags}}"></core-ajax>
       <core-ajax id="coreAjaxInput" url="{{url}}" handleas="json" response="{{responseComments}}" method="{{ method }}" contenttype="application/json">
       </core-ajax>
@@ -15123,12 +15352,7 @@ polyfill-next-selector { content: ':host > h2'; }
   </template>
   <script>
     (function () {
-      Polymer('lp-input', {
-        /**
-        * Fired when a user is selected in mentions box.
-        *
-        * @event selected-user
-        */   
+      Polymer('lp-input', {  
         /**
         * The `sc-error-handling` fires when user try to post comments without
         * the number of the register. To handling this events to show pop-up
@@ -15232,6 +15456,24 @@ polyfill-next-selector { content: ':host > h2'; }
           });                  
 
           this.setRegister(document, 'sc-select', fakeThis);
+          this.boxSelect = this.$.boxSelect;
+
+          // Firefox wrapper to check down
+          var is_firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+          if (is_firefox) {
+            this._targetElem.addEventListener('keydown', function(ev) {
+              // forcing action because firefox's behavior.
+              if (ev.keyCode == 40) { // down
+                fakeThis.selectNext();
+              }
+              if (ev.keyCode == 38) { // up
+                fakeThis.selectPrevious();
+              }      
+              if (ev.keyCode == 27) { // up
+                fakeThis.boxclose();
+              }                      
+            });
+          }
         },
         /*
         * Checks if textContent of the contentEditable was changed. If the input
@@ -15257,39 +15499,19 @@ polyfill-next-selector { content: ':host > h2'; }
           if (/^@/g.test(nodeValue) && nodeValue.length > 3 ) {
               this.getMentions(nodeValue);
               this.addEventListener('selected-user', function(ev) {
-                currentNode.nodeValue = '@' + ev.detail.response.shortname;
+                this.boxclose();
+                currentNode.nodeValue = '@' + ev.detail.response.content + ' ';
                 this._restoreSelection(indexCurrent, currentNode.nodeValue.length);
               });
           }
-        }, 
-        /*
-        * Gets data from user selected/tapped in mentions list. Fires the 
-        * 'selected-user' event.
-        *
-        * @method selectedUser
-        */        
-        selectedUser: function(ev, detail, target) {
-            shortname = target.attributes['data-shortname'].value;
-            avatar = target.attributes['data-avatar'].value;
-            section = target.attributes['data-location'].value;
-            this.hideMentions(); // hide box
-            this.fire('selected-user', {response: {'shortname': shortname, 'avatar': avatar, 'section': section}})
-        },    
+        },     
         /*
         * Show Mentions Box.
         *
         * @method showMentions
         */             
         showMentions: function() {
-          this.$.mentionsContainer.style.display = "block";
-        },
-        /*
-        * Hide Mentions Box.
-        *
-        * @method hideMentions
-        */          
-        hideMentions: function() {        
-            this.$.mentionsContainer.style.display = "none";
+          this.boxSelect.opened = true;
         },
         /*
         * Emits the responseUsers's updates. Creates an URL to access the user's 
@@ -15307,12 +15529,24 @@ polyfill-next-selector { content: ':host > h2'; }
             } else {
               url = this.mentionsURL.concat('/', expr);
             }
-            this.mentions = url;            
+             url = url.concat('/', '5')
+            this._mentions = url;            
         },
         responseUsersChanged: function() {
+           var boxSelect = this.boxSelect;
+           var arrayOfHashes = [];
            data = JSON.parse(this.responseUsers);
-           this.Users = data.Users;
-           this.showMentions();
+           
+           if (data != null) {
+             var users = data["Users"]; 
+             function callbackUsers(elem, index, array) {
+               hash = {'thumbnail': elem.avatar, 'content': elem.shortname};
+               arrayOfHashes.push(hash);
+             }
+             users.forEach(callbackUsers);
+             boxSelect.setItems(arrayOfHashes);
+             this.showMentions(); 
+           }
         },
         /*
         * Emits the responseTags's updates. Creates an URL to access the tag's 
@@ -15389,7 +15623,11 @@ polyfill-next-selector { content: ':host > h2'; }
                       }
 
                     } else {
-                      range.setStart(textNode, nodeOffset);
+                      try {
+                         range.setStart(textNode, nodeOffset);  
+                      } catch (err) {
+                         // pass
+                      }
                     }
                     // applied changes
                     s.removeAllRanges();
@@ -15532,7 +15770,10 @@ polyfill-next-selector { content: ':host > h2'; }
             nodeIndex = inNodePosition[0];
             nodeOffset = inNodePosition[1]; 
             // check if exists blank space in formatted hashtag
-            this.isNewNode = this._hasWhiteSpace(this.$.editableFilter.childNodes[indexCurrent]);  
+            this.isNewNode = this._hasWhiteSpace(this.$.editableFilter.childNodes[indexCurrent]); 
+            if(this.isNewNode) {
+              this.boxclose();
+            } 
             // By last...changes the shadow/copy of the target
             this.$.editableFilter.innerHTML = newText;
             // Restores the caret with this function
@@ -15585,12 +15826,29 @@ polyfill-next-selector { content: ':host > h2'; }
             data['body'] = body;
             data['register'] = this.register;
             data['author'] = dataUser['pk']; // TODO: fix it
-            if (body.length > 0) {
+            if (body.length > 0 && this.boxSelect.opened == false) {
               ajax.body = JSON.stringify(data);  
-              ajax.go();
-              this.addEventListener('core-response', function(){
-                this._targetElem.innerHTML = '';  
-              });
+              if (this.register) {
+                ajax.go();  
+                this._targetElem.innerHTML = ''
+              } else {
+                if (this.tagRegex.test(body)) {
+                  ajax.go();
+                  this._targetElem.innerHTML = ''
+                } else {
+                  // Handling error messages
+                  var dialogMessage = this.$.dialogMessage;
+                  // TODO: put this messages to dialog in backend
+                  dialogMessage.querySelector('p').textContent = "Selecione um " 
+                   + "chamado no menu ou escreva colocando "
+                   +  "uma #hashtag para definir o #Assunto."
+                  dialogMessage.opened = true;
+                }
+              }
+            } 
+
+            if (this.boxSelect.opened == true) { 
+              this.boxSelect.selection();
             }
 
         },
@@ -15605,7 +15863,15 @@ polyfill-next-selector { content: ':host > h2'; }
           // to fire a 'sc-sse-response' fake similar at sc-sse 
           this.fire('sc-sse-response', {response: this.responseComments, alias: 'sseTimeline'});
         },
-
+        selectPrevious: function() {
+          this.boxSelect.selectPrevious();
+        },
+        selectNext: function() {
+          this.boxSelect.selectNext();
+        },  
+        boxclose: function() {
+          this.boxSelect.close();
+        },     
       });
     })();
   </script>
@@ -15641,9 +15907,9 @@ polyfill-next-selector { content: ':host > h2'; }
         <sc-search url="search_results.json"></sc-search>
         <sc-header></sc-header>
         <div class="panelContent" vertical="" layout="" fit="">
-          <sc-timeline url="http://localhost:9003/api/v1/comments/" sseurl="http://localhost:9003/api/v1/stream/comments/" gravatarenabled="true"></sc-timeline>  
-          <lp-input target="editable" mentionsurl="http://localhost:9003/api/v1/users/" url="http://localhost:9003/api/v1/comments/" method="POST"></lp-input>          
-          <div class="sc-input-section" flex="">
+          <sc-timeline url="http://localhost:9003/api/v1/comments/" sseurl="http://localhost:9003/api/v1/stream/comments/" gravatarenabled="true"></sc-timeline>
+          <lp-input target="editable" boxtarget="editableRect" mentionsurl="http://localhost:9003/api/v1/users/" url="http://localhost:9003/api/v1/comments/" method="POST"></lp-input>          
+          <div id="editableRect" class="sc-input-section" flex="">
             <!-- ver funcionamento do input-hashtags 
             adicionar URL para o post do comentário
             e o method ao lp-input
@@ -15654,12 +15920,7 @@ polyfill-next-selector { content: ':host > h2'; }
       </core-header-panel>
     </div>    
   
-  </core-drawer-panel>
-
-  <paper-action-dialog id="dialogMessage" heading="Info" backdrop="true">
-    <p>Some content</p>
-    <paper-button affirmative="" autofocus="">OK</paper-button>
-  </paper-action-dialog>  
+  </core-drawer-panel> 
   
   <!-- <script src="assets/js/app.js"></script> -->
   <script>
@@ -15670,13 +15931,6 @@ polyfill-next-selector { content: ':host > h2'; }
       userData['shortname'] = "%% g.user.shortname %%";
       userData['email'] = "%% g.user.email %%";
       window.localStorage.setItem("User", JSON.stringify(userData)); 
-
-      // Handling error messages
-      var dialogMessage = document.querySelector('#dialogMessage');
-      window.addEventListener('core-error', function(e) {
-        dialogMessage.querySelector('p').textContent = e.detail.response.response.errors;
-        dialogMessage.opened = true;
-      });  
 
       // Reload page
       function reload() {
