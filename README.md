@@ -29,10 +29,10 @@ It uses [Jinja2](http://jinja.pocoo.org/) as a full featured template engine for
 Note: that our variables is loaded in template using `%% variable %%`. See sample
 below:
 
-```
 # sc-navbar attributes
 ----------------------
 
+```
 # when gravatarEnabled=true the avatar attribute must be md5 hash from email.
     <sc-navbar 
 	  username="%% g.user.shortname %%"
@@ -45,7 +45,8 @@ below:
      >
     <sc-navbar>
 ```
-In sc-navbar the returned JSON after GET in `url` attribute must be:
+In sc-navbar the returned JSON after GET in `url` attribute must be a list of
+objects with the fields:
 ```
 {
   "issues": [
@@ -70,7 +71,7 @@ In sc-navbar the returned JSON after GET in `url` attribute must be:
   ]
 }	
 ```
-In sc-navbar the returned JSON after GET in `stream` must be:
+In sc-navbar the returned JSON after "GET" in `stream` attribute (or Server Side Event reading resource) must be an object with the fields:
 ```
     {
       "_cls": "Issue", 
