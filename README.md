@@ -104,8 +104,9 @@ This features isn't implemented.
 ----------------------
 
 ```
-# when gravatarEnabled=true the avatar attribute can be image but is need exists
-property md5_email. #See line [49](https://github.com/siscomando/sc-timeline/blob/master/sc-timeline.html#L49) for understanding.
+# when gravatarEnabled=true the avatar attribute can be image but is required 
+to exist property md5_email. 
+# For more undestanding: https://github.com/siscomando/sc-timeline/blob/master/sc-timeline.html#L49
 
     <sc-timeline
 	  url="http://hostname/api/v1/comments/" // url to GET data
@@ -153,6 +154,46 @@ from `sseurl` attribute must be a object containing the fields:
 ```
 '{"_id": {"$oid": "5567946df2c38227342abf69"}, "created_at": {"$date": 1432840765175}, "shottime": "19h", "body": "Prefiro\\u00a0escolher\\u00a0pessoas.\\u00a0@mariolago\\u00a0como\\u00a0sempre\\u00a0podemos\\u00a0melhorar\\u00a0esse\\u00a0inout\\u00a0#Entrada", "author": {"User": {"status_online": true, "md5_email": "34a18f0f342919c1bfbeb12de1b74a4f", "shortname": "joilsonmarques", "location": null, "avatar": null}}, "stars": 0, "origin": 0, "hashtags": ["#Entrada"], "title": "#Entrada", "created_at_human": "19h19 28/5/2015"}'
 ```
+# lp-input attributes
+----------------------
+
+```
+ 	<lp-input 
+ 	  target="editable" // div element with contentEditable="true"
+ 	  boxTarget="editableRect" // element where mentions and hashtags dialog will be aligned
+      mentionsURL="http://localhost:9003/api/v1/users/" // url to search users public data
+      url="http://localhost:9003/api/v1/comments/" // url to post comments
+      method="POST">
+    </lp-input> 
+```
+The data returned by mentionsURL must be a list with objects containg the fields:
+
+```
+{
+  "Users": [
+    {
+      "_id": {
+        "$oid": "5554e764f2c382312595cb80"
+      }, 
+      "created_at": {
+        "$date": 1431616820244
+      }, 
+      "email": "horacioibrahim7707@gmail.com", 
+      "md5_email": "9416bb0ba549d98398d8923809986882", 
+      "password": null, 
+      "shortname": "horacioibrahim7707", 
+      "status_online": true
+    }
+  ]
+}
+```
+The POST's data dispatched by url attribute must contain:
+```
+			body: content of the message
+			register: ticket to associate comment at issue
+			author: the pk from user logged
+```
+
 
 
 
