@@ -92,6 +92,68 @@ In sc-navbar the returned JSON after "GET" in `stream` attribute (or Server Side
       "ugser": "SUPDE"
     }
 ```
+# sc-search attributes
+----------------------
+This features isn't implemented.
+
+```
+    <sc-search>
+    <sc-search>
+```
+# sc-timeline attributes
+----------------------
+
+```
+# when gravatarEnabled=true the avatar attribute can be image but is need exists
+property md5_email. #See line [49](https://github.com/siscomando/sc-timeline/blob/master/sc-timeline.html#L49) for understanding.
+
+    <sc-timeline
+	  url="http://hostname/api/v1/comments/" // url to GET data
+      sseurl="http://hostname/api/v1/stream/comments/" // url to read SSE.
+      gravatarEnabled="true"
+    >
+    <sc-timeline>
+```
+In sc-timeline the returned JSON after "GET" in `url` attribute must be a list 
+of objects containing the fields:
+```
+{
+  "comments": [
+    {
+      "_id": {
+        "$oid": "5567946df2c38227342abf69"
+      }, 
+      "author": {
+        "User": {
+          "avatar": null, 
+          "location": null, 
+          "md5_email": "34a18f0f342919c1bfbeb12de1b74a4f", 
+          "shortname": "joilsonmarques", 
+          "status_online": true
+        }
+      }, 
+      "body": "Prefiro\u00a0escolher\u00a0pessoas.\u00a0@mariolago\u00a0como\u00a0sempre\u00a0podemos\u00a0melhorar\u00a0esse\u00a0inout\u00a0#Entrada", 
+      "created_at": {
+        "$date": 1432840765175
+      }, 
+      "created_at_human": "19h19 28/5/2015", 
+      "hashtags": [
+        "#Entrada"
+      ], 
+      "origin": 0, 
+      "shottime": "19h", 
+      "stars": 0, 
+      "title": "#Entrada"
+    }
+ ]
+}
+```
+In sc-timeline the returned JSON after "READ" SSE payload in default channel 
+from `sseurl` attribute must be a object containing the fields:
+```
+'{"_id": {"$oid": "5567946df2c38227342abf69"}, "created_at": {"$date": 1432840765175}, "shottime": "19h", "body": "Prefiro\\u00a0escolher\\u00a0pessoas.\\u00a0@mariolago\\u00a0como\\u00a0sempre\\u00a0podemos\\u00a0melhorar\\u00a0esse\\u00a0inout\\u00a0#Entrada", "author": {"User": {"status_online": true, "md5_email": "34a18f0f342919c1bfbeb12de1b74a4f", "shortname": "joilsonmarques", "location": null, "avatar": null}}, "stars": 0, "origin": 0, "hashtags": ["#Entrada"], "title": "#Entrada", "created_at_human": "19h19 28/5/2015"}'
+```
+
 
 
 
