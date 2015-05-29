@@ -189,13 +189,13 @@ The data returned by mentionsURL must be a list with objects containg the fields
   ]
 }
 ```
-The POST's data dispatched by url attribute must contain:
+The POST's data dispatched by url attribute is:
 ```
 			body: content of the message
 			register: ticket to associate comment at issue
 			author: the pk from user logged
 ```
-
+Your backend must contain a view to handling this data.
 
 
 
