@@ -102,6 +102,7 @@ This features isn't implemented.
 ```
 # sc-timeline attributes
 ----------------------
+The `url` and `sseurl` are main attributes that must be changed to your enviroment.
 
 ```
 # when gravatarEnabled=true the avatar attribute can be image but is required 
@@ -156,6 +157,7 @@ from `sseurl` attribute must be a object containing the fields:
 ```
 # lp-input attributes
 ----------------------
+The `mentionsURL` and `url` are main attributes that must be changed to your enviroment.
 
 ```
  	<lp-input 
