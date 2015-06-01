@@ -8,7 +8,9 @@ import json
 # APP
 from src import app, red, models, login_manager
 
+#
 # Setup flask-login
+# 
 @login_manager.user_loader
 def load_user(id):
     return models.User.objects.get(pk=id)
@@ -28,19 +30,15 @@ def internal_error(error):
 	output = {"error": 'Internal error'}
 	return make_response(jsonify(output), 500)
 
-#@app.route('/mocklogin', methods=['GET'])
-#def mocklogin():
-#	users = models.User.objects()
-#	return render_template('mocklogin.html', users=users)
-
+#
+# Static routes
+# 
 @app.route('/')
 @app.route('/index')
 def index():
 
-	# if user.is_authenticated():
-		# redirect to home
-	# else:
-		# to login or register user
+	if current_user.is_authenticated():
+		return redirect(url_for('application'))
 
 	return redirect(url_for('login')) # TODO: landingpage
 
@@ -93,6 +91,12 @@ def register():
 
     flash('User successfully registered') # TODO name already exists
     return redirect(url_for('login'))
+
+@app.route('/settings', methods=['GET'])
+def settings():
+ 	''' Profile user '''
+
+ 	return render_template('settings.html')
     
 @app.route('/app', methods=['GET'])
 @login_required
@@ -188,9 +192,6 @@ def del_issues(register):
 def set_comments():
 	""" Creates a comment in database
 
-	JSON scope:
-		@param register is required
-
 	"""
 	if not request.json:
 		abort(400)
@@ -209,6 +210,7 @@ def set_comments():
 	else:
 		issue = None
 
+	# TODO: Check if author is the same users logged !!!
 	comment = models.Comment(issue_id=issue, body=body, author=author, stars=stars, 
     				origin=origin)	
 	try:

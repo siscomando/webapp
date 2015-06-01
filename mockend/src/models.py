@@ -81,12 +81,13 @@ class Issue(db.Document):
     ugat = db.StringField(max_length=12, required=True)
     ugser = db.StringField(max_length=12, required=True)
     deadline = db.IntField(default=120)
+    closed = db.BooleanField(default=False)
 
     @classmethod
     def post_save(cls, sender, document, **kwargs):
-        if 'created' in kwargs and kwargs['created']:
+        if ('created' in kwargs and kwargs['created']) or document.closed == True:
             publish_in_redis('issues', document.to_json())
-
+         
     def get_absolute_url(self):
         return url_for('issue', kwargs={'slug': self.slug})
 
