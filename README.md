@@ -1,21 +1,21 @@
 SisComando
 ============
 
-The SisComando is the tool to make the orchestration of the problems in 
-a critical enviroment of TIC.
+The SisComando is the tool to help in the communication between teams in the 
+process of orchestration of the problems in a critical enviroment of TIC.
 
 Important
 =========
-All modifications in components (bower_components dir) are tracked in 
-their specifics repos, because is not needs put it inner in the webapp's repo.
-Furthermore the content of the custom components is placed within of app.html
-after ran vulcanize.
+All modifications in components (placed bower_components dir) are tracked in 
+their specifics repos, e.g: [sc-sse](https://github.com/siscomando/sc-sse), [sc-navbar](https://github.com/siscomando/sc-navbar), etc. because is not needs put each of them within webapp's repo.
+Furthermore the content of the custom components will be concatenated within of 
+app.html after ran [vulcanize](https://www.polymer-project.org/0.5/articles/concatenating-web-components.html).
 
 Setup App
 =========
-This app uses [vulcanize]() to reduce loads dependences of the HTML's imports.
+This app uses [vulcanize](https://github.com/polymer/vulcanize) to reduce loads dependences of the HTML's imports.
 The file `build.html` is used to setup all that is needed to work fine this app. 
-It contains some elements required and others are built-in inside them. 
+The app contains some elements required in first level and others are built-in inside them. 
 - [sc-navbar](https://github.com/siscomando/sc-navbar): left navigator bar
 - [sc-search](https://github.com/siscomando/sc-search): top header bar with search feature
 - [sc-timeline](https://github.com/siscomando/sc-timeline): the element that provides our timeline
@@ -33,7 +33,7 @@ below:
 ----------------------
 
 ```
-# when gravatarEnabled=true the avatar attribute must be md5 hash from email.
+# when gravatarEnabled=true the <<avatar>> attribute must be md5 hash from email.
     <sc-navbar 
 	  username="%% g.user.shortname %%"
 	  avatar="%% g.user.md5_email %%"
@@ -45,11 +45,11 @@ below:
      >
     <sc-navbar>
 ```
-In sc-navbar the returned JSON after GET in `url` attribute must be a list of
+In sc-navbar the returned JSON after GET from `url` attribute must be a list of
 objects with the fields:
 ```
 {
-  "issues": [
+  "issues": [ // An object <<issues>> containing a list of objects...
     {
       "_cls": "Issue", 
       "_id": {
@@ -71,7 +71,8 @@ objects with the fields:
   ]
 }	
 ```
-In sc-navbar the returned JSON after "GET" in `stream` attribute (or Server Side Event reading resource) must be an object with the fields:
+In sc-navbar the returned JSON after "GET" from `stream` attribute (or Server 
+Side Event reading resource) must be an object with the fields:
 ```
     {
       "_cls": "Issue", 
@@ -106,8 +107,8 @@ The `url` and `sseurl` are main attributes that must be changed to your envirome
 
 ```
 # when gravatarEnabled=true the avatar attribute can be image but is required 
-to exist property md5_email. 
-# For more undestanding: https://github.com/siscomando/sc-timeline/blob/master/sc-timeline.html#L49
+# to exist property md5_email. For more:
+# https://github.com/siscomando/sc-timeline/blob/master/sc-timeline.html#L49
 
     <sc-timeline
 	  url="http://hostname/api/v1/comments/" // url to GET data
@@ -116,11 +117,11 @@ to exist property md5_email.
     >
     <sc-timeline>
 ```
-In sc-timeline the returned JSON after "GET" in `url` attribute must be a list 
+In sc-timeline the returned JSON after "GET" from `url` attribute must be a list 
 of objects containing the fields:
 ```
 {
-  "comments": [
+  "comments": [ // An object <<comments>> containing a list of objects...
     {
       "_id": {
         "$oid": "5567946df2c38227342abf69"
@@ -134,7 +135,7 @@ of objects containing the fields:
           "status_online": true
         }
       }, 
-      "body": "Prefiro\u00a0escolher\u00a0pessoas.\u00a0@mariolago\u00a0como\u00a0sempre\u00a0podemos\u00a0melhorar\u00a0esse\u00a0inout\u00a0#Entrada", 
+      "body": "Prefiro\u00a0escolher\u00a0pessoas.\u00a0@mariolago\u00a0", 
       "created_at": {
         "$date": 1432840765175
       }, 
@@ -150,8 +151,8 @@ of objects containing the fields:
  ]
 }
 ```
-In sc-timeline the returned JSON after "READ" SSE payload in default channel 
-from `sseurl` attribute must be a object containing the fields:
+In sc-timeline the returned JSON after "READ" SSE payload from `default` channel 
+assigned by `sseurl` attribute must be a object containing the fields:
 ```
 '{"_id": {"$oid": "5567946df2c38227342abf69"}, "created_at": {"$date": 1432840765175}, "shottime": "19h", "body": "Prefiro\\u00a0escolher\\u00a0pessoas.\\u00a0@mariolago\\u00a0como\\u00a0sempre\\u00a0podemos\\u00a0melhorar\\u00a0esse\\u00a0inout\\u00a0#Entrada", "author": {"User": {"status_online": true, "md5_email": "34a18f0f342919c1bfbeb12de1b74a4f", "shortname": "joilsonmarques", "location": null, "avatar": null}}, "stars": 0, "origin": 0, "hashtags": ["#Entrada"], "title": "#Entrada", "created_at_human": "19h19 28/5/2015"}'
 ```
@@ -197,7 +198,8 @@ The POST's data dispatched by url attribute is:
 ```
 Your backend must contain a view to handling this data.
 
-
+Next steps: vulcanize the build.html file
+===========================================
 
 
 
