@@ -43,7 +43,7 @@ below:
 	  stream="http://hostname/api/v1/stream/issues/" // this returns news tickets 
 	  channel="message" // the Server Side Event channel from published messages
      >
-    <sc-navbar>
+    </sc-navbar>
 ```
 In sc-navbar the returned JSON after GET from `url` attribute must be a list of
 objects with the fields:
@@ -99,7 +99,7 @@ This features isn't implemented.
 
 ```
     <sc-search>
-    <sc-search>
+    </sc-search>
 ```
 # sc-timeline attributes
 ----------------------
@@ -115,7 +115,7 @@ The `url` and `sseurl` are main attributes that must be changed to your envirome
       sseurl="http://hostname/api/v1/stream/comments/" // url to read SSE.
       gravatarEnabled="true"
     >
-    <sc-timeline>
+    </sc-timeline>
 ```
 In sc-timeline the returned JSON after "GET" from `url` attribute must be a list 
 of objects containing the fields:
