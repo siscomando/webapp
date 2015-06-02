@@ -181,6 +181,9 @@ def edit_issues():
 @app.route('/api/v1/issues/<string:register>', methods=['DELETE'])
 @login_required
 def del_issues(register):
+	"""
+	TODO: It needs control access
+	"""
 	issue = models.Issue.objects.get_or_404(register=register)
 	issue.delete()
 	return jsonify({'msg': 'Sucessful'}), 201
@@ -204,6 +207,10 @@ def set_comments():
 	author = json_data.get('author')
 	stars = json_data.get('stars', 0)
 	origin = json_data.get('origin')
+
+	if str(current_user.pk) != str(author):
+		abort(401) # Secure this view.
+
 	# the place (issue) where will save the comments
 	if register:
 		issue = models.Issue.objects.get_or_404(register=register)
@@ -246,6 +253,10 @@ def get_comments_from_register(register):
 @login_required	
 def del_comments(oid):
 	comment = models.Comment.objects.get_or_404(pk=oid)
+	# Only user that is author can delete it
+	if str(comment.author.pk) != str(current_user.pk)
+		abort(401)
+		
 	comment.delete()
 	return jsonify({'msg': 'Sucessful'}), 201
 
@@ -258,7 +269,11 @@ def edit_comments(oid):
 		abort(400)
 	# json loads
 	json_data = request.get_json()
-	# fields allowed (not can edit author, issue_id, created_at)
+	# fields allowed (the field author, issue_id, created_at is not editable)
+	# and only the user that is author can edit it
+	if str(comment.author.pk) != str(current_user.pk):
+		abort(401) 
+
 	comment.body = json_data.get('body')
 	comment.stars = json_data.get('stars')
 	comment.origin = json_data.get('origin')
