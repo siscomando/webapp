@@ -1222,6 +1222,7 @@ sc-link to fire an custom event.
 -->
 
 
+
 <!--
 Element providing the timeline to any apps.
 
@@ -1233,25 +1234,6 @@ Element providing the timeline to any apps.
 @blurb EElement providing the timeline to any apps.
 @status alpha
 @homepage http://github.com/siscomando/sc-timline
--->
-
-  
-
-
-
-
-
-<!--
-sc-input-hashtag a smart input that automagically change hashtag typed by links
-
-##### Example
-
-    <sc-input-hashtag url="/hashtags/generator"></sc-input-hashtag>
-
-@element sc-input-hashtag
-@blurb Element providing a smart input that change hashtag typed by links
-@status alpha
-@homepage http://github.com/siscomando/sc-input-hashtag
 -->
 
   
@@ -1293,7 +1275,6 @@ slack inputs.
 -->
 
 
-  
   <link rel="stylesheet" href="/static/assets/css/app.css">
   <link rel="shortcut icon" href="/static/assets/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/static/assets/favicon.ico" type="image/x-icon">
@@ -11687,7 +11668,7 @@ core-toolbar paper-icon-button {
 
 </polymer-element>
 
-<polymer-element class="core-header" name="sc-search" attributes="notitle author url method" assetpath="/static/components/sc-search/">
+<polymer-element class="core-header" name="sc-search" attributes="notitle author url" assetpath="/static/components/sc-search/">
 
   <template>
     <style>:host {
@@ -11719,22 +11700,24 @@ core-toolbar {
 
 core-toolbar paper-icon-button {
   vertical-align: middle;
+  margin: 0;
 }
+
 .menu-label {
   display: none;
 }
+
 #search {
   color: rgba(255, 255, 255, 0.8);
   font-weight: 100;
   font-size: 16px;
 }
-.sc-search-input {
-  /* background-color: rgba(65, 189, 191, 1); */
-}
+
 .sc-search-input input[type="text"] {
   color: #000;
   outline: none;
 }
+
 #menu {
   display: none;
 }
@@ -11774,16 +11757,24 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
 }
 
 </style>
-    <core-ajax id="coreAjax" url="{{url}}" handleas="json" response="{{response}}" params="{&quot;s&quot;:&quot;&quot;, &quot;register&quot;:&quot;&quot;}" method="{{ method ? method : 'GET'}}">
-    </core-ajax>
+
+    <core-ajax id="coreAjax" url="{{url}}" handleas="json" response="{{response}}" params="{&quot;s&quot;:&quot;&quot;, &quot;register&quot;:&quot;&quot;}" method="POST" contenttype="application/json"></core-ajax>
+
+    <core-iconset id="sc-icons-png" src="/static/components/sc-icons/sc-icons.png" width="96" iconsize="24" icons="hashtag hashtag-red notifications notifications-red">
+    </core-iconset>  
+      
     <!-- init element sc-search -->
     <div class="container-header" vertical="" layout="">
       <core-toolbar class="sc-search-input {{ displaySearch ? 'on-search' : '' }}">
         <paper-icon-button id="menu" icon="menu" on-tap="{{toogleMenu}}"></paper-icon-button>
+        <div></div>
         <paper-input-decorator id="parentsearch" label="Pesquise qualquer coisa..." flex="">
           <input id="search" is="core-input" name="s" on-blur="{{onDisplaySearch}}" on-keyup="{{getSearch}}" on-focus="{{setIn}}" value="">
         </paper-input-decorator>
-        <paper-icon-button id="searchbutton" icon="search" on-tap="{{onDisplaySearch}}"></paper-icon-button>
+        <core-icon icon="search" on-tap="{{onDisplaySearch}}">
+        </core-icon>
+        <paper-icon-button icon="speaker-notes" on-tap="{{showNotifications}}"></paper-icon-button>
+        <paper-icon-button icon="sc-icons-png:hashtag" on-tap="{{showHashtags}}"></paper-icon-button>
       </core-toolbar>
     </div>
   </template>
@@ -11826,8 +11817,10 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
       },
       setIn: function() {
         var header = document.querySelector('sc-header');
-        if (header.style.display) {
-          this.$.search.value = 'in: ';  
+        if (header) {
+          if (header.style.display) {
+            this.$.search.value = 'in: ';  
+          }
         }
       },
       unsetIn: function() {
@@ -11843,20 +11836,8 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
       displaySearchChanged: function(){ // suffix functionally
         //this.$.search.focus(); this line conflicts anothers inputs
       },
-      responseChanged: function() {
-          res = this.response;
-          containers = {};
-          if (!(res === null)) {
-            for(var i=0; i<res.length; i++) {
-              var object = res[i];
-              for(var propName in object) {
-                if(typeof(object[propName] != 'undefined')) {
-                  containers[propName] = object[propName];
-                }
-              }
-            }   
-          }   
-          this.fire('sc-response', {response: containers});
+      responseChanged: function() {  
+          this.fire('sc-response', {response: this.response});
       },
       ready: function() {
         // Ready is a lifecycle callback.
@@ -11875,7 +11856,7 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
       toogleMenu: function() {
           var coreDrawer = document.querySelector('core-drawer-panel');
           coreDrawer.togglePanel();
-      },
+      },      
       /**
        * The `getSearch` makes of the requests for target URL when the input#search
        * is changed.
@@ -11888,11 +11869,18 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
         var ajax = this.$.coreAjax;
         var term = this.$.search.value;
         var params = JSON.parse(ajax.params);
-        params.s = term
-        if (term.length >= threshold) {
-          ajax.params = JSON.stringify(params);
-          ajax.go();
-          }
+        
+        data = {};
+        data['term'] = term;
+        data['register'] = params.register;
+
+        if (term.indexOf('in:') === 0) {
+          threshold = threshold * 2;
+        }
+
+        ajax.body = JSON.stringify(data);
+        ajax.go();
+
       },
       /**
        * The `changeParamRegister` change URL of the core-ajax
@@ -11912,7 +11900,13 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
               params.register = register;
               ajax.params = JSON.stringify(params);
         });
-      } 
+      },
+      showNotifications: function() {
+        location.href = '/notifications';
+      },
+      showHashtags: function() {
+        location.href = '/hashtags';
+      }      
     });
 
   </script>
@@ -12876,7 +12870,7 @@ core-toolbar paper-icon-button {
 
       <!-- menu item: This object fire core-select event -->
       <core-menu id="coreMenu">
-          <template repeat="{{ issue in menuBySystem}}">
+          <template repeat="{{ issue in _groupedIssues}}">
             <core-submenu>
                   <div class="item-content">
                     {{issue.name}}
@@ -12965,7 +12959,7 @@ core-toolbar paper-icon-button {
       publish: {
           displaySearch: {value: false, reflect: true},  
           select: 0, 
-          menuBySystem: [],
+          _groupedIssues: [],
           avatar: null,
           avatarSize: "42px",
           gravatarEnabled: true,
@@ -12986,36 +12980,53 @@ core-toolbar paper-icon-button {
           };
           */
           if (event.detail.isSelected) {
-            var scid = event.detail.item.scid;
+            this.scid = event.detail.item.scid;
             // toggle drawer
             var coreDrawer = document.querySelector('core-drawer-panel');
             // access storage
-            var issuesSaved = JSON.parse(window.localStorage.getItem("dbIssues"));
-            for (var i=0; i< issuesSaved.length; i++) { 
+            var localIssues = JSON.parse(window.localStorage.getItem("dbIssues"));
+            for (var i=0; i< localIssues.length; i++) { 
               // field to store id (_id, primary key) is register
-              if (issuesSaved[i]['register'] === scid) { 
-                this.fire('sc-select', {issue: issuesSaved[i]['register']});
+              if (localIssues[i]['register'] === this.scid) { 
+                this.fire('sc-select', {issue: localIssues[i]['register']});
                 coreDrawer.togglePanel();
               } 
             }
           }
         });
+
+        // handling updates from sse
         this.addEventListener('sc-sse-response', function(e){
-          // handling updates
           doc =  e.detail.response;
           if (!(doc == 1)) {
             doc = JSON.parse(e.detail.response);
             db = window.localStorage.getItem("dbIssues");
-            db = JSON.parse(db);;
-            db.push(doc);
+            db = JSON.parse(db);
+            
+            if (doc.closed == true) {
+              for (item in db) {
+                if (db[item].register == doc.register) {
+                    db.splice(item, 1);
+                }
+                if (this.scid == doc.register) {
+                    location.href = '/'; // to prevent sc-header with old issue selected
+                }                
+              }
+            } else {
+              db.push(doc);  
+            }
+            
             window.localStorage.setItem("dbIssues",JSON.stringify(db));
-            // badge
-            // TODO: title = this.menuReferrer(doc.title);
-            // update info
             this.updateIssues();
           }
         });
-      },      
+      },   
+      cleanerClosed: function(elem, index, arr) {
+          // cleaner: to remove issue from db if exists closed issue in localStorage
+          if (elem.closed == true){
+            arr.splice(index, 1);
+        }
+      },  
       responseChanged: function() {
       	  this.issueOrig = this.issues = this.response['issues'];
       	  window.localStorage.setItem("dbIssues",JSON.stringify(this.issues));
@@ -13023,9 +13034,10 @@ core-toolbar paper-icon-button {
           
       },
       updateIssues: function() {
-
+          db = JSON.parse(window.localStorage.getItem("dbIssues"));
+          db.forEach(this.cleanerClosed);
+          db = window.localStorage.setItem("dbIssues", JSON.stringify(db));
           this.sortByScope();
-
       },
       menuReferrer: function(name) {
         // t.split(' ').join('')
@@ -13058,7 +13070,7 @@ core-toolbar paper-icon-button {
         }
       },
       /**
-       * The `sortByScope` sort and grouping dbIssues by field.
+       * The `sortByScope` sort and grouping attachField by field.
        *
        * 
        * @method sortByScope
@@ -13067,17 +13079,17 @@ core-toolbar paper-icon-button {
        */      
       sortByScope: function(field, attachField) {
           // initializing variables default
-          // TODO: fix this implementation
+          // TODO: fix this implementation in backend
           field = field ? field : "title";
           attachField = attachField ? attachField : "register";
-          var issuesSaved = JSON.parse(window.localStorage.getItem("dbIssues"));
+          var localIssues = JSON.parse(window.localStorage.getItem("dbIssues"));
           var scopeList = [];
-          for (item in issuesSaved) {
+          for (item in localIssues) {
                var obj = {};
-               var newField = issuesSaved[item][field]; // is value of the title
+               var newField = localIssues[item][field]; // is value of the title
                obj[newField] = {};
                obj[newField]['name'] = newField; // monkey patch
-               obj[newField]['issues'] = [];             
+               obj[newField]['issues'] = []; // arrary that receives issues            
                
                if (scopeList.length === 0) {
                   scopeList.push(obj)
@@ -13088,19 +13100,19 @@ core-toolbar paper-icon-button {
                    if (newField in scopeList[nf]) {
                       scopeList[nf][newField]['name'] = newField; // monkey patch
                       scopeList[nf][newField]['issues']
-                                          .push(issuesSaved[item][attachField]);
+                                          .push(localIssues[item][attachField]);
                       found = true;
                    } 
                }
 
                if (found === false) { 
-                 obj[newField]['issues'].push(issuesSaved[item][attachField]);            
+                 obj[newField]['issues'].push(localIssues[item][attachField]);            
                  scopeList.push(obj); 
                }                
           }
-        this.menuBySystem = [];
+        this._groupedIssues = [];
         for (elem in scopeList) { 
-          this.menuBySystem.push(scopeList[elem][Object.keys(scopeList[elem])[0]]); 
+          this._groupedIssues.push(scopeList[elem][Object.keys(scopeList[elem])[0]]); 
         }
         // return scopeList; // to comment this in production enviroment 
     },
@@ -14533,7 +14545,7 @@ polyfill-next-selector { content: ':host > h2'; }
   /* min-height: 300px;  this is defined by shottime */
 }
 core-list {
- 
+  height: 100%;
 }
 .shottime {
   position: relative;
@@ -14581,11 +14593,14 @@ core-list {
   font-size: 0.7em;
 }
 .post {
+  font-family: inherit;
+  display: block;
   font-weight: 400 !important; 
   color: #3D3C40;
   font-size: 14px;
   line-height: 20px;
   padding-right: 20px;
+  cursor: pointer;
 }
 core-icon {
   color: rgba(114, 98, 151, 0.8);
@@ -14650,10 +14665,12 @@ core-icon .pallete-icon-color .autumn {
 </style>
     <div class="mainContent" flex="" horizontal="" layout="">
       <br>
-      <core-list data="{{response.comments}}" runwayfactor="12" flex="">
+      <core-list id="coreList" data="{{response.comments}}" runwayfactor="12" height="48" flex="">
         <template>
-          <!-- begin post -->
-          <div id="{{ model._id.$oid }}" class="row timeline-post {{ {selected: selected} | tokenList }} item-{{ model._id.$oid }}" horizontal="" layout="">
+          <!-- begin post 
+          TODO: new core-list template to support list users
+          -->
+          <div id="id{{ model._id.$oid }}" class="row timeline-post {{ {selected: selected} | tokenList }} item-{{ model._id.$oid }}" horizontal="" layout="">
             <div class="columns shottime">{{ model.shottime }}</div>
             <div class="columns division-icon">
               <core-icon icon="{{ setIcon(model.origin) }}" class="pallete-icon-color autumn"></core-icon>
@@ -14680,7 +14697,9 @@ core-icon .pallete-icon-color .autumn {
                 <div class="stars">
                     <star-rating votes="{{ model.stars }}" votessum="0"></star-rating>
                 </div>
-                <div class="post">{{ model.body }}</div>
+                <div class="post" on-tap="{{getFullContent}}">
+                    {{ model.body | ellipsis }}
+                </div>
             </div>
           </div>
           <!-- end post -->
@@ -14749,6 +14768,13 @@ core-icon .pallete-icon-color .autumn {
         this.changeURL(document, 'sc-select', timeline);
         var currentElem = this;
         this.updateComment(document, currentElem);
+
+        // if sc-response fired to changed the timeline response
+        document.addEventListener('sc-response', function(ev) {
+          currentElem.response = ev.detail.response;
+        });
+
+        this.$.coreList.focus();
       },
       /**
        * The `changeURL` change URL of the core-ajax to get data from specif
@@ -14849,6 +14875,26 @@ core-icon .pallete-icon-color .autumn {
         // default
         return 'communication:no-sim';
       },
+      getFullContent: function(event, detail, sender) {
+        var comment = sender.templateInstance.model.model;
+        this[comment._id.$oid] = comment;
+        sender.innerHTML = this[comment._id.$oid]['body'];
+        sender.style.height =  "100%";
+      },      
+      ellipsis: function(body) {
+        if (body) {
+          if (body.length > 200) {
+              // save content
+              bodyHidden = body.slice(200);
+              // resize body
+              body = body.slice(0, 200);
+              body = body + "...";
+              return body;
+          } else {
+            return body;
+          }
+        }
+      },        
       /**
       from: http://stackoverflow.com/a/9145985/2283488
       */
@@ -14883,149 +14929,6 @@ core-icon .pallete-icon-color .autumn {
         gravatarUrl = '//www.gravatar.com/avatar/' + md5 + "?s=" + 48;
         return gravatarUrl
       }     
-    });
-
-  </script>
-
-</polymer-element>
-
-<polymer-element name="sc-input-hashtag" attributes="notitle author url method" assetpath="/static/components/sc-input-hashtag/">
-
-  <template>
-    <style>:host {
-  display: block;
-  font-family: 'RobotoDraft', sans-serif;
-}
-
-/* To ensure your styling works under the Shadow DOM polyfill, see
-   www.polymer-project.org/docs/polymer/styling.html#directives */
-polyfill-next-selector { content: ':host > h2'; }
-::content h2 {
-  color: blue;
-}
-
-#inputComments {
-  position: relative;
-  bottom: 0;
-  padding: 1px 10px 6px 10px;
-  border-radius: 5px;
-  border: 3px solid #E8E8E8;
-  box-shadow: 1px 1px 4px #D0D0D0;  
-}
-/*  paper input decorator custom styling */
-#inputComments paper-input-decorator /deep/ .unfocused-underline {
-  /* line color when the input is unfocused */
-  background-color: rgba(204, 204, 204, 0.3);
-}
-#inputComments paper-input-decorator /deep/ .focused-underline {
-  /* line color when the input is focused */
-  background-color: rgba(42, 122, 124, 0.5);
-}
-#inputComments paper-input-decorator /deep/ ::-webkit-input-placeholder {
-  /* platform specific rules for placeholder text */
-  color: #D8D8D8;
-}
-#inputComments paper-input-decorator /deep/ ::-moz-placeholder {
-    color: #D8D8D8;
-}
-#inputComments paper-input-decorator /deep/ :-ms-input-placeholder {
-    color: #D8D8D8;
-}
-#inputComments #btnComment {
-  margin-top: 7px;
-  position: absolute;
-  margin-left: -10px;
-  color: #c8c8c8
-}
-#inputComments #comment {
-  margin-left: 30px;
-}</style>
-    
-    <core-ajax id="coreAjaxInput" url="{{url}}" handleas="json" response="{{response}}" method="{{ method ? method : 'POST'}}" contenttype="application/json">
-    </core-ajax>
-
-    <div id="inputComments">
-      <form id="commentForm">
-      
-        <paper-icon-button id="btnComment" icon="communication:chat"></paper-icon-button>
-      
-        <paper-input-decorator raised="true" label="Você tem ideias para resolver problemas...?">
-         
-          <input id="comment" is="core-input" name="c" value="" autocorrect="off" autocomplete="off">
-         
-          <core-a11y-keys target="{{}}" keys="Enter" on-keys-pressed="{{sendTo}}"></core-a11y-keys>
-         
-          <input hidden="true" type="submit">
-        
-        </paper-input-decorator>       
-      
-      </form>
-    </div>    
-
-  </template>
-
-  <script>
-
-    Polymer('sc-input-hashtag',{     
-      /**
-       * The `author` attribute sets an initial author
-       *
-       * @attribute author
-       * @type string
-       * @default 'Horacio Ibrahim'
-       */
-      author: 'Horacio Ibrahim', 
-      publish: {
-          displaySearch: {value: false, reflect: true}, 
-          register: null, 
-      },
-      /* the best place to the constructor for array or object */
-      created: function() {
-        // initialize but it not is turned public to use by users of the element
-        // to turn public to use attributes or publish.
-      },
-      ready: function() {
-        // Ready is a lifecycle callback.
-        // You can do setup work in here.
-        // More info: http://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
-        // simple test alert(this.issueInfo.register);
-        // var scnavbar = document.querySelector('sc-navbar');
-        var inputHashtag = this;
-        this.changeParamRegister(document, 'sc-select', inputHashtag);        
-      },
-      sendTo: function(){
-          var ajax = this.$.coreAjaxInput;
-          var data = {};
-          var dataUser = JSON.parse(window.localStorage.getItem('User'));
-          data['body'] = this.$.comment.value;  
-          data['register'] = this.register;  
-          data['author'] = dataUser['pk']; // TODO: fix it
-          if (this.$.comment.value.length > 0) {
-            ajax.body = JSON.stringify(data);  
-            ajax.go();
-            this.$.commentForm.reset();
-          }
-      },
-      responseChanged: function() {
-        // clean the input if all right
-          this.fire('sc-sse-response', {response: this.response, alias: 'sseTimeline'});
-      },
-      /**
-       * The `changeParamRegister` change to current Register
-       *
-       * 
-       * @method changeParamRegister
-       * @param source an instance that generated the event
-       * @param eventName the name of the event generated by source 
-       * @param callback a callback or this custom element
-       */       
-      changeParamRegister: function(source, eventName, callback) {
-        source.addEventListener(eventName, function(e){
-              register = e.detail.issue;
-              register = register.replace('/', '');
-              callback.register = register;
-        });
-      }       
     });
 
   </script>
@@ -15896,24 +15799,17 @@ core-menu {
             </div>
         </div>
         <!-- App context mini-header: END -->
-        <sc-navbar username="%% g.user.shortname %%" avatar="%% g.user.md5_email %%" gravatarenabled="true" online="%% g.user.status_online %%" url="http://localhost:9003/api/v1/issues/" stream="http://localhost:9003/api/v1/stream/issues/" channel="message"></sc-navbar>
-        <!--
-        stream="http://localhost:9003/api/v1/stream/issues/"
-        -->
+        <sc-navbar username="%% g.user.shortname %%" avatar="%% g.user.md5_email %%" gravatarenabled="true" online="%% g.user.status_online %%" url="/api/v1/issues/" stream="/api/v1/stream/issues/" channel="message"></sc-navbar>
       </core-header-panel>
     </div>
     <div main="">
       <core-header-panel>
-        <sc-search url="search_results.json"></sc-search>
+        <sc-search url="/api/v1/search/"></sc-search>
         <sc-header></sc-header>
         <div class="panelContent" vertical="" layout="" fit="">
-          <sc-timeline url="http://localhost:9003/api/v1/comments/" sseurl="http://localhost:9003/api/v1/stream/comments/" gravatarenabled="true"></sc-timeline>
-          <lp-input target="editable" boxtarget="editableRect" mentionsurl="http://localhost:9003/api/v1/users/" url="http://localhost:9003/api/v1/comments/" method="POST"></lp-input>          
+          <sc-timeline url="/api/v1/comments/" sseurl="/api/v1/stream/comments/" gravatarenabled="true"></sc-timeline>
+          <lp-input target="editable" boxtarget="editableRect" mentionsurl="/api/v1/users/" url="/api/v1/comments/" method="POST"></lp-input>          
           <div id="editableRect" class="sc-input-section" flex="">
-            <!-- ver funcionamento do input-hashtags 
-            adicionar URL para o post do comentário
-            e o method ao lp-input
-            -->
           <div id="editable" contenteditable="true"></div>
           </div>
         </div>

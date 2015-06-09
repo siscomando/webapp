@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
+import logging, json, re
 from flask.views import View
 from flask import jsonify, request, make_response, abort, Response, flash
 from flask import render_template, flash, url_for, redirect, session, g
 from flask.ext.login import login_required, current_user, login_user, logout_user
-import logging
-import json
 # APP
 from src import app, red, models, login_manager
 
@@ -109,6 +108,31 @@ def application():
 	return render_template('app.html')
 
 # API REQUESTS 
+@app.route('/api/v1/search/', methods=['POST'])
+@login_required
+def search():
+	# TODO: FTS - full text search
+	
+	if not request.json:
+		abort(400)
+
+	json_data = request.get_json()
+	term = json_data['term']
+	register = json_data['register']
+	
+	rex = re.compile('(^in:[ ]?)(.*)')
+	matched = rex.match(term)
+	if matched and register:
+		term = matched.groups()[1]
+		issue = models.Issue.objects.get_or_404(register=register)
+		comments = models.Comment.objects(body__icontains=term, issue_id=issue)
+	else:
+		comments = models.Comment.objects(body__icontains=term)
+
+	json_data = json.loads(comments.to_json())
+	data = {'comments': json_data}
+	return jsonify(data), 201
+
 @app.route('/api/v1/users/<string:expr>/<string:limit>')
 @app.route('/api/v1/users/<string:expr>')
 @login_required
@@ -254,7 +278,7 @@ def get_comments_from_register(register):
 def del_comments(oid):
 	comment = models.Comment.objects.get_or_404(pk=oid)
 	# Only user that is author can delete it
-	if str(comment.author.pk) != str(current_user.pk)
+	if str(comment.author.pk) != str(current_user.pk):
 		abort(401)
 		
 	comment.delete()

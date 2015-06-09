@@ -50,31 +50,24 @@
          avatar="%% g.user.md5_email %%"
          gravatarEnabled="true"
          online="%% g.user.status_online %%"
-         url="http://localhost:9003/api/v1/issues/"
-         stream="http://localhost:9003/api/v1/stream/issues/"
+         url="/api/v1/issues/"
+         stream="/api/v1/stream/issues/"
          channel="message"
         ></sc-navbar>
-        <!--
-        stream="http://localhost:9003/api/v1/stream/issues/"
-        -->
       </core-header-panel>
     </div>
     <div main>
       <core-header-panel>
-        <sc-search url="search_results.json"></sc-search>
+        <sc-search url="/api/v1/search/"></sc-search>
         <sc-header></sc-header>
         <div class="panelContent" vertical layout fit>
-          <sc-timeline url="http://localhost:9003/api/v1/comments/" 
-          sseurl="http://localhost:9003/api/v1/stream/comments/"
+          <sc-timeline url="/api/v1/comments/" 
+          sseurl="/api/v1/stream/comments/"
           gravatarEnabled="true"></sc-timeline>
           <lp-input target="editable" boxTarget="editableRect" 
-          mentionsURL="http://localhost:9003/api/v1/users/"
-          url="http://localhost:9003/api/v1/comments/" method="POST"></lp-input>          
+          mentionsURL="/api/v1/users/"
+          url="/api/v1/comments/" method="POST"></lp-input>          
           <div id="editableRect" class="sc-input-section" flex >
-            <!-- ver funcionamento do input-hashtags 
-            adicionar URL para o post do comentário
-            e o method ao lp-input
-            -->
           <div id="editable" contenteditable="true"></div>
           </div>
         </div>
