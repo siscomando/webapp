@@ -1,0 +1,56 @@
+:host {
+  display: block;
+  padding: 0;
+  margin: 0;
+  top: 0;
+  width:  100%;
+  min-height: 100%;
+}
+.modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #FFF;
+    /* needed styles for the overlay */
+    z-index: 120; /* keep on top of other elements on the page */
+    box-shadow: 0 0 0 9999px rgba(255,255,255,1);
+    display: none;
+}
+.modal .close {
+  float: right;
+  margin: 10px;
+}
+#modal .headline {
+  min-height: 80px;
+  background: #2A99D6;
+  color: white;
+  font-size: 36px;
+  font-weight: 700;
+  padding: 50px 30px 30px 30px;
+}
+.modal .content {
+  display: block;
+  padding: 20px;
+  overflow: scroll;
+  text-align: center;
+}
+.modal .content p{
+  text-align: left;
+}
+paper-icon-button {
+	float: right;
+	margin: 10px;
+}
+
+@media only screen 
+and (max-device-width : 667px) { 
+ /* Mobile start */
+ #modal .headline {
+  font-size: 24px;
+  padding: 48px 10px 6px;
+ }
+ paper-icon-button {
+    margin: -5px 10px; 
+ /* Mobile end */
+}

@@ -1,0 +1,58 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../lp-icons/lp-icons.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../core-media-query/core-media-query.html">
+
+<polymer-element name="lp-sop-dialog" attributes="bgheader targetHidden">
+  <template>
+    <link rel="stylesheet" href="lp-sop-dialog.css"> 
+
+    <div id="modal" class="modal">
+      <div class="headline">
+        <content select=".headline"></content>
+        <paper-icon-button id="closeSopDialog" icon="close"></paper-icon-button>
+      </div>
+      <div class="content">
+        <content select=".content"></content>
+      </div>    
+    </div>
+
+  </template>
+  <script>
+      Polymer({
+        publish: {
+          targetHidden: "",
+        },
+        ready: function() {
+          this.super();
+          var myThis = this;
+          var closeSopDialog = this.$.closeSopDialog;
+          this.targetHidden = document.querySelector('#wrapperContent');
+          this.divContent = this.$.modal.querySelector('.content');
+
+          closeSopDialog.addEventListener('click', function(){
+            myThis.close();
+          });
+
+          document.addEventListener("keydown", function(ev){
+              if (ev.keyCode == 27) {
+                myThis.close();
+              }              
+          });
+
+        },
+        open: function() {
+          this.$.modal.style.display = "block";
+          // this.divContent.style.height = document.body.offsetHeight + "px";
+          this.targetHidden.style.display = "none";
+          window.scrollTo(0,0);
+          // console.log("h: "+ this.$.modal.offsetHeight);
+        },
+        close: function() {
+          this.$.modal.style.display = "none";
+          this.targetHidden.style.display = "";
+        },      
+      });
+  </script>
+
+</polymer-element>

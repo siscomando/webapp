@@ -1,0 +1,101 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<polymer-element name="lp-header" attributes="minHeight videoShow webm mp4 poster">
+  <template>
+    <link rel="stylesheet" href="lp-header.css">    
+    <div id="heroMessage" style="height: {{minHeight}}px;" horizontal layout>
+      <div class="quickmenu">
+        <ul>
+          <li><a href="/login/"><content select=".item1"></content></a></li>
+          <li><content select=".item2"></content></li>
+          <li><content select=".item3"></content></li>
+        </ul>
+      </div>    
+      <div class="all-overlay"></div>
+      <div class="brand">
+        <content select=".brand">
+        </content>
+      </div>
+      <div id="content" flex>
+        <content select=".callMessage"></content>        
+      </div> 
+      <div class="video-overlay"></div>
+      <video autoplay loop poster="{{poster}}" id="bgvid">
+          <source src="{{webm}}" type="video/webm">
+          <source src="{{mp4}}" type="video/mp4">
+      </video>         
+    </div>
+
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        /**
+        * The `minHeight` set the minimum height to header
+        *
+        * @attribute minHeight
+        * @type integer
+        * @default 500
+        */ 
+        /**
+        * The `videoShow` set if show/hide the video. By default is false and 
+        * the video is hide.
+        *
+        * @attribute videoShow
+        * @type boolean
+        * @default false
+        */  
+        /**
+        * The `webm` set the url to the video's format .webm
+        *
+        *     Best practices for absolute path is to pass: //domain/videos/xxx.webm 
+        *
+        * @attribute webm
+        * @type string
+        * @default 500
+        */  
+        /**
+        * The `mp4` set the url to the video's format .mp4
+        *
+        *     Best practices for absolute path is to pass: //domain/videos/xxx.mp4 
+        *
+        * @attribute mp4
+        * @type string
+        * @default 500
+        */   
+        /**
+        * The `poster` set the minimum height to header
+        *
+        * @attribute poster
+        * @type string
+        * @default 500
+        */                                               
+        publish: {
+          // publics properties
+          minHeight: 500,
+          videoShow: false,
+        },
+        created: function() {
+          /* the bes to the constructor for array or object */ 
+        },
+        ready: function() {
+            this.toggleVideo();
+        },
+        videoShowChanged: function() {
+          this.toggleVideo();
+        },
+        toggleVideo: function() {
+          var video = this.$.heroMessage.querySelector('video');
+          var overlay = this.$.heroMessage.querySelector('.video-overlay');
+          if (this.videoShow){
+            video.style.display = 'block';
+            overlay.style.display = video.style.display;
+          } else {
+            video.style.display = 'none';
+            overlay.style.display = video.style.display;
+          }
+        },
+      });
+    })();
+  </script>
+</polymer-element>

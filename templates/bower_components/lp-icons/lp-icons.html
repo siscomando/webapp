@@ -1,0 +1,23 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-icons/core-icons.html">
+<link rel="import" href="../core-icons/hardware-icons.html">
+<link rel="import" href="../core-icons/maps-icons.html">
+<link rel="import" href="../core-icons/social-icons.html">
+
+<polymer-element name="lp-icons" attributes="icon color size opacity" extends="core-icon">
+  <template>
+    <core-icon icon="{{icon}}" 
+      style="color: {{color}}; width: {{size}}; height: {{size}}; opacity: {{opacity}};"></core-icon>
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        // define element prototype here
+        publish: {
+          color: 'white',
+          fsize: '1em',
+        }
+      });
+    })();
+  </script>
+</polymer-element>
