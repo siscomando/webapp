@@ -23,6 +23,6 @@ templates/bower_components/core-*
 templates/bower_components/web*
 templates/bower_components/polymer*
 templates/bower_components/sc-*
-templates/bower_components/lp-input/
-templates/bower_components/lp-ugettext/
-templates/bower_components/lp-text-languages/
+templates/bower_components/lp-input
+templates/bower_components/lp-ugettext
+templates/bower_components/lp-text-languages
