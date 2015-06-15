@@ -1,0 +1,97 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-button/paper-button.html">
+
+<!--
+This element can be used for general purpose login boxes (identification
+and password).
+
+##### Example
+
+    <paper-login-box></paper-login-box>
+
+@element paper-login-box
+@blurb Login box
+@status alpha
+@homepage http://polymerlabs.github.io/paper-login-box
+-->
+<polymer-element name="paper-login-box" attributes="heading identification">
+
+  <template>
+    <link rel="stylesheet" href="paper-login-box.css" />
+    <h2>{{heading}}</h2>
+    <content select="[top]"></content>
+    <content select="[idHeading]"></content>
+    <paper-input id="idInput" value="{{identifier}}" label="{{identification}}"></paper-input>
+    <content select="[pwHeading]"></content>
+    <paper-input id="pwInput" value="{{password}}" label="Password" type="password"></paper-input>
+    <paper-button label="{{submit}}" id="submitbutton" raisedButton on-click="{{validate}}"></paper-button>
+    <content select="[bottom]"></content>
+  </template>
+
+  <script>
+
+    Polymer('paper-login-box', {
+      /**
+       * The `heading` attribute sets an initial heading
+       * 
+       * @attribute heading
+       * @type string
+       * @default 'Login'
+       */
+      heading: 'Login',
+
+      /**
+       * The `submit` attribute sets the submit button text
+       * 
+       * @attribute submit
+       * @type string
+       * @default 'Login'
+       */
+      submit: 'Login',
+
+      /**
+       * The `identification` attribute sets an initial identification.
+       * 
+       * @attribute identification
+       * @type string
+       * @default 'Username'
+       */
+      identification: 'Username',
+      identifier: "",
+      password: "",
+
+      validate: function() {
+        this.$.idInput.invalid = !!!this.identifier;
+        this.$.pwInput.invalid = !!!this.password;
+        if (!this.password || !this.identifier) return;
+        this.submit();
+      },
+
+      /**
+       * The `paper-login-box-click` event is fired whenever we
+       * call submit
+       * 
+       * @event paper-login-box-click
+       * @param {Object} detail
+       *   @param {string} detail.identifier The identification value (e.g. username)
+       *   @param {string} detail.password The password value
+       */
+
+      /**
+       * The `submit` method will fire the login try event.
+       * 
+       * @method submit
+       */
+      submit: function() {
+        this.fire('paper-login-box-click', {
+          identifier: this.identifier,
+          password: this.password
+        });
+      }
+
+    });
+
+  </script>
+
+</polymer-element>

@@ -1,0 +1,90 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  background-color: #F9F9F9;
+  font-family: 'RobotoDraft', sans-serif;
+}
+core-header-panel {
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.container {
+  width: 80%;
+  margin: 50px auto;
+}
+.appbrand {
+	background-color: #19293E;
+	padding: 10px 10px 10px 16px;
+	vertical-align: middle;
+  cursor: pointer;
+}
+.appname {
+	margin-left: 10px;
+	margin-top:20px;
+	color: #FFF;
+}
+.panelContent {
+}
+
+sc-input-hashtag {
+  padding: 0px 11px 17px 11px;
+}
+
+login-box {
+  margin: 40px auto;
+}
+#loadData {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 9999;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+paper-spinner {
+  position: relative;
+  display: block;
+  width: 60px;
+  height: 60px;
+}
+paper-spinner.blue::shadow .circle {
+  border-color: #2A99D6;
+}
+.beta {
+
+}
+.sc-input-section {
+  display: flex;
+  background-color: #EEEEEE;
+  min-height: 50px;
+  padding: 14px;
+  margin: 0;
+  max-width: 100%;
+  bottom: 0;
+}
+#editable {
+  background-color: #FFFFFF;
+  font-size: 1.15em;
+  font-weight: 300;
+  border-radius: 3px;
+  font-size: .95rem;
+  padding: 6px 6px 6px 6px;
+  overflow: hidden;
+  outline: none;
+  min-height: 30px;
+  max-height: 120px !important;
+  resize: none !important;  
+  width: 100%;
+  margin: 0;
+  word-wrap: break-word; /* firefox */
+  word-break: break-all; /* firefox */
+}
+
+#editable em {
+font-style: normal;
+color: #47CACC !important;
+} 
+
+.user-data{
+  display: none;
+}

@@ -1,0 +1,32 @@
+{
+  "name": "paper-login-box",
+  "version": "0.0.5",
+  "authors": [
+    "aynik <aynik26@gmail.com>",
+    "Axel Christ <adracus@gmail.com>"
+  ],
+  "description": "Login box for general purpose",
+  "keywords": "login, polymer, web-components",
+  "main": "login-box.html",
+  "license": "MIT",
+  "homepage": "https://github.com/Adracus/login-box/",
+  "ignore": [
+    "**/.*"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.4.x",
+    "polymer-test-tools": "Polymer/polymer-test-tools#~0.4.x",
+    "paper-input": "Polymer/paper-input#~0.4.x",
+    "paper-button": "Polymer/paper-button#~0.4.x"
+  },
+  "_release": "0.0.5",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.5",
+    "commit": "dcb6fe43c8cb399e1ec1ca5f16dd89bb7cfe0762"
+  },
+  "_source": "git://github.com/aynik/paper-login-box.git",
+  "_target": "~0.0.5",
+  "_originalSource": "paper-login-box",
+  "_direct": true
+}

@@ -1,0 +1,27 @@
+:host {
+  display: block;
+}
+
+#mainContent {
+	display: block;
+	padding-top: 55px;
+	padding-bottom: 50px;
+
+}
+#mainContent h1 {
+	font-size: 3em;
+	margin-bottom: 20px;
+	text-align: center;
+}
+.highlights {
+	margin-top: 90px;
+}
+.texts {
+	padding-top: 20px;
+	font-weight: 100;
+	font-size: 1.25em;
+	div {
+		padding: 10px 20px 20px 20px;
+		line-height: 1.48em;
+	}
+}

@@ -1,0 +1,28 @@
+{
+  "name": "sc-icons",
+  "version": "0.0.1",
+  "authors": [
+    "Horacio Ibrahim <horacioibrahim@gmail.com>"
+  ],
+  "description": "sc-icons set of icons",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "sc-icons"
+  ],
+  "main": "sc-icons.html",
+  "license": "MIT",
+  "homepage": "https://github.com/siscomando/sc-icons/",
+  "ignore": [
+    "/.*",
+    "/tests/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^0.5.4",
+    "paper-item": "Polymer/paper-item",
+  },
+  "devDependencies": {
+    "web-component-tester": "*"
+  }
+}

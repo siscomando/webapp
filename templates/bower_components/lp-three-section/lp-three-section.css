@@ -1,0 +1,31 @@
+:host {
+  display: block;
+}
+#mainContent {
+	display: block;
+}
+#mainContent h1 {
+	font-size: 3em;
+	margin-bottom: 20px;
+	text-align: center;
+}
+.highlights {
+	margin-top: 90px;
+}
+.texts {
+	padding-top: 20px;
+	font-weight: 100;
+}
+.texts div {
+	padding: 10px 20px 20px 20px;
+	line-height: 1.48em;
+}
+
+@media only screen 
+and (max-device-width : 667px) { 
+ /* Mobile start */
+	#mainContent h1 {
+		font-size: 2em;
+	}
+ /* Mobile end */
+}

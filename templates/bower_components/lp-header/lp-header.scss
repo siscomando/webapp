@@ -1,0 +1,56 @@
+:host {
+  display: block;
+  position: relative;
+  background-color: #E3457C;
+  font-weight: 100;
+}
+#heroMessage {
+	font-size: 3em;
+	color: white;
+	text-align: center;
+}
+#heroMessage .brand {
+	position: absolute;
+	font-weight: 300;	
+	font-size: 1.25em !important;
+	text-align: left;
+	top: 20px;
+	left: 20px;
+	z-index: 100;
+}
+#content {
+	padding-top: 228px;
+	height: 4em;
+	text-align: center;
+  	display: block;
+  	letter-spacing: 1px;
+  	z-index: 100;
+}
+
+.video-overlay {
+    background: url("/images/video-overlay.png") repeat scroll 0% 0% transparent;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 99;
+    display: none;
+} 
+
+video#bgvid { 
+	display: none;
+	position: absolute; 
+	right: 0; 
+	bottom: 0;
+	min-width: 100%; 
+	min-height: 100%;
+	width: auto; 
+	height: auto; 
+	z-index: -100;
+	/* background: url(videoBgDefault.jpg) no-repeat; */
+	background-size: cover; 
+	z-index: 98;
+}
+video#bgvid { transition: 1s opacity; }
+

@@ -1,0 +1,53 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-media-query/core-media-query.html">
+
+<polymer-element name="lp-three-section" attributes="minHeight bgcolor titlecolor titleweight textscolor paddingTop textSize">
+  <template>
+    <link rel="stylesheet" href="lp-three-section.css">  
+    <core-media-query query="max-width: 640px" queryMatches="{{phoneScreen}}"
+    ></core-media-query>
+    <div id="mainContent" 
+    style="min-height: {{minHeight}}px; background-color: {{bgcolor}}; padding-top: {{paddingTop}}; padding-bottom: {{paddingBottom}}" horizontal layout>
+      <h1 style="color: {{titlecolor}}; font-weight: {{titleweight}};">
+        <content select=".title"></content>
+      </h1>
+    <div class="highlights" layout vertical?="{{phoneScreen}}"
+       horizontal?="{{!phoneScreen}}" style="color: {{textscolor}}; font-size: {{textSize}};">
+      <div auto-vertical>
+        <content select=".highlight-1"></content>
+        <span class="texts">
+          <content select=".text-highlight-1"></content>
+        </span>
+      </div>
+      <div auto-vertical>
+        <content select=".highlight-2"></content>
+        <span class="texts">
+          <content select=".text-highlight-2"></content>
+        </span>
+      </div>
+      <div auto-vertical>
+        <content select=".highlight-3"></content>
+        <span class="texts">
+          <content select=".text-highlight-3"></content>
+        </span>
+      </div>      
+    </div>
+    
+    <!-- All not predefined content -->
+    <content></content>
+  </template>
+  <script>
+    (function () {
+      Polymer({
+        publish: {
+          paddingTop: "55px",
+          paddingBottom: "50px",
+          textSize: "1.25em",
+        },
+        // define element prototype here
+        ready: function (){
+        },
+      }); 
+    })();
+  </script>
+</polymer-element>
