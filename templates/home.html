@@ -369,18 +369,20 @@
     <span class="content">
         <p></lp-icons>We happy by you want to be invited!
         <lp-icons icon='social:cake' color="#979797"></lp-icons></p>
-        <form action="/invited/" method="post">
+        <form id="inviteForm" action="/invited/" method="post">
           <paper-input-decorator label="Your Name">
               <input is="core-input">
           </paper-input-decorator>
           <paper-input-decorator label="E-mail address">
               <input is="core-input" type="email">
           </paper-input-decorator>
-          <paper-button style="float: right;">
+          <template is="auto-binding">
+          <paper-button style="float: right;" on-tap="{{sendInvite}}">
             <lp-text-languages pt-br="<lp-icons icon='send' color='#FFFFFF'></lp-icons>Enviar">
             <lp-icons icon='send' color="#FFFFFF"></lp-icons>Enviar
             </lp-text-languages>
           </paper-button>
+          </template>
         </form>
     </span>
   </lp-sop-dialog> 
@@ -404,6 +406,7 @@
     var dialogDonate = document.querySelector('#dialogDonate'); 
     var linkAboutSis = document.querySelector('#aboutsis');
     var dialogAboutSis = document.querySelector('#dialogAboutSis'); 
+    var inviteForm = document.querySelector('#inviteForm');
 
 
     callerInvite.addEventListener('click', function(ev) {
@@ -441,8 +444,16 @@
       ev.target.setVideo = function(ev) {
         var video = document.querySelector('lp-header');
         video.videoShow = !video.videoShow;
-      };         
-    });
+      };
+      
+      ev.target.sendInvite = function(ev) {      
+        inviteForm.submit();
+      };
+
+    });  
+
+    // to send invite
+
   </script>
 </body>
 </html>
