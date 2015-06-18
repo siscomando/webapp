@@ -460,7 +460,11 @@ and password).
 @homepage http://polymerlabs.github.io/login-box
 -->
 
+  
+  
+    
   <link rel="stylesheet" href="/static/assets/css/app.css">
+  <link rel="stylesheet" href="/static/assets/css/appstaticpages.css">
   <link rel="shortcut icon" href="/static/assets/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/static/assets/favicon.ico" type="image/x-icon">
 
@@ -4070,13 +4074,16 @@ content[select="[top]"]::content img.radial {
     <h2>{{heading}}</h2>
     <content select="[top]"></content>
     <content select="[identifierHeading]"></content>
-    <paper-input id="identifierInput" value="{{identifier}}" label="{{identification}}"></paper-input>
+    
+    <!-- <paper-input id="identifierInput" value="{{identifier}}" label="{{identification}}" floatingLabel></paper-input>-->
+
+    <paper-input-decorator label="E-mail" floatinglabel="">
+      <input is="core-input" type="email" id="identifierInput" value="{{identifier}}" label="E-mail" floatinglabel="">
+    </paper-input-decorator>    
+    
     <content select="[passwordHeading]"></content>
     
-    <!--
-    <paper-input id="passwordInput" value="{{password}}" label="password" type="password"></paper-input>
-    -->
-    <paper-input-decorator label="with password" floatinglabel="">
+    <paper-input-decorator label="Password" floatinglabel="">
       <input is="core-input" type="password" id="passwordInput" value="{{password}}" label="password">
     </paper-input-decorator>
 
@@ -4218,10 +4225,30 @@ content[select="[top]"]::content img.radial {
             <span class="appname">SisComando</span>
           </div>
       </div>
-      <div class="baseContent">
-        <login-box heading="Register" identification="e-mail" submit="register" action="/register"></login-box>
+      <div horizontal="" center-justified="" layout="" center="">
+        <div class="baseContent register">
+          <h3>Signup</h3>
+          <p>%% greetings %%, %% name %%! </p>
+          <p>Digite uma senha para finalizar o cadastro.</p> 
+          <form id="registerForm" name="form" action="/register" method="POST">
+            <paper-input-decorator label="Password" floatinglabel="">
+              <input is="core-input" type="password" id="passwordInput" value="" label="password">
+            </paper-input-decorator>
+            <template is="auto-binding">
+              <paper-button id="submitbutton" raised="" on-tap="{{submitRegister}}">Enviar</paper-button>
+            </template>
+          </form>          
+        </div>
       </div>      
     </core-header-panel>
+    <script>
+    var registerForm = document.querySelector('#registerForm');
+      addEventListener('template-bound', function(ev){
+        ev.target.submitRegister = function() {
+            registerForm.submit(;)
+        }
+      });
+    </script>
 
 
 

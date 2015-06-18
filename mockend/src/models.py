@@ -8,7 +8,7 @@ from flask.ext.mongoengine import BaseQuerySet
 from bson import json_util
 # APP
 from src import database as db
-from src import red
+from src import red, emails
 from src import login_manager
 
 # SSE Events support
@@ -220,7 +220,26 @@ class Tags(db.Document):
     obj_pk = db.StringField(required=False)
 
 
+class Invite(db.Document):
+    name = db.StringField(required=True, max_length=255)
+    email = db.StringField(required=True, unique=False) 
+    invited_by_email = db.StringField(required=False, unique=False)
+    created_at = db.DateTimeField(default=datetime.datetime.now)
+    is_approved = db.BooleanField(default=False)
+    used = db.BooleanField(default=False)
+    # ObjectID alreay a token
+    # TODO: #signals send to email
+
+    @classmethod
+    def post_save(cls, sender, document, **kwargs):
+        if 'created' in kwargs and kwargs['created']:
+            emails.request_invited(document.name, document.email)
+        else:
+            if document.is_approved and document.used == False:
+                emails.approved_invited(document.name, document.email, document.pk)
+            
 # Signals
 signals.post_save.connect(Issue.post_save, sender=Issue)
 signals.post_save.connect(Comment.post_save, sender=Comment)
+signals.post_save.connect(Invite.post_save, sender=Invite)
 

@@ -4,6 +4,7 @@ from flask.views import View
 from flask import jsonify, request, make_response, abort, Response, flash
 from flask import render_template, flash, url_for, redirect, session, g
 from flask.ext.login import login_required, current_user, login_user, logout_user
+from flask.ext.babel import lazy_gettext as _
 # APP
 from src import app, red, models, login_manager
 
@@ -33,13 +34,12 @@ def internal_error(error):
 # Static routes
 # 
 @app.route('/')
-@app.route('/index')
 def index():
 
 	if current_user.is_authenticated():
 		return redirect(url_for('application'))
 
-	return redirect(url_for('login')) # TODO: landingpage
+	return render_template('home.html')
 
 @app.route('/logout')
 @login_required
@@ -69,15 +69,20 @@ def login():
 	# return jsonify({'msg': 'Sucessful'}), 201
 	return render_template('login.html')
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
+@app.route('/register/<string:token>', methods=['GET', 'POST'])
+def register(token):
 	# TODO: TESTAR LOGIN REDIRECT
 	# TODO: RESETAR SENHA
     if request.method == 'GET':
-        return render_template('register.html')
+    	invited = models.Invite.objects.get_or_404(pk=token)
+    	if invited.is_approved == True and invited.used == False:
+    		name = invited.name.split()[0].capitalize()
+        	return render_template('register.html', greetings=_(u'Hi'), name=name)
+        else:
+        	return render_template('not_approved_invited.html', greetings=_(u'Hi'),)
 
     user = models.User()
-    user.email =  request.form.get('identifier', None)
+    user.email =  invited.email
     user.password = request.form.get('password', None)
 
     if user.email is None or user.password is None:
@@ -96,6 +101,23 @@ def settings():
  	''' Profile user '''
 
  	return render_template('settings.html')
+
+@app.route('/request_invite', methods=['POST'])
+def request_invite():
+ 	name = request.form['name']
+ 	email = request.form['email']
+ 	invite = models.Invite()
+ 	invite.name = name
+ 	invite.email = email
+ 	
+ 	#try:
+ 	invite.save()
+ 	#except:
+ 	#	#erro nome, email estao em vazios
+ 	#	return render_template('request_invite_failed.html')
+
+ 	return render_template('request_invite_successful.html')
+
     
 @app.route('/app', methods=['GET'])
 @login_required

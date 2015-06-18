@@ -213,6 +213,51 @@ lp-two-img-section .btn-caller {
   margin-left: 30px;
 }
 
+.thanks-request {
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  display: block;
+  min-height: 200px;  
+}
+.thanks-request p {
+  font-weight: 300;
+  line-height: 34px;
+  font-size: 25px;
+}
+
+.register {
+  display: block;
+  -moz-box-shadow: 0 0 10px #888;
+  -webkit-box-shadow: 0 0 10px #888;
+  box-shadow: 0 0 10px #888;
+  max-width: 250px;
+  min-width: 200px;
+  padding: 15px;
+  margin: 80px auto;
+  font-family: sans-serif;
+  text-align: center;
+}
+.register paper-input, .register paper-input-decorator{
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+}
+.register paper-input::shadow > #input, .register paper-input-decorator::shadow > #input {
+  text-align: center;
+}
+.register #submitbutton {
+  margin-top: 10px;
+  width: 90%;
+  background: #4059a9;
+  color: white;
+}
+.register content[select="[top]"]::content img.radial {
+  border-radius: 50%;
+}
+.register > h3 {
+  margin-top: 5px;
+}
+
 @media only screen 
 and (max-device-width : 667px) { 
  /* Mobile start */

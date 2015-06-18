@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import redis
+import os
 from flask import Flask, url_for
 from flask.ext.mongoengine import MongoEngine
 from flask.ext.cors import CORS
 from flask.ext.login import LoginManager
+from flask_mail import Mail
+from flask.ext.babel import Babel
 
 # Pre-setup
 red = redis.StrictRedis()
@@ -25,6 +28,22 @@ app = CustomFlask(__name__)
 cors = CORS(app, resources=r'/api/*', origins='*', 
 	allow_headers=['Content-Type', 'Origin', 'Accept,', 'X-Requested-With', 
 				'X-CSRF-Token','Access-Control-Allow-Origin'])
+
+# Mail
+mail = Mail(app)
+# i18n and l10n
+babel = Babel(app)
+# Sample
+# email server
+MAIL_SERVER = 'localhost'
+MAIL_PORT = 25
+MAIL_USE_TLS = False
+MAIL_USE_SSL = True
+MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+
+# administrator list
+ADMINS = ['horacioibrahim@gmail.com']
 
 # Load together Flask and Flask-login
 login_manager = LoginManager()

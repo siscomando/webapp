@@ -9,7 +9,11 @@
   <link rel="import" href="components/polymer/polymer.html">
   <link rel="import" href="components/core-header-panel/core-header-panel.html">
   <link rel="import" href="components/login-box/login-box.html">
+  <link rel="import" href="components/paper-input/paper-input.html">
+  <link rel="import" href="components/paper-input/paper-input-decorator.html">
+  <link rel="import" href="components/paper-button/paper-button.html">  
   <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="stylesheet" href="assets/css/appstaticpages.css">
   <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
   <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
 
@@ -22,16 +26,35 @@
       <div class="core-header">
           <div class="appbrand" horizontal layout>
             <span class="logo"> 
-              <img src="assets/img/logo_60.png">
+              <img src="/assets/img/logo_60.png">
             </span>
             <span class="appname">SisComando</span>
           </div>
       </div>
-      <div class="baseContent" >
-        <login-box heading="Register" identification="e-mail" submit="register"
-        action="/register"></login-box>
+      <div horizontal center-justified layout center>
+        <div class="baseContent register">
+          <h3>Signup</h3>
+          <p>%% greetings %%, %% name %%! </p>
+          <p>Digite uma senha para finalizar o cadastro.</p> 
+          <form id="registerForm" name="form" action="/register" method="POST">
+            <paper-input-decorator label="Password" floatingLabel>
+              <input is="core-input" type="password" id="passwordInput" value="" label="password">
+            </paper-input-decorator>
+            <template is="auto-binding">
+              <paper-button id="submitbutton" raised on-tap="{{submitRegister}}">Enviar</paper-button>
+            </template>
+          </form>          
+        </div>
       </div>      
     </core-header-panel>
+    <script>
+    var registerForm = document.querySelector('#registerForm');
+      addEventListener('template-bound', function(ev){
+        ev.target.submitRegister = function() {
+            registerForm.submit(;)
+        }
+      });
+    </script>
 
 </body>
 </html>
