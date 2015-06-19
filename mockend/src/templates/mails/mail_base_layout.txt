@@ -1,8 +1,0 @@
-********* %%title%% *********
-
-%%greetings%%, %%fullname%%,
-
-<%  block content %>
-<% endblock %>
-
-Equipe do SisComando.

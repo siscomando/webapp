@@ -1,0 +1,5 @@
+<% extends 'mails/mail_base_layout.html' %>
+
+<% block content %>
+Seu convite foi aprovado! Acesse %% url_for('register', token=token_url_register, _external=True) %% para concluir o registro.
+<% endblock %>
