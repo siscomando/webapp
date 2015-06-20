@@ -14,9 +14,9 @@ from src.decorators import async
 
 @async
 def async_send_mail(app, msg):
-	ses = SESConnection(aws_access_key_id=app.config.get(AWS_ACCESS_KEY_ID),
-		aws_secret_access_key=app.config.get(AWS_SECRET_ACCESS_KEY))
-	
+	ses = SESConnection(aws_access_key_id=app.config.get('AWS_ACCESS_KEY_ID'),
+		aws_secret_access_key=app.config.get('AWS_SECRET_ACCESS_KEY'))
+
 	with app.app_context():
 		#mail.send(msg)
 		ses.send_email(msg.sender, msg.subject, msg.body, msg.recipients, html_body=msg.html)
