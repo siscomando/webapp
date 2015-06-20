@@ -12,6 +12,8 @@ from flask.ext.babel import lazy_gettext as _
 from src import app, mail
 from src.decorators import async
 
+ADMINS = app.config.get('ADMINS')
+
 @async
 def async_send_mail(app, msg):
 	ses = SESConnection(aws_access_key_id=app.config.get('AWS_ACCESS_KEY_ID'),
@@ -36,11 +38,10 @@ def default_send_mail(subject, sender, recipients, body_text, body_html=None):
 
 def request_invited(fullname, email):
 	""" When the user requests an invite a return message is sent for it. """
-	admins = app.config.get('ADMINS')
 
 	default_send_mail(
 			_(u"We've received your invitation request."),
-			admins[0], 
+			ADMINS[0], 
 			email,
 			render_template('mails/request_invited.txt', 
 				title=_(u"Invitation Request"), fullname=fullname, greetings=_(u"Hi")),
