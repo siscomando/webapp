@@ -8,7 +8,7 @@ created at 15/Jun/2015
 from flask_mail import Message
 from flask import render_template
 from flask.ext.babel import lazy_gettext as _
-from src import app, mail, ADMINS
+from src import app, mail
 from src.decorators import async
 
 @async
@@ -31,9 +31,11 @@ def default_send_mail(subject, sender, recipients, body_text, body_html=None):
 
 def request_invited(fullname, email):
 	""" When the user requests an invite a return message is sent for it. """
+	admins = app.config.get('ADMINS')
+
 	default_send_mail(
 			_(u"We've received your invitation request."),
-			ADMINS[0], 
+			admins[0], 
 			email,
 			render_template('mails/request_invited.txt', 
 				title=_(u"Invitation Request"), fullname=fullname, greetings=_(u"Hi")),

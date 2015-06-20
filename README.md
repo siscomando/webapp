@@ -19,7 +19,7 @@ The app contains some elements required in first level and others are built-in i
 - [sc-navbar](https://github.com/siscomando/sc-navbar): left navigator bar
 - [sc-search](https://github.com/siscomando/sc-search): top header bar with search feature
 - [sc-timeline](https://github.com/siscomando/sc-timeline): the element that provides our timeline
-- [lp-input](http://horacioibrahim.github.io/lp-input/): a fake input/textarea that supports mentions, hashtags on an ordinary
+- [lp-input](https://github.com/horacioibrahim/lp-input): a fake input/textarea that supports mentions, hashtags on an ordinary
 div.
 
 Setup by custom elements

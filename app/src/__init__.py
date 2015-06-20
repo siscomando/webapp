@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import redis
-import os
-from flask import Flask, url_for
+from flask import Flask
 from flask.ext.mongoengine import MongoEngine
 from flask.ext.cors import CORS
 from flask.ext.login import LoginManager
@@ -25,6 +24,7 @@ class CustomFlask(Flask):
 
 #app = Flask(__name__)
 app = CustomFlask(__name__)
+app.config.from_envvar('SISCOMANDO_SETTINGS')
 cors = CORS(app, resources=r'/api/*', origins='*', 
 	allow_headers=['Content-Type', 'Origin', 'Accept,', 'X-Requested-With', 
 				'X-CSRF-Token','Access-Control-Allow-Origin'])
@@ -33,38 +33,11 @@ cors = CORS(app, resources=r'/api/*', origins='*',
 mail = Mail(app)
 # i18n and l10n
 babel = Babel(app)
-# Sample
-# email server
-MAIL_SERVER = 'localhost'
-MAIL_PORT = 25
-MAIL_USE_TLS = False
-MAIL_USE_SSL = True
-MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-
-# administrator list
-ADMINS = ['horacioibrahim@gmail.com']
 
 # Load together Flask and Flask-login
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
-
-# Config. To separate this when you needing by using config.from_object
- # See more #1
-app.config['SECRET_KEY'] = '$3cr0to'
-app.config['DEBUG'] = True
-app.config['TESTING'] = False
-app.config['USERNAME'] = 'admin'
-app.config['PASSWORD'] = 'default'
-
-if app.config['TESTING']:
-	# purpose tests
-    app.config['MONGODB_SETTINGS'] = {'db':'test_mockend'}
-else:
-	# production
-    app.config['MONGODB_SETTINGS'] = {'db':'mockend'}
-
 
 database = MongoEngine(app)
 
