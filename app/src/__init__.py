@@ -25,6 +25,7 @@ class CustomFlask(Flask):
 #app = Flask(__name__)
 app = CustomFlask(__name__)
 app.config.from_envvar('SISCOMANDO_SETTINGS')
+
 cors = CORS(app, resources=r'/api/*', origins='*', 
 	allow_headers=['Content-Type', 'Origin', 'Accept,', 'X-Requested-With', 
 				'X-CSRF-Token','Access-Control-Allow-Origin'])
