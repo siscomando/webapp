@@ -11,11 +11,8 @@
 	font-size: 3em;
 	color: #FFF;
 	text-align: center;
-	background: url("images/macbook-temp.png") no-repeat center center fixed;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+  	background-color: #282828;
+  	width: 100%;
 }
 #heroMessage .brand {
 	position: absolute;
@@ -122,3 +119,4 @@ and (max-device-width : 667px) {
  }
  /* Mobile end */
 }
+

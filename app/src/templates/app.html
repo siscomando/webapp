@@ -8,7 +8,7 @@
   <link rel="apple-touch-icon" href="/static/assets/img/touch-icon-iphone.png">
   <link rel="apple-touch-icon" sizes="76x76" href="/static/assets/img/touch-icon-ipad.png">
   <link rel="apple-touch-icon" sizes="120x120" href="/static/assets/img/touch-icon-iphone-retina.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="/static/assets/img/touch-icon-ipad-retina.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/static/assets/img/touch-icon-ipad-retina.png">        
          
   <title>SisComando - Mais fácil, mais social!</title>
 
@@ -11775,10 +11775,12 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
         <paper-input-decorator id="parentsearch" label="Pesquise qualquer coisa..." flex="">
           <input id="search" is="core-input" name="s" on-blur="{{onDisplaySearch}}" on-keyup="{{getSearch}}" on-focus="{{setIn}}" value="">
         </paper-input-decorator>
-        <core-icon icon="search" on-tap="{{onDisplaySearch}}">
-        </core-icon>
+        <!-- <core-icon icon="search" on-tap="{{onDisplaySearch}}">
+        </core-icon>--> 
+        <!--
         <paper-icon-button icon="speaker-notes" on-tap="{{showNotifications}}"></paper-icon-button>
         <paper-icon-button icon="sc-icons-png:hashtag" on-tap="{{showHashtags}}"></paper-icon-button>
+        -->
       </core-toolbar>
     </div>
   </template>
@@ -14388,9 +14390,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
 
         // calculate init value
         function getStarredNumber() {
-
           return Math.ceil( self.votesSum / self.votes ) -1 ;
-
         }
 
         starredNumber = getStarredNumber();
@@ -14457,6 +14457,10 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
 
             evt = new CustomEvent('rate');
             self.dispatchEvent(evt);
+
+            // to back control to timeline
+            var scTimeline = document.querySelector('sc-timeline');
+            scTimeline.$.coreList.focus();            
 
             return false;
           }, false);
@@ -14699,7 +14703,7 @@ core-icon .pallete-icon-color .autumn {
                   </div>
                 </div>
                 <div class="stars">
-                    <star-rating votes="{{ model.stars }}" votessum="0"></star-rating>
+                    <star-rating votes="5" votessum="10"></star-rating>
                 </div>
                 <div class="post" on-tap="{{getFullContent}}">
                     {{ model.body | ellipsis }}

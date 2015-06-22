@@ -37,8 +37,9 @@
           <p>%% greetings %%, %% name %%! </p>
           <p>Digite uma senha para finalizar o cadastro.</p> 
           <form id="registerForm" name="form" action="/register" method="POST">
+            <input type="hidden" id="inviteID" name="invite" value="%% invite.pk %%">
             <paper-input-decorator label="Password" floatingLabel>
-              <input is="core-input" type="password" id="passwordInput" value="" label="password">
+              <input is="core-input" type="password" name="password" id="passwordInput" value="" label="password">
             </paper-input-decorator>
             <template is="auto-binding">
               <paper-button id="submitbutton" raised on-tap="{{submitRegister}}">Enviar</paper-button>
@@ -51,7 +52,7 @@
     var registerForm = document.querySelector('#registerForm');
       addEventListener('template-bound', function(ev){
         ev.target.submitRegister = function() {
-            registerForm.submit(;)
+            registerForm.submit();
         }
       });
     </script>

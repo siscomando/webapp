@@ -78,7 +78,7 @@ def register(token):
     	if invited.is_approved == True and invited.used == False:
     		name = invited.name.split()[0].capitalize()
         	return render_template('register.html', greetings=_(u'Hi'), 
-        		name=name, invite=invite)
+        		name=name, invite=invited)
         else:
         	return render_template('not_approved_invited.html', greetings=_(u'Hi'),)
 
@@ -95,11 +95,13 @@ def register_new():
 
 	try:
 		user.save()
+	    # invite used flag
+		return redirect(url_for('login'))
 	except:
 		flash('User or password is invalid or already exists', 'error')
 
 	flash('User successfully registered') # TODO name already exists
-	return redirect(url_for('login'))
+	return redirect(url_for('index'))
 
 @app.route('/settings', methods=['GET'])
 def settings():

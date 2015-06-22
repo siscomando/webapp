@@ -1,9 +1,9 @@
 <link rel="import" href="../polymer/polymer.html">
 
-<polymer-element name="lp-header" attributes="minHeight videoShow webm mp4 poster">
+<polymer-element name="lp-header" attributes="minHeight videoShow webm mp4 poster bg">
   <template>
     <link rel="stylesheet" href="lp-header.css">    
-    <div id="heroMessage" style="height: {{minHeight}}px;" horizontal layout>
+    <div id="heroMessage" style="height: {{minHeight}}px; background: url({{bg}}) no-repeat; background-size: cover; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-position: center center;" horizontal layout>
       <div class="quickmenu">
         <ul>
           <li><a href="/login"><content select=".item1"></content></a></li>
