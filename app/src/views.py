@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import logging, json, re
+import logging, json, re, base64
 from flask.views import View
 from flask import jsonify, request, make_response, abort, Response, flash
 from flask import render_template, flash, url_for, redirect, session, g
@@ -69,7 +69,7 @@ def login():
 	# return jsonify({'msg': 'Sucessful'}), 201
 	return render_template('login.html')
 
-@app.route('/register/<string:token>', methods=['GET', 'POST'])
+@app.route('/register/<string:token>', methods=['GET'])
 def register(token):
 	# TODO: TESTAR LOGIN REDIRECT
 	# TODO: RESETAR SENHA
@@ -77,24 +77,29 @@ def register(token):
     	invited = models.Invite.objects.get_or_404(pk=token)
     	if invited.is_approved == True and invited.used == False:
     		name = invited.name.split()[0].capitalize()
-        	return render_template('register.html', greetings=_(u'Hi'), name=name)
+        	return render_template('register.html', greetings=_(u'Hi'), 
+        		name=name, invite=invite)
         else:
         	return render_template('not_approved_invited.html', greetings=_(u'Hi'),)
 
-    user = models.User()
-    user.email =  invited.email
-    user.password = request.form.get('password', None)
+@app.route('/register', methods=['POST'])
+def register_new():
+	invite_pk = request.form.get('invite')
+	invited = models.Invite.objects.get_or_404(pk=invite_pk)
+	user = models.User()
+	user.email =  invited.email
+	user.password = request.form.get('password', None)
 
-    if user.email is None or user.password is None:
-    	flash('The typed User or Password is invalid', 'error')
+	if user.email is None or user.password is None:
+		flash('The typed User or Password is invalid', 'error')
 
-    try:
-    	user.save()
-    except:
-    	flash('User or password is invalid or already exists', 'error')
+	try:
+		user.save()
+	except:
+		flash('User or password is invalid or already exists', 'error')
 
-    flash('User successfully registered') # TODO name already exists
-    return redirect(url_for('login'))
+	flash('User successfully registered') # TODO name already exists
+	return redirect(url_for('login'))
 
 @app.route('/settings', methods=['GET'])
 def settings():
