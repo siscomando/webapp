@@ -12781,6 +12781,14 @@ core-menu {
 	overflow: hidden;
 	margin-bottom: 65px;
 }
+core-menu h5 {
+	color: white;
+	margin: 0;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	font-weight: 500;
+	opacity: 0.6;
+}
 core-submenu {
 	font-family: 'RobotoDraft', sans-serif;
 	color: #FFF;
@@ -12876,6 +12884,7 @@ core-toolbar paper-icon-button {
 
       <!-- menu item: This object fire core-select event -->
       <core-menu id="coreMenu">
+          <h5>Em andamento ({{totalOpened}})</h5>
           <template repeat="{{ issue in _groupedIssues}}">
             <core-submenu>
                   <div class="item-content">
@@ -13009,13 +13018,14 @@ core-toolbar paper-icon-button {
             db = window.localStorage.getItem("dbIssues");
             db = JSON.parse(db);
             
+            // if doc is closed to remove from view (navbar)
             if (doc.closed == true) {
               for (item in db) {
                 if (db[item].register == doc.register) {
                     db.splice(item, 1);
                 }
                 if (this.scid == doc.register) {
-                    location.href = '/'; // to prevent sc-header with old issue selected
+                    location.href = '/'; // to prevent sc-header with old issue selected. Go back home.
                 }                
               }
             } else {
@@ -13034,7 +13044,7 @@ core-toolbar paper-icon-button {
         }
       },  
       responseChanged: function() {
-      	  this.issueOrig = this.issues = this.response['issues'];
+      	  this.issuesOrig = this.issues = this.response['issues'];
       	  window.localStorage.setItem("dbIssues",JSON.stringify(this.issues));
           this.updateIssues();
           
@@ -13042,7 +13052,8 @@ core-toolbar paper-icon-button {
       updateIssues: function() {
           db = JSON.parse(window.localStorage.getItem("dbIssues"));
           db.forEach(this.cleanerClosed);
-          db = window.localStorage.setItem("dbIssues", JSON.stringify(db));
+          this.issuesOrig = db;
+          window.localStorage.setItem("dbIssues", JSON.stringify(db));
           this.sortByScope();
       },
       menuReferrer: function(name) {
@@ -13123,15 +13134,15 @@ core-toolbar paper-icon-button {
         // return scopeList; // to comment this in production enviroment 
     },
       filterChanged: function(){
-        var issueOrig = this.issueOrig;
-        var issueRes = [];
+        var issuesOrig = this.issuesOrig;
+
         if(this.filter) {
-          issuesFiltered = (search(this.filter, issueOrig).length > 0) ?
-          search(this.filter, issueOrig) : [];
+          issuesFiltered = (search(this.filter, issuesOrig).length > 0) ?
+          search(this.filter, issuesOrig) : [];
           window.localStorage.setItem("dbIssues", JSON.stringify(issuesFiltered));
           this.updateIssues();
         } else {
-          window.localStorage.setItem("dbIssues", JSON.stringify(issueOrig));
+          window.localStorage.setItem("dbIssues", JSON.stringify(issuesOrig));
           this.updateIssues();
         }
       },
@@ -13145,7 +13156,10 @@ core-toolbar paper-icon-button {
       },
       showText: function() {
         this.$.inputFilter.hidden = false;
-      }       
+      },
+      _groupedIssuesChanged: function() {
+        this.totalOpened = this._groupedIssues.length;
+      }     
     });
   </script>
 

@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 import random
+import sys
+
+# Add local app
+sys.path.append("../../app/")
 from src import models
 
 seed = random.randint(1000, 8000)
