@@ -51,7 +51,13 @@ paper-spinner.blue::shadow .circle {
   border-color: #2A99D6;
 }
 .beta {
-
+  background-color: #EA4A5B;
+  color: white;
+  font-weight: 300;
+  font-size: 10px;
+  height: 12px;
+  padding: 2px 3px 2px 3px;
+  border-radius: 2px;
 }
 .sc-input-section {
   display: flex;
