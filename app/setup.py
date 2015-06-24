@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
-try:
-	from distutils.core import setup
-except ImportError:
-	from setuptools import setup
+from setuptools import setup, find_packages
 
+requirements = open('requirements.txt', 'r')
+requirements = requirements.readlines()
 
 setup(
-    name='siscomando',
-    version='0.2.0',
-    author='Horacio Ibrahim',
+    name='SisComando',
+    version='0.2.1',
+    author='SisComando Team',
     author_email='horacioibrahim@gmail.com',
-    packages=['siscomando'],
+    packages=find_packages('siscomando'),
+    package_dir={'': 'siscomando'},
     url='https://github.com/siscomando',
     download_url='https://github.com/siscomando/webapp/tarball/master',
     description='Web app of the Siscomando',
+    install_requires=requirements,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
