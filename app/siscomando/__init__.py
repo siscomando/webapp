@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 import redis
 from flask import Flask
 from flask.ext.mongoengine import MongoEngine
@@ -7,7 +8,6 @@ from flask.ext.login import LoginManager
 from flask_mail import Mail
 from flask.ext.babel import Babel
 from flask.ext import restful
-from api.resources.issues import Issues
 
 # Pre-setup
 red = redis.StrictRedis()
@@ -36,8 +36,6 @@ mail = Mail(app)
 babel = Babel(app)
 # Initiate API instance from restful
 api = restful.Api(app, prefix="/api/v2")
-api.add_resource(Issues, '/issues')
-
 # Load together Flask and Flask-login
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -52,7 +50,7 @@ database = MongoEngine(app)
 # app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 # Load views
-from src import views
+from siscomando import views
 
 if __name__ == '__main__':
     app.run(threaded=True) #

@@ -1,4 +1,4 @@
-from config import *
+from configs.config import *
 
 # Usage
 # export SISCOMANDO_SETTINGS enviroment variable with path of the config
