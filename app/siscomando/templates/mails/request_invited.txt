@@ -1,7 +1,6 @@
 <% extends 'mails/mail_base_layout.txt' %>
 
 <% block content %>
-***** Solicitação recebida **************
 
 Recebemos sua solicitação para participar do SisComando e estamos felizes por isso! <br>
 No momento estamos em beta, trabalhando de portas fechadas, em breve seu convite será aprovado.</p>

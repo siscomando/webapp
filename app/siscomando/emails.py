@@ -9,8 +9,8 @@ from boto.ses.connection import SESConnection
 from flask_mail import Message
 from flask import render_template
 from flask.ext.babel import lazy_gettext as _
-from src import app, mail
-from src.decorators import async
+from siscomando import app, mail
+from siscomando.decorators import async
 
 ADMINS = app.config.get('ADMINS')
 
@@ -67,9 +67,21 @@ def welcome_app():
 	""" Triggers when the user makes the registration on app. """
 	pass
 
-def you_was_mentioned():
+def you_was_mentioned(user_said, mentioned_name, mentioned_email, url_comment):
 	""" Triggers when an user is mentioned in comments. """
-	pass
+	title = _(u"{} mentioned you in a comment".format(user_said))
+	
+	default_send_mail(
+			title,
+			ADMINS[0], 
+			mentioned_email,
+			render_template('mails/you_was_mentioned.txt', 
+				title=title, mentioned=mentioned_name, 
+				greetings=_(u"Hi"), url_comment=url_comment),
+			render_template('mails/you_was_mentioned.html', 
+				title=title, fullname=mentioned_name, 
+				greetings=_(u"Hi"), url_comment=url_comment)
+		)
 
 def replied_from_mentioned():
 	""" Triggers when the mentioned user by you reply."""

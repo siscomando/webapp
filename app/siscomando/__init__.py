@@ -6,6 +6,8 @@ from flask.ext.cors import CORS
 from flask.ext.login import LoginManager
 from flask_mail import Mail
 from flask.ext.babel import Babel
+from flask.ext import restful
+from api.resources.issues import Issues
 
 # Pre-setup
 red = redis.StrictRedis()
@@ -25,15 +27,16 @@ class CustomFlask(Flask):
 #app = Flask(__name__)
 app = CustomFlask(__name__)
 app.config.from_envvar('SISCOMANDO_SETTINGS')
-
-cors = CORS(app, resources=r'/api/*', origins='*', 
+cors = CORS(app, resources=r'/api/v1/*', origins='*', 
 	allow_headers=['Content-Type', 'Origin', 'Accept,', 'X-Requested-With', 
 				'X-CSRF-Token','Access-Control-Allow-Origin'])
-
 # Mail
 mail = Mail(app)
 # i18n and l10n
 babel = Babel(app)
+# Initiate API instance from restful
+api = restful.Api(app, prefix="/api/v2")
+api.add_resource(Issues, '/issues')
 
 # Load together Flask and Flask-login
 login_manager = LoginManager()

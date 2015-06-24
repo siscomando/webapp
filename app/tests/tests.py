@@ -30,6 +30,8 @@ class SrcTestCase(unittest.TestCase):
 		app.config['TESTING'] = True
 		app.config['WTF_CSRF_ENABLED'] = False
 		self.client = app.test_client()
+
+		# Randomly creates register issues with 'unique' register
 		int_seed = random.randint(1, 1100)
 		register = ''.join(['2015RI00001', str(int_seed)])
 		self.issue_default = {
@@ -45,7 +47,7 @@ class SrcTestCase(unittest.TestCase):
 		db.drop_database(self.dbname)
 
 	def login(self, username, password):
-	    return self.client.post('/login/', data=dict(
+	    return self.client.post('/login', data=dict(
 	        identifier=username,
 	        password=password), content_type="application/x-www-form-urlencoded", follow_redirects=True)
 
@@ -338,37 +340,24 @@ class SrcTestCase(unittest.TestCase):
 		self.assertEqual(len(results), 0)
 
 	def test_api_get_users(self):
-		"""	Tests the search of the users for mentions feature. A json with as
-		sample bellow must be returned:
-
-			{
-			    "Users": [
-			        {
-			            "avatar": "http://www.gravatar.com/avatar/7b02b4e3a6f2217cb5731e9d8c1c8191?d=http://asteps.org/wp-content/plugins/buddypress/bp-core/images/mystery-man.jpg&s=150&r=G",
-			            "location": "SUPGS/GSIAI/GSAUT",
-			            "shortname": "horacioibrahim"
-			        },
-			        {
-			            "avatar": "http://api.randomuser.me/portraits/thumb/women/80.jpg",
-			            "location": "SUPGS/GSIAI/GSAUT",
-			            "shortname": "mmissias"
-			        }        
-			    ]
-			}		
+		"""	Tests mentions feature. A json with as sample must be returned as
+		docs#api_responses.		
 		"""
-		u = models.User.objects().first()
-		print "user email: ", u.email
-		print "user password: ", u.password
-		rv = self.login(u.email, u.password)
-		print "RV", rv
-		print "RV.data", rv.data
-		term = 'xxx' # term of search
-		url = '/api/v1/users/' + term
-		res = self.client.get(url)
-		print "response is: ", res
-		json_data = json.loads(res.get_data())
-		self.assertIsInstance(json_data['Users'], list)
-		self.assertIn(term, json_data['Users'][0]['shortname'])
+		u = models.User()
+		u.email = 'DavidQuinlan@siscomando.com'
+		u.password = '123'
+		with app.test_request_context():
+			client = app.test_client()
+			rv = client.get(u.email, u.password)
+			print "RV: ", dir(rv)
+			print "RV: ", rv.status_code
+			term = 'David' # term of search
+			url = '/api/v1/users/' + term
+			res = self.client.get(url)
+			print "RES: ", res.get_data()
+			json_data = json.loads(res.get_data())
+			print json_data
+
 
 
 class CustomsTestCase(unittest.TestCase):
