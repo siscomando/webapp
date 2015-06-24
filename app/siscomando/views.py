@@ -6,7 +6,7 @@ from flask import render_template, flash, url_for, redirect, session, g
 from flask.ext.login import login_required, current_user, login_user, logout_user
 from flask.ext.babel import lazy_gettext as _
 # APP
-from src import app, red, models, login_manager
+from siscomando import app, red, models, login_manager
 
 #
 # Setup flask-login
@@ -194,6 +194,10 @@ def get_issue(register):
 @login_required
 def set_issues():
 	""" Persists the JSON from request in database
+	
+	TODO: 
+	 - needs control access at resource
+	 - new fields	
 	"""
 	if not request.json:
 		abort(400)
@@ -213,7 +217,9 @@ def set_issues():
 def edit_issues():
 	""" Edits an issue
 
-	TODO: needs control access at resource
+	TODO: 
+	 - needs control access at resource
+	 - new fields
 	"""
 	if not request.json or 'register' not in request.json:
 		abort(404)

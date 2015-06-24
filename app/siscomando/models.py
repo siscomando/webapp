@@ -7,9 +7,14 @@ from mongoengine import signals, CASCADE, DENY
 from flask.ext.mongoengine import BaseQuerySet
 from bson import json_util
 # APP
-from src import database as db
-from src import red, emails
-from src import login_manager
+from siscomando import database as db
+from siscomando import red, emails
+from siscomando import login_manager
+
+# Hints:
+# We can denormalization. See more 1-2-3 by starting here:
+# http://blog.mongodb.org/post/87200945828/6-rules-of-thumb-for-mongodb-schema-design-part-1
+#
 
 # SSE Events support
 def publish_in_redis(channel, data):
@@ -72,12 +77,13 @@ class User(db.Document):
 
 class Issue(db.Document):
     created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
+    updated_at = db.DateTimeField()
     title = db.StringField(max_length=255, required=True)
     slug = db.StringField(max_length=255, required=False) # TODO slugfy
     body = db.StringField(required=True)
     register = db.StringField(max_length=120, required=True, unique=True)
     register_orig = db.StringField(max_length=120)
-    classifier = db.IntField(default=0)
+    classifier = db.IntField(default=0) # high, highest ...
     ugat = db.StringField(max_length=12, required=True)
     ugser = db.StringField(max_length=12, required=True)
     deadline = db.IntField(default=120)
@@ -109,6 +115,7 @@ class Issue(db.Document):
     def save(self, *args, **kwargs):
         self.register_normalized()
         self.slugfy()
+        self.updated_at = datetime.datetime.now()
         super(Issue, self).save(*args, **kwargs)
 
     meta = {
@@ -138,8 +145,7 @@ class Comment(db.Document):
     origin = db.IntField(choices=CHOICES_SOURCE, default=0)
     hashtags = db.ListField(db.StringField(max_length=100))
     title = db.StringField(max_length=255)
-    # We can denormalization. See more 1-2-3 by starting here:
-    # http://blog.mongodb.org/post/87200945828/6-rules-of-thumb-for-mongodb-schema-design-part-1
+    mentions_users = db.ListField(db.StringField(max_length=80)) # It's User.shortname
 
     def set_shottime(self):
         """ Shottime is the time from event of the comment in minutes """
@@ -160,6 +166,15 @@ class Comment(db.Document):
             raise TypeError(u"It's required to provider an issue or hashtags")
 
         self.title = self.issue_id.title if self.issue_id else self.hashtags[0]
+
+    def has_mentions(self, shortname):
+        pass
+        # TODO: check if mentions_users contains shortname. Return boolean
+    
+    def set_users_mentioned(self):
+        pass
+        # TODO: parser comments by @name and save without @ as `shortname from User
+        # sent mentions mails
 
     def to_json(self):
         data = self.to_mongo()

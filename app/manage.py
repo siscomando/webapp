@@ -4,7 +4,7 @@ from flask.ext.script import Manager, Server
 #from tornado.httpserver import HTTPServer
 #from tornado.ioloop import IOLoop 
 #APP
-from src import app
+from siscomando import app
 
 #http_server = HTTPServer(WSGIContainer(app))
 #http_server.listen(9003)

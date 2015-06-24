@@ -1,7 +1,7 @@
 import os
 
 # app settings
-DEBUG = True
+DEBUG = False
 TESTING = False
 
 # email settings
