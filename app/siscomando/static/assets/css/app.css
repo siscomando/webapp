@@ -94,3 +94,15 @@ color: #47CACC !important;
 .user-data{
   display: none;
 }
+
+paper-toast {
+  bottom: 0;
+  left: auto;
+  width: 80%;
+  color: yellow;
+}
+
+html /deep/ .hashLink {
+  color: #47CACC !important;
+  text-decoration: none;
+}
