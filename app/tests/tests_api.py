@@ -1,5 +1,5 @@
 import unittest
-from src import app 
+from siscomando import app 
 
 class ApiIssuesTestCase(unittest.TestCase):
 
