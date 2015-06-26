@@ -1,15 +1,16 @@
 import os
 
 # app settings
-DEBUG = False
+DEBUG = True
 TESTING = False
+MODE = 'DEVELOPMENT' #PRODUCTION
 
 # email settings
 ADMINS = ['horacioibrahim@gmail.com']
 MAIL_SERVER = 'localhost'
 MAIL_PORT = 25
 MAIL_USE_TLS = False
-MAIL_USE_SSL = True
+MAIL_USE_SSL = False
 
 # database settings 
 if TESTING:
