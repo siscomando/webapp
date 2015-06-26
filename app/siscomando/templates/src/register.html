@@ -46,7 +46,14 @@
             </template>
           </form>          
         </div>
-      </div>      
+      </div> 
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+          <paper-toast text="%% message %%" opened="true"></paper-toast>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}           
     </core-header-panel>
     <script>
     var registerForm = document.querySelector('#registerForm');

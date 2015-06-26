@@ -2,7 +2,7 @@
 
 %%greetings%%, %%fullname%%,
 
-<%  block content %>
-<% endblock %>
+{%  block content %}
+{% endblock %}
 
 Equipe do SisComando.
