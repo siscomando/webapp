@@ -43,7 +43,7 @@ class GunicornServer(Command):
 		FlaskApplication().run()
 
 manager = Manager(app)
-# manager.add_command('runserver', Server(host='127.0.0.1', port=9003))
+manager.add_command('runserver_sync', Server(host='127.0.0.1', port=9003))
 manager.add_command('runserver', GunicornServer())
 	
 if __name__ == '__main__':
