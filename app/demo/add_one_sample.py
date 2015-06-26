@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 import random
 import sys
-
-# Add local app
-sys.path.append("../../app/")
-from src import models
+sys.path.append('../../app')
+from siscomando import models
 
 seed = random.randint(1000, 8000)
 sups = ['SUPOP', 'SUPCD', 'SUPDE', 'SUNFJ', 'SUNNE', 'SUNAF', 'COTEC']
