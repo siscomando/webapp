@@ -1212,6 +1212,7 @@ is required core-ajax.
 
 
 
+
 <!--
 sc-link to fire an custom event.
 
@@ -1224,6 +1225,7 @@ sc-link to fire an custom event.
 @status beta
 @homepage http://github.com/siscomando/sc-link
 -->
+
 
 
 
@@ -12884,7 +12886,7 @@ core-toolbar paper-icon-button {
 
       <!-- menu item: This object fire core-select event -->
       <core-menu id="coreMenu">
-          <h5>Em andamento ({{totalOpened}})</h5>
+          <h5>Em andamento <!--({{totalOpened}})--></h5>
           <template repeat="{{ issue in _groupedIssues}}">
             <core-submenu>
                   <div class="item-content">
@@ -14333,12 +14335,13 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
 </script>
 </polymer-element>
 
-<polymer-element name="star-rating" attributes="starCount votes votesSum url readyOnly" assetpath="/static/components/star-rating/">
+<polymer-element name="star-rating" attributes="starCount votes votesSum url pk readyOnly" assetpath="/static/components/star-rating/">
 
   <template>
     <div id="starRating">
     </div>
-
+    <core-ajax id="rateAjax" url="{{url}}" response="{{response}}" contenttype="applicaton/json" handleas="json" method="POST">
+    </core-ajax>
     <style>
       #starRating {
         display: inline-block;
@@ -14361,9 +14364,9 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
   <script>
     Polymer('star-rating', {
  
-      // number of votes
+      // number of voters...one...two...three people 
       votes           : 0,
-      // sum of all votes
+      // sum of all of valutation: the score
       votesSum        : 0,
       // number of star
       starCount       : 5,
@@ -14371,7 +14374,13 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
       readyOnly       : false,
       // url to update Votes
       url : '',
-
+      send: function(score) {
+        var ajax = this.$.rateAjax;
+        data['pk'] = this.pk;
+        data['score'] = score;
+        ajax.body = JSON.stringify(data);
+        ajax.go();
+      },
       attached : function() {
 
         var 
@@ -14406,12 +14415,12 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
 
         // calculate init value
         function getStarredNumber() {
-          return Math.ceil( self.votesSum / self.votes ) -1 ;
+          return Math.ceil( self.votesSum / self.votes ) - 1 // Returns index;
         }
 
         starredNumber = getStarredNumber();
 
-        // change the stars to the index
+        // change the stars to the index replacing class from element
         function changeTo( index ) {
           var 
 
@@ -14474,6 +14483,9 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
             evt = new CustomEvent('rate');
             self.dispatchEvent(evt);
 
+            
+            // submit action to url and update
+            this.send(starredNumber + 1);
             // to back control to timeline
             var scTimeline = document.querySelector('sc-timeline');
             scTimeline.$.coreList.focus();            
@@ -14532,7 +14544,25 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
     })();
   </script>
 </polymer-element>
-<polymer-element name="sc-timeline" attributes="notitle author data emptyavatar url sseurl ssechannel ssealias scope gravatarEnabled" assetpath="/static/components/sc-timeline/">
+
+<polymer-element name="sc-contentHTML" attributes="htmldata" assetpath="/static/components/sc-contentHTML/">
+    <template>
+        <content></content>
+    </template>
+    <script>
+        Polymer('sc-contentHTML', {
+            publish: {
+              htmldata: '',  
+            },
+            ready: function(){
+                this.innerHTML = this['htmldata'];
+            },
+            htmldataChanged: function() {
+                this.innerHTML = this['htmldata'];                
+            }
+        });
+    </script>
+</polymer-element><polymer-element name="sc-timeline" attributes="notitle author data emptyavatar url sseurl ssechannel ssealias scope gravatarEnabled" assetpath="/static/components/sc-timeline/">
 
   <template>
   <core-ajax auto="" url="{{url}}" handleas="json" response="{{response}}"></core-ajax>
@@ -14617,14 +14647,19 @@ core-list {
   font-size: 0.7em;
 }
 .post {
-  font-family: inherit;
   display: block;
+  font-family: inherit;
   font-weight: 400 !important; 
   color: #3D3C40;
   font-size: 14px;
   line-height: 20px;
   padding-right: 20px;
   cursor: pointer;
+  min-height: 100%;
+}
+.post .hashLink {
+  color: #47CACC !important;
+  text-decoration: none;
 }
 core-icon {
   color: rgba(114, 98, 151, 0.8);
@@ -14690,6 +14725,7 @@ core-icon .pallete-icon-color .autumn {
     <div class="mainContent" flex="" horizontal="" layout="">
       <br>
       <core-list id="coreList" data="{{response.comments}}" runwayfactor="12" height="48" flex="">
+        <br>
         <template>
           <!-- begin post 
           TODO: new core-list template to support list users
@@ -14719,10 +14755,10 @@ core-icon .pallete-icon-color .autumn {
                   </div>
                 </div>
                 <div class="stars">
-                    <star-rating votes="5" votessum="10"></star-rating>
+                    <star-rating votes="{{model.stars.score}}" votessum="{{model.stars.votes}}" url="/api/v1/stars/comments" pk="{{ model._id.$oid }}"></star-rating>
                 </div>
-                <div class="post" on-tap="{{getFullContent}}">
-                    {{ model.body | ellipsis }}
+                <div class="post" on-tap="{{getFullContent}}" on-hold="{{turnEditable}}">
+                    <sc-contenthtml htmldata="{{ellipsis(model.body) }}"></sc-contenthtml>
                 </div>
             </div>
           </div>
@@ -14901,10 +14937,19 @@ core-icon .pallete-icon-color .autumn {
       },
       getFullContent: function(event, detail, sender) {
         var comment = sender.templateInstance.model.model;
-        this[comment._id.$oid] = comment;
-        sender.innerHTML = this[comment._id.$oid]['body'];
-        sender.style.height =  "100%";
-      },      
+        sender.innerHTML = comment.body;
+        
+        if (sender.style.hackView !=  true) {
+          this.fadeObject(sender, 0, 1, 1000);
+          sender.style.hackView = true;
+        } 
+        
+      }, 
+      turnEditable: function(event, detail, sender) {
+        // sender.contentEditable = true;
+        // TODO: turn contentEditable, send content when leave, change to not
+        // editable...
+      } ,    
       ellipsis: function(body) {
         if (body) {
           if (body.length > 200) {

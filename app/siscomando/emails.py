@@ -20,8 +20,11 @@ def async_send_mail(app, msg):
 		aws_secret_access_key=app.config.get('AWS_SECRET_ACCESS_KEY'))
 
 	with app.app_context():
-		#mail.send(msg)
-		ses.send_email(msg.sender, msg.subject, msg.body, msg.recipients, html_body=msg.html)
+		development = app.config.get('MODE')
+		if development == 'DEVELOPMENT':
+		    mail.send(msg)
+		else:
+			ses.send_email(msg.sender, msg.subject, msg.body, msg.recipients, html_body=msg.html)
 
 def default_send_mail(subject, sender, recipients, body_text, body_html=None):
 	""" To send message by flask-mail lib using threading """

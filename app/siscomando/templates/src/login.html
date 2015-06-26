@@ -9,6 +9,7 @@
   <link rel="import" href="/static/components/polymer/polymer.html">
   <link rel="import" href="/static/components/core-header-panel/core-header-panel.html">
   <link rel="import" href="/static/components/login-box/login-box.html">
+  <link rel="import" href="/static/components/paper-toast/paper-toast.html">
   <link rel="stylesheet" href="/static/assets/css/app.css">
   <link rel="shortcut icon" href="/static/assets/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/static/assets/favicon.ico" type="image/x-icon">
@@ -30,7 +31,14 @@
       <div class="baseContent">
         <login-box action="/login"></login-box>
       </div>      
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+          <paper-toast text="%% message %%" opened="true"></paper-toast>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
     </core-header-panel>
-
+    
 </body>
 </html>
