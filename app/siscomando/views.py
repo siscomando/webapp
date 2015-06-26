@@ -13,7 +13,10 @@ from siscomando import app, red, models, login_manager
 # 
 @login_manager.user_loader
 def load_user(id):
-    return models.User.objects.get(pk=id)
+	"""Because pk is unique we can to use filter. It will return the user or
+	None if user not exists."""
+	u = models.User.objects.filter(pk=id).first()
+	return u
 
 @app.before_request
 def before_request():
@@ -56,9 +59,10 @@ def login():
 	if request.method == 'POST':
 		email = request.form['identifier']
 		password = request.form['password']
-		registered_user = models.User.objects.filter(email=email, 
-				password=password).first()
-		if registered_user is None:
+		registered_user = models.User.objects.filter(email=email).first()
+	
+		if registered_user is None or \
+			registered_user.check_password(password) is not True:
 			flash('Username or Password is invalid', 'error') # TODO
 			return redirect(url_for('login'))
 
@@ -130,13 +134,40 @@ def request_invite():
 @login_required
 def application():
 
-	#if user.is_authenticated():
-	#	return render_template('app.html')
-	# else:
-	#	return login()
-	return render_template('app.html')
+	if current_user.is_authenticated():
+		return render_template('app.html')
+	else:
+		return login()
+
+@app.route('/hashtag/<string:hash>', methods=['GET'])
+def get_hashtags(hash):
+	# get messages by hashtags and get hashtags
+	pass
 
 # API REQUESTS 
+@app.route('/api/v1/stars/<string:target>', methods=['POST'])
+@login_required
+def set_stars(target):
+    """ Set valuation of the target
+    """
+    if not request.json:
+    	abort(400)
+
+    if target == "comments":
+    	json_data = request.get_json()
+    	pk = json_data['pk']
+    	score = json_data['score']
+    	comment = models.Comment.objects.get_or_404(pk=pk)
+    	comment.stars['votes'] += 1;
+    	comment.stars['score'] += score;
+    	comment.save()
+    	data = {'votes': comment.stars['votes'],
+    	    'score': comment.stars['score']
+		}
+        return jsonify(data), 201
+
+	return jsonify({'Not implemented target'}), 401
+
 @app.route('/api/v1/search/', methods=['POST'])
 @login_required
 def search():
@@ -277,8 +308,9 @@ def set_comments():
 		issue = None
 
 	# TODO: Check if author is the same users logged !!!
-	comment = models.Comment(issue_id=issue, body=body, author=author, stars=stars, 
-    				origin=origin)	
+	comment = models.Comment(issue_id=issue, body=body, author=author, 
+    				origin=origin)
+    					
 	try:
 		comment.save()
 	except:
