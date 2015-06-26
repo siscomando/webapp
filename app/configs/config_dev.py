@@ -16,9 +16,12 @@ MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 # email settings
 ADMINS = ['horacioibrahim@gmail.com']
 #### AMAZON SES SAMPLE ######
-MAIL_SERVER = 'email-smtp.us-east-1.amazonaws.com'
-MAIL_PORT = 587
-MAIL_USE_TLS = True
+#MAIL_SERVER = 'email-smtp.us-east-1.amazonaws.com'
+#MAIL_PORT = 587
+#MAIL_USE_TLS = True
+MAIL_SERVER = 'localhost'
+MAIL_PORT = 25
+MAIL_USE_TLS = False
 # MAIL_DEFAULT_SENDER = 'team@hipy.co'
 #AWS_SES_RETURN_PATH = 'ADDRESS_TO_REPLY'
 AWS_ACCESS_KEY_ID = 'AKIAJF4SNXPIZUQVTYOA'
