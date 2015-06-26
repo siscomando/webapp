@@ -1,0 +1,18 @@
+<polymer-element name="sc-contentHTML" attributes="htmldata">
+    <template>
+        <content></content>
+    </template>
+    <script>
+        Polymer('sc-contentHTML', {
+            publish: {
+              htmldata: '',  
+            },
+            ready: function(){
+                this.innerHTML = this['htmldata'];
+            },
+            htmldataChanged: function() {
+                this.innerHTML = this['htmldata'];                
+            }
+        });
+    </script>
+</polymer-element>
