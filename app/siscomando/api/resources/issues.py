@@ -2,10 +2,9 @@ from flask.ext import restful
 from flask.ext.restful import fields, marshal_with
 from siscomando import models
 
+class BaseIssues(restful.Resource):
 
-class Issues(restful.Resource):
-	
-    _fields = {
+    issues_fields = {
         'pk': fields.String,
         'register': fields.String,
         'title': fields.String,
@@ -20,7 +19,10 @@ class Issues(restful.Resource):
         'register_orig': fields.String
     }
 
-    @marshal_with(_fields)
+
+class Issues(BaseIssues):
+	
+    @marshal_with(BaseIssues.issues_fields)
     def get(self):
         issues = models.Issue.objects()
         return issues
@@ -36,5 +38,6 @@ class Issues(restful.Resource):
 
     def delete(self):
         pass
+
 
 
