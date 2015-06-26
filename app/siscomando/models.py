@@ -3,6 +3,7 @@ import json
 import md5
 import re
 from flask import url_for
+from werkzeug.security import generate_password_hash, check_password_hash
 from mongoengine import signals, CASCADE, DENY
 from flask.ext.mongoengine import BaseQuerySet
 from bson import json_util
@@ -68,9 +69,16 @@ class User(db.Document):
     def set_shortname(self):
         self.shortname = self.email.split('@')[0]
 
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
     def save(self, *args, **kwargs):
         self.validate_email()
         self.set_shortname()
+        self.set_password(self.password)
         self.md5_email = md5.md5(self.email).hexdigest()
         super(User, self).save(*args, **kwargs)
 
@@ -129,6 +137,12 @@ class Issue(db.Document):
     }
 
 
+class ScoreStars(db.EmbeddedDocument):
+    #votes = db.IntField(default=0) len from listField equal votes
+    score = db.IntField(default=0)
+    voter = db.ReferenceField(User)
+
+
 class Comment(db.Document):
     CHOICES_SOURCE = (
         (0, 'sc'), 
@@ -141,7 +155,7 @@ class Comment(db.Document):
     shottime = db.StringField(default=None)
     body = db.StringField(verbose_name='Comment', required=True)
     author = db.ReferenceField('User', required=True, reverse_delete_rule=DENY)
-    stars = db.IntField(default=0)
+    stars = db.ListField(db.EmbeddedDocumentField(ScoreStars))
     origin = db.IntField(choices=CHOICES_SOURCE, default=0)
     hashtags = db.ListField(db.StringField(max_length=100))
     title = db.StringField(max_length=255)
@@ -156,8 +170,17 @@ class Comment(db.Document):
         if self.issue_id is None:
             self.shottime = str(datetime.datetime.today().hour) + 'h'
 
+    def to_link_hashtag(self, hashtag):
+        return '<a class="hashLink" href="/hashtag/{value}">{value}</a>'.format(value=hashtag)
+
     def set_hashtags(self):
         self.hashtags = re.findall(r'(#\w+)', self.body)
+        # replacing text by link
+        def macthaction(matchobj):
+            if matchobj.group(0):
+                return self.to_link_hashtag(matchobj.group(0))
+
+        self.body = re.sub(r'(#\w+)', macthaction, self.body)
 
     def set_title(self):
         # Validation: It's required the users to provide comments with issue or 
@@ -196,6 +219,9 @@ class Comment(db.Document):
         day, month, year = self.created_at.day, self.created_at.month, self.created_at.year  
         hour, minute = self.created_at.hour, self.created_at.minute
         data['created_at_human'] = "%sh%s %s/%s/%s" % (hour, minute, day, month, year)
+        data['stars'] = {'votes': len(self.stars), 
+                    'score': sum([s.score for s in self.stars])
+        }
               
         return json_util.dumps(data)
 
