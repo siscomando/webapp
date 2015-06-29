@@ -22,8 +22,8 @@ def publish_in_redis(channel, data):
     return red.publish(channel, data)
 
 class CustomQuerySet(BaseQuerySet):
-    def to_json(self):
-        return "[%s]" % (','.join([doc.to_json() for doc in self]))
+    def to_json(self, current_user=None):
+        return "[%s]" % (','.join([doc.to_json(current_user=current_user) for doc in self]))
 
 class User(db.Document):
     email = db.StringField(required=True, unique=True)
@@ -174,13 +174,18 @@ class Comment(db.Document):
         return '<a class="hashLink" href="/hashtag/{value}">{value}</a>'.format(value=hashtag)
 
     def set_hashtags(self):
-        self.hashtags = re.findall(r'(#\w+)', self.body)
-        # replacing text by link
-        def macthaction(matchobj):
-            if matchobj.group(0):
-                return self.to_link_hashtag(matchobj.group(0))
+        # TODO: to refactor to support update/edit a comment
 
-        self.body = re.sub(r'(#\w+)', macthaction, self.body)
+        if len(self.hashtags) == 0:
+            self.hashtags = re.findall(r'(#\w+)', self.body)
+            # replacing text by link
+            def macthaction(matchobj):
+                if matchobj.group(0):
+                    return self.to_link_hashtag(matchobj.group(0))
+
+            self.body = re.sub(r'(#\w+)', macthaction, self.body)
+        else: 
+            pass # clean links, format, etc. before...
 
     def set_title(self):
         # Validation: It's required the users to provide comments with issue or 
@@ -199,7 +204,7 @@ class Comment(db.Document):
         # TODO: parser comments by @name and save without @ as `shortname from User
         # sent mentions mails
 
-    def to_json(self):
+    def to_json(self, current_user=None):
         data = self.to_mongo()
 
         if self.issue_id:
@@ -219,8 +224,14 @@ class Comment(db.Document):
         day, month, year = self.created_at.day, self.created_at.month, self.created_at.year  
         hour, minute = self.created_at.hour, self.created_at.minute
         data['created_at_human'] = "%sh%s %s/%s/%s" % (hour, minute, day, month, year)
+
+        readOnly = False
+        if self.stars and current_user:
+            readOnly = current_user.email in [star_obj.voter.email for star_obj in self.stars]
+
         data['stars'] = {'votes': len(self.stars), 
-                    'score': sum([s.score for s in self.stars])
+                    'score': sum([s.score for s in self.stars]),
+                    'readOnly': readOnly
         }
               
         return json_util.dumps(data)
