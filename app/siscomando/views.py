@@ -158,12 +158,13 @@ def set_stars(target):
     	pk = json_data['pk']
     	score = json_data['score']
     	comment = models.Comment.objects.get_or_404(pk=pk)
-    	comment.stars['votes'] += 1;
-    	comment.stars['score'] += score;
+    	star = models.ScoreStars()
+    	star.score = score
+    	star.voter = models.User.objects.get(pk=current_user.pk)
+    	comment.stars.append(star)
     	comment.save()
-    	data = {'votes': comment.stars['votes'],
-    	    'score': comment.stars['score']
-		}
+    	data = json.loads(comment.to_json())
+    	data = {'comment': data}
         return jsonify(data), 201
 
 	return jsonify({'Not implemented target'}), 401
@@ -327,7 +328,7 @@ def set_comments():
 @login_required	
 def get_comments():
 	comments = models.Comment.objects()
-	json_data = json.loads(comments.to_json())
+	json_data = json.loads(comments.to_json(current_user=current_user))
 	data = {'comments': json_data}
 	return jsonify(data), 201
 
