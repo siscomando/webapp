@@ -14335,12 +14335,12 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
 </script>
 </polymer-element>
 
-<polymer-element name="star-rating" attributes="starCount votes votesSum url pk readyOnly" assetpath="/static/components/star-rating/">
+<polymer-element name="star-rating" attributes="starCount votes score url pk readOnly" assetpath="/static/components/star-rating/">
 
   <template>
     <div id="starRating">
     </div>
-    <core-ajax id="rateAjax" url="{{url}}" response="{{response}}" contenttype="applicaton/json" handleas="json" method="POST">
+    <core-ajax id="rateAjax" url="{{url}}" response="{{response}}" contenttype="application/json" handleas="json" method="POST">
     </core-ajax>
     <style>
       #starRating {
@@ -14363,148 +14363,133 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
 
   <script>
     Polymer('star-rating', {
- 
-      // number of voters...one...two...three people 
-      votes           : 0,
-      // sum of all of valutation: the score
-      votesSum        : 0,
-      // number of star
-      starCount       : 5,
-      // make the polymer ready only
-      readyOnly       : false,
-      // url to update Votes
-      url : '',
-      send: function(score) {
-        var ajax = this.$.rateAjax;
-        data['pk'] = this.pk;
-        data['score'] = score;
-        ajax.body = JSON.stringify(data);
-        ajax.go();
+       publish: {
+        /**
+        * Numbers total of votes by voters.
+        */
+        votes: 0,
+        /**
+        * Score is the sum of the quantity of stars from each vote .
+        */
+        score: 0, // votesSum
+        /**
+        * Numbers of stars to show.
+        */
+        numbersStars: 5, // starCount
+        readOnly: false,
+        /**
+        * Url where updates will send.
+        */
+        url: '',
+        /**
+        * List of de `a` elements.
+        */
+        stars: []
       },
-      attached : function() {
-
-        var 
-
-          // cache this
-          self              = this,
-
-          // initial star value
-          starredNumber,
-
-          // cache stars child
-          stars             = [],
-
-          // cache star in loop
-          star,
-
-          // cache a elements
-          a,
-
-          // cache loop variables
-          i , k;
-
-
-        // create stars
-        for ( i = 0, k = self.starCount; i < k; i++ ) {
+      ready: function() {
+        this._makeStars();
+        this._addAtributtes();
+        this.changeStatus(this._getIndex());
+        var starredLoaded = this._getIndex();
+        this.addEventListener('mouseleave', function(){
+          // TODO: over leave to back initial score
+          if (this.readOnly) {
+            return false;
+          }
+          this.changeStatus(starredLoaded); // Initialized status.
+        }, false);         
+      },
+      scoreChanged: function() {
+        this.changeStatus(this._getIndex());       
+      },
+      /**
+      * Creates the `a` elements and update stars propertie. Each star has your
+      * own link and events associated. 
+      */
+      _makeStars: function() {
+        var a;
+        var stars = []
+        for(var i=0; i < this.numbersStars; i++) {
           a = document.createElement('a');
-          a.href = '#';
+          a.href = "#";
           a.className = 'star';
           this.$.starRating.appendChild(a);
           stars.push(a);
         }
-
-        // calculate init value
-        function getStarredNumber() {
-          return Math.ceil( self.votesSum / self.votes ) - 1 // Returns index;
-        }
-
-        starredNumber = getStarredNumber();
-
-        // change the stars to the index replacing class from element
-        function changeTo( index ) {
-          var 
-
-            // cache star
-            star,
-
-            // cache new className
-            className;
-
-          for ( i = 0, k = self.starCount; i < k; i++ ) {
-            star = stars[i];
-
-            className = 'star';
-
-            if ( i <= index ) {
-              className += ' check';
-            }
-
-            star.className = className;
+        this.stars = stars; // reload to each star-rating
+      },
+      _getIndex: function() {
+        return Math.ceil(this.score / this.votes) -1;
+      },
+      /**
+      * Makes a loop in all stars and adds class 'star' and/or 'check' to 
+      * change appearance status to each stars.
+      */
+      changeStatus: function(index) {
+        var star;
+        var className = 'star';
+        for (var i=0; i < this.numbersStars; i++) {
+          star = this.stars[i];
+          if (i <= index) {
+            className = 'star check';
           }
+          star.className = className;
+          className = 'star';
         }
+      },
+      /**
+      * Adds specifics attributes to some behaviors, as click, leave, etc. 
+      * to each star.
+      */
+      _addAtributtes: function() {
+        var self = this;
 
-        // show the initial star
-        changeTo( starredNumber );
-
-        for ( i = 0, k = this.starCount; i < k; i++ ) {
-          star = stars[i];
-          // set index
+        for (i=0; i < this.numbersStars; i++) {
+          star = this.stars[i];
           star.setAttribute('index', i);
-
-          // star hover event
-          star.addEventListener('mouseenter', function(e){
-
-            if ( self.readyOnly ) {
-              return false;
+          // To add events...
+          star.addEventListener('mouseenter', function(ev){
+            if (self.readOnly) {
+              return false; // No changes is allowed
             }
-
-            changeTo( parseInt(this.getAttribute('index')) );
-
+            self.changeStatus(parseInt(this.getAttribute('index')));
           }, false);
 
-          // star click event
-          star.addEventListener('click', function(e){
-            e.preventDefault();
-
+          star.addEventListener('click', function(ev){
+            ev.preventDefault();
             var evt;
-
-            if ( self.readyOnly ) {
-              return false;
+            if (self.readOnly) {
+              return false; // no changes is allowed 
             }
-
-            self.votesSum += parseInt( this.getAttribute('index') ) + 1;
+            // score thats will send to backend.
+            self._score = parseInt(this.getAttribute('index')) + 1;
+            // updates the frontend (two-bind).
+            self.score += parseInt(this.getAttribute('index')) + 1;
             self.votes++;
-
-            starredNumber = getStarredNumber();
-            changeTo( starredNumber );
-
-            self.readyOnly = true;
-
+            self.changeStatus(parseInt(this.getAttribute('index')));
+            self.readOnly = true;
             evt = new CustomEvent('rate');
             self.dispatchEvent(evt);
-
-            
-            // submit action to url and update
-            this.send(starredNumber + 1);
-            // to back control to timeline
+            self.send(self._score);
+            // Workaround to back control to timeline
             var scTimeline = document.querySelector('sc-timeline');
-            scTimeline.$.coreList.focus();            
+            scTimeline.$.coreList.focus();
 
             return false;
           }, false);
         }
-
-        // when mouse leave, back to current value
-        self.addEventListener('mouseleave', function(){
-
-          if ( self.readyOnly ) {
-            return false;
-          }
-
-          changeTo( starredNumber );
-
-        }, false);
-      }
+      },
+      /**
+      * Method `send` post the vote to persist in the model.
+      */
+      send: function(score) {
+        var ajax = this.$.rateAjax;
+        data = {};
+        data['pk'] = this.pk;
+        data['score'] = score;
+        ajax.body = JSON.stringify(data);
+        ajax.go();
+      }      
     });
   </script>
 
@@ -14755,9 +14740,9 @@ core-icon .pallete-icon-color .autumn {
                   </div>
                 </div>
                 <div class="stars">
-                    <star-rating votes="{{model.stars.score}}" votessum="{{model.stars.votes}}" url="/api/v1/stars/comments" pk="{{ model._id.$oid }}"></star-rating>
+                    <star-rating votes="{{model.stars.votes}}" score="{{model.stars.score}}" readonly="{{model.stars.readOnly}}" url="/api/v1/stars/comments" pk="{{ model._id.$oid }}"></star-rating>
                 </div>
-                <div class="post" on-tap="{{getFullContent}}" on-hold="{{turnEditable}}">
+                <div class="post" on-click="{{getFullContent}}" on-hold="{{turnEditable}}" on-dblclick="{{collpaseContent}}">
                     <sc-contenthtml htmldata="{{ellipsis(model.body) }}"></sc-contenthtml>
                 </div>
             </div>
@@ -14935,16 +14920,30 @@ core-icon .pallete-icon-color .autumn {
         // default
         return 'communication:no-sim';
       },
+      /*
+      * Expands .post (or row) with long text AND apply fade effects one time.
+      *
+      */
       getFullContent: function(event, detail, sender) {
+        var self = this;
         var comment = sender.templateInstance.model.model;
         sender.innerHTML = comment.body;
-        
+        // hackView is a workaround solution to save information when the fade
+        // effects already done. 
         if (sender.style.hackView !=  true) {
           this.fadeObject(sender, 0, 1, 1000);
           sender.style.hackView = true;
         } 
-        
       }, 
+      /*
+      * Collapse div.post (or row) with long text.
+      *
+      */
+      collpaseContent: function(event, detail, sender) {
+        var comment = sender.templateInstance.model.model;
+        sender.style.hackView = false;
+        sender.innerHTML = this.ellipsis(comment.body);
+      },
       turnEditable: function(event, detail, sender) {
         // sender.contentEditable = true;
         // TODO: turn contentEditable, send content when leave, change to not
