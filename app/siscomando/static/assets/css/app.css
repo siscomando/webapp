@@ -63,9 +63,14 @@ paper-spinner.blue::shadow .circle {
   display: flex;
   background-color: #EEEEEE;
   min-height: 50px;
-  padding: 14px;
+  padding: 0px;
   margin: 0;
   max-width: 100%;
+  bottom: 0;
+}
+#editableRect {
+  position: absolute;
+  width: 100%;
   bottom: 0;
 }
 #editable {
@@ -78,10 +83,11 @@ paper-spinner.blue::shadow .circle {
   overflow: hidden;
   outline: none;
   min-height: 30px;
-  max-height: 120px !important;
+  max-height: 180px !important;
   resize: none !important;  
   width: 100%;
-  margin: 0;
+  margin: 12px;
+  overflow-y: scroll;
   word-wrap: break-word; /* firefox */
   word-break: break-all; /* firefox */
 }
