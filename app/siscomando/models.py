@@ -9,8 +9,7 @@ from flask.ext.mongoengine import BaseQuerySet
 from bson import json_util
 # APP
 from siscomando import database as db
-from siscomando import red, emails
-from siscomando import login_manager
+from siscomando import red, emails, login_manager
 
 # Hints:
 # We can denormalization. See more 1-2-3 by starting here:
