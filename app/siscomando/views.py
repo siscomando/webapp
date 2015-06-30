@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging, json, re, base64
 from flask.views import View
-from flask import jsonify, request, make_response, abort, Response, flash
-from flask import render_template, flash, url_for, redirect, session, g
+from flask import (jsonify, request, make_response, abort, Response, flash,
+					render_template, flash, url_for, redirect, session, g)
 from flask.ext.login import login_required, current_user, login_user, logout_user
 from flask.ext.babel import lazy_gettext as _
 # APP
@@ -192,7 +192,7 @@ def search():
 
 	json_data = json.loads(comments.to_json())
 	data = {'comments': json_data}
-	return jsonify(data), 201
+	return jsonify(data), 200
 
 @app.route('/api/v1/users/<string:expr>/<string:limit>')
 @app.route('/api/v1/users/<string:expr>')
@@ -208,13 +208,13 @@ def get_users(expr, limit=None):
 	users = models.User.objects(shortname__icontains=expr).limit(int(limit)) # TODO: to deploy FTS
 	json_data = json.loads(users.to_json())
 	data = {'Users': json_data}
-	return jsonify(data), 201
+	return jsonify(data), 200
 
 @app.route('/api/v1/issues/', methods=['GET'])
 @login_required
 def get_issues():
 	issues = models.Issue.objects()
-	return jsonify({'issues': issues}), 201
+	return jsonify({'issues': issues}), 200
 
 @app.route('/api/v1/issues/<string:register>', methods=['GET'])
 @login_required
@@ -330,7 +330,7 @@ def get_comments():
 	comments = models.Comment.objects()
 	json_data = json.loads(comments.to_json(current_user=current_user))
 	data = {'comments': json_data}
-	return jsonify(data), 201
+	return jsonify(data), 200
 
 @app.route('/api/v1/comments/<string:register>/', methods=['GET'])
 @login_required	
@@ -339,7 +339,7 @@ def get_comments_from_register(register):
 	comments = models.Comment.objects(issue_id=issue.pk)
 	json_data = json.loads(comments.to_json())
 	data = {'comments': json_data}
-	return jsonify(data), 201
+	return jsonify(data), 200
 
 @app.route('/api/v1/comments/<string:oid>/', methods=['DELETE'])
 @login_required	
