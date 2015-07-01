@@ -103,7 +103,7 @@ color: #47CACC !important;
 
 paper-toast {
   bottom: 0;
-  left: auto;
+  left: 10px;
   width: 80%;
   color: yellow;
 }
