@@ -11725,7 +11725,7 @@ core-toolbar paper-icon-button {
 }
 
 #menu {
-  display: none;
+ display: none;
 }
 /*  paper input decorator custom styling */
 paper-input-decorator /deep/ .unfocused-underline {
@@ -11756,7 +11756,7 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   #menu {
     display: inline;
   }
@@ -11854,7 +11854,21 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
         // simple test alert(this.issueInfo.register);
         // var scnavbar = document.querySelector('sc-navbar');
         var searchComponent = this;
-        this.changeParamRegister(document, 'sc-select', searchComponent)        
+        this.changeParamRegister(document, 'sc-select', searchComponent) 
+        
+        /* 
+        document.addEventListener('core-responsive-change', function() {
+          if (searchComponent.$.menu.rackingOpened == true) {
+            searchComponent.$.menu.style.display = "none";
+            searchComponent.$.menu.rackingOpened = false; 
+            console.log("none"); 
+          } else {
+            searchComponent.$.menu.style.display = "block";
+            searchComponent.$.menu.rackingOpened = true;                
+            console.log("block");
+          }
+        });
+        */      
       },
       /**
        * The `toogleMenu` toggle drawer
@@ -14610,7 +14624,7 @@ core-list {
 }
 .title {
   font-size: 0.9em;
-  font-weight: 100 !important;
+  font-weight: 300 !important;
   color: #8B898F;
 }
 .stars {
@@ -14629,18 +14643,30 @@ core-list {
 }
 .timepost {
   color: #C8C8C8;
-  font-size: 0.7em;
+  font-size: 0.9em;
+  font-weight: 300 !important;
 }
 .post {
   display: block;
   font-family: inherit;
-  font-weight: 400 !important; 
+  font-weight: 300 !important; 
   color: #3D3C40;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 20px;
   padding-right: 20px;
   cursor: pointer;
   min-height: 100%;
+}
+.post .actions-for-post {
+  width: 100%;
+}
+paper-button.btn-collapse {
+  display: none;
+  background-color: rgba(255,255,255,0.5);
+  color: #888;
+  margin: 0;
+  font-size: 0.85em;
+  width: 100%;
 }
 .post .hashLink {
   color: #47CACC !important;
@@ -14745,6 +14771,7 @@ core-icon .pallete-icon-color .autumn {
                 <div class="post" on-click="{{getFullContent}}" on-hold="{{turnEditable}}" on-dblclick="{{collpaseContent}}">
                     <sc-contenthtml htmldata="{{ellipsis(model.body) }}"></sc-contenthtml>
                 </div>
+                <!-- <div class="actions-for-post"><paper-button class="btn-collapse">Encolher</paper-button></div> -->
             </div>
           </div>
           <!-- end post -->
@@ -14925,8 +14952,7 @@ core-icon .pallete-icon-color .autumn {
       *
       */
       getFullContent: function(event, detail, sender) {
-        var self = this;
-        var comment = sender.templateInstance.model.model;
+        var comment = sender.templateInstance.model.model;        
         sender.innerHTML = comment.body;
         // hackView is a workaround solution to save information when the fade
         // effects already done. 
@@ -15853,7 +15879,7 @@ core-menu {
     <paper-spinner class="blue" active></paper-spinner>
   </div>
   -->  
-  <core-drawer-panel>   
+  <core-drawer-panel responsivewidth="768px">   
     <div drawer="">
       <core-header-panel>
         <!-- App context mini-header: you can to put logo app, name, etc.-->
