@@ -14385,23 +14385,37 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
         /**
         * List of de `a` elements.
         */
-        stars: []
+        stars: [],
+        /**
+        * Initial value to back when mouseleave
+        *
+        */
+        starred: null
       },
       ready: function() {
         this._makeStars();
         this._addAtributtes();
         this.changeStatus(this._getIndex());
-        var starredLoaded = this._getIndex();
         this.addEventListener('mouseleave', function(){
           // TODO: over leave to back initial score
           if (this.readOnly) {
             return false;
           }
-          this.changeStatus(starredLoaded); // Initialized status.
+          // if continue null is because not passed by scoreChanged
+          if (this.starred === null) {
+            this.changeStatus(-1); // Initialized status.
+          } else {
+            this.changeStatus(this.starred);
+          }
+
         }, false);         
       },
       scoreChanged: function() {
-        this.changeStatus(this._getIndex());       
+        this.changeStatus(this._getIndex()); 
+
+        if (this.starred === null) {
+          this.starred = this._getIndex();
+        }        
       },
       /**
       * Creates the `a` elements and update stars propertie. Each star has your
@@ -14761,7 +14775,7 @@ core-icon .pallete-icon-color .autumn {
                   </div>
                 </div>
                 <div class="stars">
-                    <star-rating votes="{{model.stars.votes}}" score="{{model.stars.score}}" readonly="{{model.stars.readOnly}}" url="/api/v1/stars/comments" pk="{{ model._id.$oid }}"></star-rating>
+                    <star-rating votes="{{model.stars.votes}}" score="{{model.stars.score}}" readonly="{{model.stars.readOnly}}" url="/api/v1/stars/comments/" pk="{{ model._id.$oid }}"></star-rating>
                 </div>
                 <div class="post" on-click="{{getFullContent}}" on-hold="{{turnEditable}}" on-dblclick="{{collpaseContent}}">
                     <sc-contenthtml htmldata="{{ellipsis(model.body) }}"></sc-contenthtml>
