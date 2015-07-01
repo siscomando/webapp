@@ -11855,20 +11855,7 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
         // var scnavbar = document.querySelector('sc-navbar');
         var searchComponent = this;
         this.changeParamRegister(document, 'sc-select', searchComponent) 
-        
-        /* 
-        document.addEventListener('core-responsive-change', function() {
-          if (searchComponent.$.menu.rackingOpened == true) {
-            searchComponent.$.menu.style.display = "none";
-            searchComponent.$.menu.rackingOpened = false; 
-            console.log("none"); 
-          } else {
-            searchComponent.$.menu.style.display = "block";
-            searchComponent.$.menu.rackingOpened = true;                
-            console.log("block");
-          }
-        });
-        */      
+             
       },
       /**
        * The `toogleMenu` toggle drawer
@@ -14651,8 +14638,8 @@ core-list {
   font-family: inherit;
   font-weight: 300 !important; 
   color: #3D3C40;
-  font-size: 15px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 24px;
   padding-right: 20px;
   cursor: pointer;
   min-height: 100%;
@@ -14723,15 +14710,23 @@ core-icon .pallete-icon-color .autumn {
     vertical-align: middle;
     min-width: 32px;
     border-right: 1px solid #E0E0E0;
+  }
+  .timeline-post, .row {
+    margin-bottom: 45px;
+  }
+  .post {
+    padding-right: 5px;  
+  }
 }
-.timeline-post, .row {
-  margin-bottom: 45px;
-}
-.post {
-  padding-right: 5px;  
+@media (max-width: 640px) {
+    .content {
+      padding-right: 20px;
+    }
+    .post {
+      font-size: 14px;
+    }
 }
 
-}
 </style>
     <div class="mainContent" flex="" horizontal="" layout="">
       <br>
