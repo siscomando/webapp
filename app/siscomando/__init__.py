@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 import redis
+import logging
+import os
 from flask import Flask, Blueprint 
 from flask.ext.mongoengine import MongoEngine
 from flask.ext.cors import CORS
@@ -11,6 +13,7 @@ from flask.ext import restful
 
 # Pre-setup
 red = redis.StrictRedis()
+file_handler = logging.FileHandler('/tmp/siscomando.log')
 
 class CustomFlask(Flask):
     jinja_options = Flask.jinja_options.copy()
@@ -25,7 +28,25 @@ class CustomFlask(Flask):
 
 
 app = CustomFlask(__name__)
-app.config.from_envvar('SISCOMANDO_SETTINGS')
+
+# Setup environ
+environ_mode = os.getenv('DEPLOY_MODE')
+
+if environ_mode == 'DEVELOPMENT':
+    app.config.from_object('siscomando.settings.Development')
+elif environ_mode == 'DEVELOPMENTSES':
+    app.config.from_object('siscomando.settings.DevelopementSES')
+elif environ_mode == 'TESTING':
+    app.config.from_object('siscomando.settings.Testing')
+elif environ_mode == 'PRODUCTION':
+    app.config.from_object('siscomando.settings.Production')
+else:
+    raise TypeError(u'DEPLOY_MODE mode environment variable not defined ' \
+        'or misspell!')
+
+# Logging
+app.logger.addHandler(file_handler)
+app.logger.setLevel(logging.DEBUG)
 
 # Settings webservice flask_restful entry point.
 webservice_bp = Blueprint('webservice', __name__)
@@ -39,12 +60,11 @@ cors = CORS(app, resources=r'/api/v1/*', origins='*',
 mail = Mail(app)
 # i18n and l10n
 babel = Babel(app)
-
 # Load together Flask and Flask-login.
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
-
+# Setup datababse MongoDB
 database = MongoEngine(app)
 
 # Config cans to be used: app.config.from_object(__name__)
