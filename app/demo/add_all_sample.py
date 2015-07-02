@@ -35,6 +35,9 @@ bodies = [
     'Professionally e-enable bricks-and-clicks opportunities before granular total linkage. Synergistically predominate frictionless methodologies before ',
     'Conveniently underwhelm alternative web services vis-a-vis team building services'
 ]
+
+users = models.User.objects()
+
 for s in range(1, 50):
     sort = random.randint(0, len(sups) - 1)
     seed = random.randint(1000, 8000)
@@ -47,11 +50,12 @@ for s in range(1, 50):
     sort = random.randint(0, len(sups) - 1)
     i.ugser = sups[sort]
     i.save(i)
-    users = models.User.objects()
+    
     for f in range(1, 20):
-        st = models.ScoreStars()
-        st.score = random.randint(1,5)
-        st.vetor = users[random.randint(0, QTD_USERS - 2)]
+        ord_users = random.randint(0, len(users) - 1)
+        st = models.ScoreStars(score=random.randint(1,5), 
+            voter=users[ord_users])
+        print st.score, st.voter
         comment = models.Comment()
         comment.issue_id = i
         comment.body = bodies[random.randint(0, len(bodies) -1)]
