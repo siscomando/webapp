@@ -99,10 +99,11 @@ def register_new():
 
 	try:
 		user.save()
-	    # invite used flag
+		flash('Account created with successfully!')
 		return redirect(url_for('login'))
 	except:
-		flash('User or password is invalid or already exists', 'error')
+		flash('User already exists. Try login!', 'error')
+		return redirect(url_for('login'))
 
 	flash('User successfully registered') # TODO name already exists
 	return redirect(url_for('index'))
