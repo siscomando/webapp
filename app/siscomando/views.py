@@ -312,13 +312,13 @@ def set_comments():
 	# TODO: Check if author is the same users logged !!!
 	comment = models.Comment(issue_id=issue, body=body, author=author, 
     				origin=origin)
-    					
+    	
 	try:
 		comment.save()
 	except:
 		data = {'errors': "Selecione um chamado no menu ou escreva colocando " \
 				"uma #hashtag para definir o #Assunto."}
-		return jsonify(data), 400
+		return jsonify(data), 403
 
 	json_data = json.loads(comment.to_json())
 	data = {'comments': json_data}

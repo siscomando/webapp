@@ -14669,7 +14669,7 @@ paper-button.btn-collapse {
   font-size: 0.85em;
   width: 100%;
 }
-.post .hashLink {
+.post .hashLink, .post .mentions {
   color: #47CACC !important;
   text-decoration: none;
 }
@@ -15378,6 +15378,7 @@ core-menu {
           _targetElem: null,
           tagRegex: /(#){1}([A-Z]+[A-Z0-9]+)/ig,
           userRegex: /(@){1}([A-Z]+[A-Z0-9]+)/ig,
+          unameHtagRegex: /(#|@){1}([A-Z]+([_]+)?[A-Z0-9]+)(([_]+)?[A-Z0-9]+)+/ig,
           /**
           * The mentionsSearch is an URL to search users.
           *
@@ -15795,7 +15796,8 @@ core-menu {
         * @return formatted string
         */                                 
         formatter: function(text) {
-          var unameHtagRegex = /(#|@){1}([A-Z]+[A-Z0-9]+)/ig;
+          // supported under and dunder ;)
+          var unameHtagRegex = /(#|@){1}([A-Z]+([_]+)?[A-Z0-9]+)(([_]+)?[A-Z0-9]+)+/ig;
 
           function wrapEm(match) {
               return "<em>" + match + "</em>";
