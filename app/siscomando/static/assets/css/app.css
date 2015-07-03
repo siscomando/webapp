@@ -25,6 +25,7 @@ core-header-panel {
 	color: #FFF;
 }
 .panelContent {
+  padding-bottom: 32px;
 }
 
 sc-input-hashtag {
