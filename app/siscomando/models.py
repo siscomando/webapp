@@ -38,7 +38,7 @@ class User(db.Document):
 
     meta = {'queryset_class': CustomQuerySet}    
 
-    def to_json(self):
+    def to_json(self, current_user=None):
         data = self.to_mongo()
         data['password'] = None
         return json_util.dumps(data)    
@@ -156,9 +156,9 @@ class Comment(db.Document):
     author = db.ReferenceField('User', required=True, reverse_delete_rule=DENY)
     stars = db.ListField(db.EmbeddedDocumentField(ScoreStars))
     origin = db.IntField(choices=CHOICES_SOURCE, default=0)
-    hashtags = db.ListField(db.StringField(max_length=100))
+    hashtags = db.ListField(db.StringField(max_length=120))
     title = db.StringField(max_length=255)
-    mentions_users = db.ListField(db.StringField(max_length=80)) # It's User.shortname
+    mentions_users = db.ListField(db.StringField(max_length=120)) # It's User.shortname
 
     def set_shottime(self):
         """ Shottime is the time from event of the comment in minutes """
@@ -169,8 +169,19 @@ class Comment(db.Document):
         if self.issue_id is None:
             self.shottime = str(datetime.datetime.today().hour) + 'h'
 
+    def set_title(self):
+        # Validation: It's required the users to provide comments with issue or 
+        # at least one hashtag within body message.
+        if self.issue_id is None and len(self.hashtags) == 0:
+            raise TypeError(u"It's required to provider an issue or hashtags")
+
+        self.title = self.issue_id.title if self.issue_id else self.hashtags[0]            
+
     def to_link_hashtag(self, hashtag):
         return '<a class="hashLink" href="/hashtag/{value}">{value}</a>'.format(value=hashtag)
+
+    def to_link_mention(self, shortname):
+        return '<a class="mentions shortname username" href="/users/{value}">{value}</a>'.format(value=shortname)        
 
     def set_hashtags(self):
         # TODO: to refactor to support update/edit a comment
@@ -185,23 +196,24 @@ class Comment(db.Document):
             self.body = re.sub(r'(#\w+)', macthaction, self.body)
         else: 
             pass # clean links, format, etc. before...
+    
+    def set_users_mentioned(self):
+        # TODO: to refactor to support update/edit a comment
 
-    def set_title(self):
-        # Validation: It's required the users to provide comments with issue or 
-        # at least one hashtag within body message.
-        if self.issue_id is None and len(self.hashtags) == 0:
-            raise TypeError(u"It's required to provider an issue or hashtags")
+        if len(self.mentions_users) == 0:
+            self.mentions_users = re.findall(r'(@\w+)', self.body)
+            # replacing text by link
+            def macthaction(matchobj):
+                if matchobj.group(0):
+                    return self.to_link_mention(matchobj.group(0))
 
-        self.title = self.issue_id.title if self.issue_id else self.hashtags[0]
+            self.body = re.sub(r'(@\w+)', macthaction, self.body)
+        else: 
+            pass # clean links, format, etc. before...
 
     def has_mentions(self, shortname):
         pass
-        # TODO: check if mentions_users contains shortname. Return boolean
-    
-    def set_users_mentioned(self):
-        pass
-        # TODO: parser comments by @name and save without @ as `shortname from User
-        # sent mentions mails
+        # TODO: check if mentions_users contains shortname. Return boolean            
 
     def to_json(self, current_user=None):
         data = self.to_mongo()
@@ -260,6 +272,7 @@ class Comment(db.Document):
     def save(self, *args, **kwargs):
         self.set_shottime()
         self.set_hashtags()
+        self.set_users_mentioned()
         self.set_title()
         super(Comment, self).save(*args, **kwargs)
 
