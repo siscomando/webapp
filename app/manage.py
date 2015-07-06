@@ -34,7 +34,7 @@ class GunicornServer(Command):
 				return {
 					'bind': '{0}:{1}'.format(host, port),
 					'workers': workers,
-					'worker_class': worker_class
+					'worker_class': worker_class,
 				}
 
 			def load(self):
