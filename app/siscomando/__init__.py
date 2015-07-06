@@ -71,7 +71,7 @@ database = MongoEngine(app)
 # from_object() will look at the given object (if it’s a string it will import it) 
 # and then look for all uppercase variables defined there.
 # Load views
-from siscomando import views
+from siscomando import views, api
 
 if __name__ == '__main__':
     app.run(threaded=True) #
