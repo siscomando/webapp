@@ -180,10 +180,12 @@ def search():
 
 	json_data = request.get_json()
 	term = json_data['term']
-	register = json_data['register']
+	register = json_data.get('register', None)
 	
 	rex = re.compile('(^in:[ ]?)(.*)')
 	matched = rex.match(term)
+	# If the `term` is initiate with expression `in:` and the register number 
+	# was sent to search inside Issue.
 	if matched and register:
 		term = matched.groups()[1]
 		issue = models.Issue.objects.get_or_404(register=register)
