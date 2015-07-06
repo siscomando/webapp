@@ -27,17 +27,5 @@ class Issues(BaseIssues):
         issues = models.Issue.objects()
         return issues
 
-    def get_issue(self, register, filters=None):
-        pass
-
-    def post(self):
-        pass
-
-    def update(self):
-        pass
-
-    def delete(self):
-        pass
-
 
 
