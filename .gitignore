@@ -26,3 +26,5 @@ templates/bower_components/sc-*
 templates/bower_components/lp-input
 templates/bower_components/lp-ugettext
 templates/bower_components/lp-text-languages
+siscomando/static/components/lp-*
+siscomando/static/components/sc-*
