@@ -330,7 +330,15 @@ def set_comments():
 @app.route('/api/v1/comments/', methods=['GET'])
 @login_required	
 def get_comments():
-	comments = models.Comment.objects()
+	start = 0
+	end = 25 # the comments retunes if not passed arg page
+	page = request.args.get('page', 1)
+	if page:
+		page = page if isinstance(page, int) else int(page)
+		page = page if page > 0 else 1
+		start = (end * (page - 1))
+		end = end * page
+	comments = models.Comment.objects[start:end] # plus closed last 
 	json_data = json.loads(comments.to_json(current_user=current_user))
 	data = {'comments': json_data}
 	return jsonify(data), 200
@@ -338,6 +346,13 @@ def get_comments():
 @app.route('/api/v1/comments/<string:register>/', methods=['GET'])
 @login_required	
 def get_comments_from_register(register):
+	page = request.args.get('page', None)
+	
+	# Workaround to return something but not comments. Because all comments
+	# is returned in the first request. This view not needs pagination on now.
+	if page:
+		return jsonify({'message': u'All messages already returned.'}), 200
+
 	issue = models.Issue.objects.get_or_404(register=register)
 	comments = models.Comment.objects(issue_id=issue.pk)
 	json_data = json.loads(comments.to_json())
