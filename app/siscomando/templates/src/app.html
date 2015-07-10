@@ -19,8 +19,10 @@
   <link rel="import" href="/static/components/polymer/polymer.html">
   <link rel="import" href="/static/components/core-drawer-panel/core-drawer-panel.html">
   <link rel="import" href="/static/components/core-header-panel/core-header-panel.html">
+  <link rel="import" href="/static/components/paper-icon-button/paper-icon-button.html">
   <link rel="import" href="/static/components/sc-header/sc-header.html">
   <link rel="import" href="/static/components/sc-search/sc-search.html">
+  <link rel="import" href="/static/components/core-scroll-threshold/core-scroll-threshold.html">
   <link rel="import" href="/static/components/sc-navbar/sc-navbar.html">
   <link rel="import" href="/static/components/sc-timeline/sc-timeline.html">
   <link rel="import" href="/static/components/lp-input/lp-input.html">
@@ -36,7 +38,7 @@
   </div>
   -->  
   <core-drawer-panel responsiveWidth="768px">   
-    <div drawer>
+    <div drawer drawerWidth="350px">
       <core-header-panel>
         <!-- App context mini-header: you can to put logo app, name, etc.-->
         <div class="core-header">
@@ -70,9 +72,14 @@
           gravatarEnabled="true"></sc-timeline>
           <lp-input target="editable" boxTarget="editableRect" 
           mentionsURL="/api/v1/users/"
-          url="/api/v1/comments/" method="POST"></lp-input>          
+          url="/api/v1/comments/" method="POST"
+          eventFired="click-submit-lp-input">
+          ></lp-input>          
           <div id="editableRect" class="sc-input-section" flex >
           <div id="editable" contenteditable="true"></div>
+          <!-- experimental button -->
+          <paper-icon-button icon="send" 
+          style="position: absolute; float:right; right: 10px; top: 10px; color: #EEEEEE;"></paper-icon-button>
           </div>
         </div>
       </core-header-panel>
