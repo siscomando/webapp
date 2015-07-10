@@ -25,13 +25,13 @@ for i in range(1, QTD_USERS):
 
 # Adding systems...
 bodies = [
-        'Interactively deploy backward-compatible processes rather than premier mindshare.',
+        'Interactively deploy backward-compatible processes rather than premier #mindshare. ',
     'Dramatically transform client-focused data for leveraged internal',
-    'Dramatically transform client-focused data for leveraged internal or "organic" sources. Globally optimize just in time portals without backward-compatible functionalities. Quickly seize enabled customer service rather than resource sucking web-readiness. ',
+    'Dramatically transform client-focused data for #leveraged internal or "organic" sources. Globally optimize just in time portals without backward-compatible functionalities. Quickly seize enabled customer service rather than resource sucking web-readiness. ',
     'Enthusiastically drive premier partnerships after premier web-readiness. Collaboratively reinvent maintainable products after cross functional schemas. Authoritatively enhance flexible e-services and team driven results.',
     'Monotonectally customize team driven mindshare rather than leading-edge collaboration and idea-sharing. Energistically fashion front-end partnerships vis-a-vis leading-edge niches. Rapidiously transform holistic synergy via unique value. ',
     'Continually procrastinate progressive results whereas cooperative imperatives.',
-    'Progressively formulate client-centered interfaces without just in time e-business. Progressively utilize maintainable value rather than turnkey human capital. Enthusiastically envisioneer synergistic supply chains for inexpensive innovation.',
+    'Progressively formulate client-centered interfaces without just in time e-business. #Progressively utilize maintainable value rather than turnkey human capital. Enthusiastically envisioneer synergistic supply chains for inexpensive innovation.',
     'Professionally e-enable bricks-and-clicks opportunities before granular total linkage. Synergistically predominate frictionless methodologies before ',
     'Conveniently underwhelm alternative web services vis-a-vis team building services'
 ]
