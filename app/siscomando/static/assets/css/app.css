@@ -25,7 +25,8 @@ core-header-panel {
 	color: #FFF;
 }
 .panelContent {
-  padding-bottom: 32px;
+  margin-top: -15px;
+  padding-bottom: 70px;
 }
 
 sc-input-hashtag {
@@ -80,7 +81,7 @@ paper-spinner.blue::shadow .circle {
   font-weight: 300;
   border-radius: 3px;
   font-size: .95rem;
-  padding: 6px 6px 6px 6px;
+  padding: 6px 28px 6px 6px;
   overflow: hidden;
   outline: none;
   min-height: 30px;
