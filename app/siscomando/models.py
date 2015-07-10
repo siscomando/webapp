@@ -95,6 +95,7 @@ class Issue(db.Document):
     ugser = db.StringField(max_length=12, required=True)
     deadline = db.IntField(default=120)
     closed = db.BooleanField(default=False)
+    author = db.ReferenceField('User', required=True, reverse_delete_rule=DENY)
 
     @classmethod
     def post_save(cls, sender, document, **kwargs):
