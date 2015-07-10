@@ -178,7 +178,9 @@ class Comment(db.Document):
         self.title = self.issue_id.title if self.issue_id else self.hashtags[0]            
 
     def to_link_hashtag(self, hashtag):
-        return '<a class="hashLink" href="/hashtag/{value}">{value}</a>'.format(value=hashtag)
+        return '<a class="hashLink" eventname="hashtag-to-search" ' \
+                    'colorlink="#47CACC" href="/hashtag/{value}">{value}' \
+                    '</a>'.format(value=hashtag)
 
     def to_link_mention(self, shortname):
         return '<a class="mentions shortname username" href="/users/{value}">{value}</a>'.format(value=shortname)        
