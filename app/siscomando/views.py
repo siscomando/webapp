@@ -181,6 +181,9 @@ def search():
 	json_data = request.get_json()
 	term = json_data['term']
 	register = json_data.get('register', None)
+
+	if term is None or term == '':
+		return get_comments() # workaround for presentation
 	
 	rex = re.compile('(^in:[ ]?)(.*)')
 	matched = rex.match(term)
@@ -303,7 +306,7 @@ def set_comments():
 	origin = json_data.get('origin')
 
 	if str(current_user.pk) != str(author):
-		abort(401) # Secure this view.
+		abort(401) # Secure this view. Validation origin user.
 
 	# the place (issue) where will save the comments
 	if register:

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from flask.ext.script import Manager, Server, Command, Option 
+from flask.ext.script import Manager, Server, Command, Option, Shell 
 #APP
 from siscomando import app
+from api import app as app_api
 
 
 class GunicornServer(Command):
@@ -9,7 +10,7 @@ class GunicornServer(Command):
 	"""
 	description = 'Run the app within Gunicorn'
 
-	def __init__(self, host='127.0.0.1', port=9003, workers=4, 
+	def __init__(self, host='127.0.0.1', port=9013, workers=4, 
 		worker_class='gunicorn.workers.ggevent.GeventWorker'):
 		self.port = port
 		self.host = host
@@ -31,6 +32,15 @@ class GunicornServer(Command):
 			def init(self, parser, opts, args):
 				""" This configures the Application class from gunicorn.
 				"""
+				self.args = args
+				self.app = app
+				port = 9013
+
+				if 'runserver_api' in self.args:
+					port = 9014 # to allow run both instances.
+					self.app = app_api
+
+
 				return {
 					'bind': '{0}:{1}'.format(host, port),
 					'workers': workers,
@@ -38,13 +48,19 @@ class GunicornServer(Command):
 				}
 
 			def load(self):
-				return app
+				return self.app
 
 		FlaskApplication().run()
 
-manager = Manager(app)
+
+manager = Manager(app_api)
+# `runserver_sync` runs the server as develop mode from flask.
 manager.add_command('runserver_sync', Server(host='127.0.0.1', port=9003))
+# `runserver` runs the server of the WebApp for production behavior.
 manager.add_command('runserver', GunicornServer())
+# `runserver_api` runs the server of the API for production behavior.
+manager.add_command('runserver_api', GunicornServer())
+
 	
 if __name__ == '__main__':
 	# IOLoop.instance().start()

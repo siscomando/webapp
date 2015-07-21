@@ -49,6 +49,7 @@ for s in range(1, 50):
     i.ugat = sups[sort]
     sort = random.randint(0, len(sups) - 1)
     i.ugser = sups[sort]
+    i.author = users[0]
     i.save(i)
     
     for f in range(1, 20):

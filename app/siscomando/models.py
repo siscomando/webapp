@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from mongoengine import signals, CASCADE, DENY
 from flask.ext.mongoengine import BaseQuerySet
 from bson import json_util
+from cerberus import Validator
 # APP
 from siscomando import database as db
 from siscomando import red, emails, login_manager
@@ -30,17 +31,21 @@ class User(db.Document):
     last_name = db.StringField(max_length=50)
     password = db.StringField(required=True)
     created_at = db.DateTimeField(default=datetime.datetime.now)
+    updated_at = db.DateTimeField()
     location = db.StringField(max_length=25)
     shortname = db.StringField(max_length=80)
-    avatar = db.StringField()
+    avatar = db.StringField() # URL 
     status_online = db.BooleanField(default=True)
     md5_email = db.StringField()
+    token = db.StringField()
+    roles = db.ListField(db.StringField()) # users, admins, superusers
+
 
     meta = {'queryset_class': CustomQuerySet}    
 
     def to_json(self, current_user=None):
         data = self.to_mongo()
-        data['password'] = None
+        data['password'] = None # wrapper to omit password. 
         return json_util.dumps(data)    
 
     def is_authenticated(self):
@@ -59,8 +64,12 @@ class User(db.Document):
         return '<User %r>' % (self.email)
 
     def validate_email(self):
-        email = self.email.split('@')
-        if len(email) == 2:
+        schema = {'email': {'type':'string', 
+            'regex': '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-.]+$'}}
+        fragment = {'email': self.email}
+        v = Validator()
+        
+        if v.validate(fragment, schema):
             self.set_shortname()
         else:
             raise TypeError('Mail address malformed')
@@ -85,17 +94,18 @@ class User(db.Document):
 class Issue(db.Document):
     created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
     updated_at = db.DateTimeField()
-    title = db.StringField(max_length=255, required=True)
+    title = db.StringField(max_length=150, required=True)
     slug = db.StringField(max_length=255, required=False) # TODO slugfy
     body = db.StringField(required=True)
-    register = db.StringField(max_length=120, required=True, unique=True)
-    register_orig = db.StringField(max_length=120)
+    register = db.StringField(max_length=50, required=True, unique=True)
+    register_orig = db.StringField(max_length=51)
     classifier = db.IntField(default=0) # high, highest ...
     ugat = db.StringField(max_length=12, required=True)
     ugser = db.StringField(max_length=12, required=True)
     deadline = db.IntField(default=120)
     closed = db.BooleanField(default=False)
-    author = db.ReferenceField('User', required=True, reverse_delete_rule=DENY)
+    author = db.ReferenceField('User', required=True)
+
 
     @classmethod
     def post_save(cls, sender, document, **kwargs):
@@ -150,11 +160,12 @@ class Comment(db.Document):
         (2, 'email')
     )
     # if empty the comment is not associated with issue (or hashtag)
-    issue_id = db.ReferenceField('Issue', reverse_delete_rule=DENY)
+    issue_id = db.ReferenceField('Issue') # CASCADE ?
     created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
+    updated_at = db.DateTimeField()
     shottime = db.StringField(default=None)
     body = db.StringField(verbose_name='Comment', required=True)
-    author = db.ReferenceField('User', required=True, reverse_delete_rule=DENY)
+    author = db.ReferenceField('User', required=True)
     stars = db.ListField(db.EmbeddedDocumentField(ScoreStars))
     origin = db.IntField(choices=CHOICES_SOURCE, default=0)
     hashtags = db.ListField(db.StringField(max_length=120))
@@ -221,7 +232,7 @@ class Comment(db.Document):
     def to_json(self, current_user=None):
         data = self.to_mongo()
 
-        if self.issue_id:
+        if self.issue_id: # Eve to solve this approach.
             data['issue_id'] = {'Issue': {
                                     'title': self.issue_id.title, 
                                     'register': self.issue_id.register
@@ -235,6 +246,7 @@ class Comment(db.Document):
                                 'md5_email': self.author.md5_email
                         }
         }
+        # Eve to solve this approach with DATE_FORMAT settings.
         day, month, year = self.created_at.day, self.created_at.month, self.created_at.year  
         hour, minute = self.created_at.hour, self.created_at.minute
         data['created_at_human'] = "%sh%s %s/%s/%s" % (hour, minute, day, month, year)
@@ -292,6 +304,7 @@ class Invite(db.Document):
     email = db.StringField(required=True, unique=False) 
     invited_by_email = db.StringField(required=False, unique=False)
     created_at = db.DateTimeField(default=datetime.datetime.now)
+    updated_at = db.DateTimeField()
     is_approved = db.BooleanField(default=False)
     used = db.BooleanField(default=False)
     # ObjectID alreay a token
@@ -305,7 +318,9 @@ class Invite(db.Document):
             if document.is_approved and document.used == False:
                 emails.approved_invited(document.name, document.email, document.pk)
             
-# Signals
+# Signals pre_save
+# ...
+# Signals post_save
 signals.post_save.connect(Issue.post_save, sender=Issue)
 signals.post_save.connect(Comment.post_save, sender=Comment)
 signals.post_save.connect(Invite.post_save, sender=Invite)

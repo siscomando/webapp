@@ -9,7 +9,6 @@ from flask.ext.cors import CORS
 from flask.ext.login import LoginManager
 from flask_mail import Mail
 from flask.ext.babel import Babel
-from flask.ext import restful
 
 # Pre-setup
 red = redis.StrictRedis()
@@ -48,10 +47,6 @@ else:
 app.logger.addHandler(file_handler)
 app.logger.setLevel(logging.DEBUG)
 
-# Settings webservice flask_restful entry point.
-webservice_bp = Blueprint('webservice', __name__)
-webservice = restful.Api(webservice_bp, prefix="/api/v2")
-
 # CORS to support external request (outside from hosted domain).
 cors = CORS(app, resources=r'/api/v1/*', origins='*', 
 	allow_headers=['Content-Type', 'Origin', 'Accept,', 'X-Requested-With', 
@@ -71,7 +66,7 @@ database = MongoEngine(app)
 # from_object() will look at the given object (if it’s a string it will import it) 
 # and then look for all uppercase variables defined there.
 # Load views
-from siscomando import views, api
+from siscomando import views
 
 if __name__ == '__main__':
     app.run(threaded=True) #

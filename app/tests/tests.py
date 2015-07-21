@@ -10,7 +10,7 @@ from sseclient import SSEClient
 from tornado.testing import AsyncTestCase, AsyncHTTPTestCase
 from tornado.httpclient import AsyncHTTPClient
 #APP
-from src import app, database, models
+from siscomando import app, database, models
 
 
 def login(self, username, password):
