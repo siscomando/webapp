@@ -3,7 +3,7 @@ from __future__ import absolute_import
 import redis
 import logging
 import os
-from flask import Flask, Blueprint 
+from flask import Flask, Blueprint
 from flask.ext.mongoengine import MongoEngine
 from flask.ext.cors import CORS
 from flask.ext.login import LoginManager
@@ -48,9 +48,10 @@ app.logger.addHandler(file_handler)
 app.logger.setLevel(logging.DEBUG)
 
 # CORS to support external request (outside from hosted domain).
-cors = CORS(app, resources=r'/api/v1/*', origins='*', 
-	allow_headers=['Content-Type', 'Origin', 'Accept,', 'X-Requested-With', 
+cors = CORS(app, resources=r'/api/v1/*', origins='*',
+	allow_headers=['Content-Type', 'Origin', 'Accept,', 'X-Requested-With',
 				'X-CSRF-Token','Access-Control-Allow-Origin'])
+
 # Mail
 mail = Mail(app)
 # i18n and l10n
@@ -63,7 +64,7 @@ login_manager.login_view = 'login'
 database = MongoEngine(app)
 
 # Config cans to be used: app.config.from_object(__name__)
-# from_object() will look at the given object (if it’s a string it will import it) 
+# from_object() will look at the given object (if it’s a string it will import it)
 # and then look for all uppercase variables defined there.
 # Load views
 from siscomando import views

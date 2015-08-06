@@ -1,18 +1,15 @@
-<!doctype html>
-<html>
-<head>
+<!DOCTYPE html><html><head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-touch-fullscreen" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style"
-        content="black-translucent" >
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="apple-touch-icon" href="/static/assets/img/touch-icon-iphone.png">
   <link rel="apple-touch-icon" sizes="76x76" href="/static/assets/img/touch-icon-ipad.png">
   <link rel="apple-touch-icon" sizes="120x120" href="/static/assets/img/touch-icon-iphone-retina.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="/static/assets/img/touch-icon-ipad-retina.png">        
-         
+  <link rel="apple-touch-icon" sizes="152x152" href="/static/assets/img/touch-icon-ipad-retina.png">
+
   <title>SisComando - Mais fácil, mais social!</title>
 
   <script src="/static/components/webcomponentsjs/webcomponents.min.js"></script>
@@ -30,19 +27,19 @@
   <link rel="icon" href="/static/assets/favicon.ico" type="image/x-icon">
 
 </head>
-<body vertical layout unresolved>
+<body vertical="" layout="" unresolved="">
   <!--
   <div id="loadData" layout vertical center-center>
     <paper-spinner class="blue" active></paper-spinner>
   </div>
-  -->  
-  <core-drawer-panel responsiveWidth="768px">   
-    <div drawer drawerWidth="350px">
+  -->
+  <core-drawer-panel responsivewidth="768px">
+    <div drawer="" drawerwidth="350px">
       <core-header-panel>
         <!-- App context mini-header: you can to put logo app, name, etc.-->
         <div class="core-header">
-            <div class="appbrand" horizontal layout onclick="reload();">
-              <span class="logo"> 
+            <div class="appbrand" horizontal="" layout="" onclick="reload();">
+              <span class="logo">
                 <img src="/static/assets/img/logo_60.png">
               </span>
               <span class="appname">SisComando</span>
@@ -50,42 +47,28 @@
             </div>
         </div>
         <!-- App context mini-header: END -->
-        <sc-navbar 
-         username="%% g.user.shortname %%"
-         avatar="%% g.user.md5_email %%"
-         gravatarEnabled="true"
-         online="%% g.user.status_online %%"
-         url="/api/v1/issues/"
-         stream="/api/v1/stream/issues/"
-         channel="message"
-        ></sc-navbar>
+        <sc-navbar username="%% g.user.shortname %%" avatar="%% g.user.md5_email %%" gravatarenabled="true" online="%% g.user.status_online %%" url="/api/v1/issues/" stream="/api/v1/stream/issues/" channel="message"></sc-navbar>
       </core-header-panel>
     </div>
-    <div main>
+    <div main="">
       <core-header-panel>
         <sc-search url="/api/v1/search/"></sc-search>
         <sc-header></sc-header>
-        <div class="panelContent" vertical layout fit>
-          <sc-timeline url="/api/v1/comments/" 
-          sseurl="/api/v1/stream/comments/"
-          gravatarEnabled="true"></sc-timeline>
-          <lp-input target="editable" boxTarget="editableRect" 
-          mentionsURL="/api/v1/users/"
-          url="/api/v1/comments/" method="POST"
-          eventFired="click-submit-lp-input">
-          ></lp-input>          
-          <div id="editableRect" class="sc-input-section" flex >
+        <div class="panelContent" vertical="" layout="" fit="">
+          <sc-timeline url="/api/v1/comments/" sseurl="/api/v1/stream/comments/" gravatarenabled="true"></sc-timeline>
+          <lp-input target="editable" boxtarget="editableRect" mentionsurl="/api/v1/users/" url="/api/v1/comments/" method="POST" eventfired="click-submit-lp-input">
+          &gt;</lp-input>
+          <div id="editableRect" class="sc-input-section" flex="">
           <div id="editable" contenteditable="true"></div>
           <!-- experimental button -->
-          <paper-icon-button icon="send" 
-          style="position: absolute; float:right; right: 10px; top: 10px; color: #EEEEEE;"></paper-icon-button>
+          <paper-icon-button icon="send" style="position: absolute; float:right; right: 10px; top: 10px; color: #EEEEEE;"></paper-icon-button>
           </div>
         </div>
       </core-header-panel>
-    </div>    
-  
-  </core-drawer-panel> 
-  
+    </div>
+
+  </core-drawer-panel>
+
   <!-- <script src="assets/js/app.js"></script> -->
   <script>
       var userData = {};
@@ -94,12 +77,13 @@
       userData['avatar'] = "%% g.user.avatar %%";
       userData['shortname'] = "%% g.user.shortname %%";
       userData['email'] = "%% g.user.email %%";
-      window.localStorage.setItem("User", JSON.stringify(userData)); 
+      window.localStorage.setItem("User", JSON.stringify(userData));
 
       // Reload page
       function reload() {
         location.href = "/app";
-      }           
+      }
   </script>
-</body>
-</html>
+
+
+</body></html>

@@ -10,7 +10,7 @@ from siscomando import app, red, models, login_manager
 
 #
 # Setup flask-login
-# 
+#
 @login_manager.user_loader
 def load_user(id):
 	"""Because pk is unique we can to use filter. It will return the user or
@@ -20,7 +20,7 @@ def load_user(id):
 
 @app.before_request
 def before_request():
-    g.user = current_user    
+    g.user = current_user
 
 # APP
 @app.errorhandler(404)
@@ -35,7 +35,7 @@ def internal_error(error):
 
 #
 # Static routes
-# 
+#
 @app.route('/')
 def index():
 
@@ -60,7 +60,7 @@ def login():
 		email = request.form['identifier']
 		password = request.form['password']
 		registered_user = models.User.objects.filter(email=email).first()
-	
+
 		if registered_user is None or \
 			registered_user.check_password(password) is not True:
 			flash('Username or Password is invalid', 'error') # TODO
@@ -69,7 +69,7 @@ def login():
 		login_user(registered_user, remember=True)
 		flash('Logged in successfully')
 		return redirect(request.args.get('next') or url_for('application'))
-	
+
 	# return jsonify({'msg': 'Sucessful'}), 201
 	return render_template('login.html')
 
@@ -81,7 +81,7 @@ def register(token):
     	invited = models.Invite.objects.get_or_404(pk=token)
     	if invited.is_approved == True and invited.used == False:
     		name = invited.name.split()[0].capitalize()
-        	return render_template('register.html', greetings=_(u'Hi'), 
+        	return render_template('register.html', greetings=_(u'Hi'),
         		name=name, invite=invited)
         else:
         	return render_template('not_approved_invited.html', greetings=_(u'Hi'),)
@@ -121,7 +121,7 @@ def request_invite():
  	invite = models.Invite()
  	invite.name = name
  	invite.email = email
- 	
+
  	#try:
  	invite.save()
  	#except:
@@ -130,11 +130,11 @@ def request_invite():
 
  	return render_template('request_invite_successful.html')
 
-    
+
 @app.route('/app/', methods=['GET'])
 @login_required
 def application():
-
+        
 	if current_user.is_authenticated():
 		return render_template('app.html')
 	else:
@@ -145,7 +145,7 @@ def get_hashtags(hash):
 	# get messages by hashtags and get hashtags
 	pass
 
-# API REQUESTS 
+# API REQUESTS
 @app.route('/api/v1/stars/<string:target>/', methods=['POST'])
 @login_required
 def set_stars(target):
@@ -174,7 +174,7 @@ def set_stars(target):
 @login_required
 def search():
 	# TODO: FTS - full text search
-	
+
 	if not request.json:
 		abort(400)
 
@@ -184,10 +184,10 @@ def search():
 
 	if term is None or term == '':
 		return get_comments() # workaround for presentation
-	
+
 	rex = re.compile('(^in:[ ]?)(.*)')
 	matched = rex.match(term)
-	# If the `term` is initiate with expression `in:` and the register number 
+	# If the `term` is initiate with expression `in:` and the register number
 	# was sent to search inside Issue.
 	if matched and register:
 		term = matched.groups()[1]
@@ -226,16 +226,16 @@ def get_issues():
 @login_required
 def get_issue(register):
 	issue = models.Issue.objects.get_or_404(register=register)
-	return jsonify({'issue': issue})	
+	return jsonify({'issue': issue})
 
 @app.route('/api/v1/issues/', methods=['POST'])
 @login_required
 def set_issues():
 	""" Persists the JSON from request in database
-	
-	TODO: 
+
+	TODO:
 	 - needs control access at resource
-	 - new fields	
+	 - new fields
 	"""
 	if not request.json:
 		abort(400)
@@ -255,7 +255,7 @@ def set_issues():
 def edit_issues():
 	""" Edits an issue
 
-	TODO: 
+	TODO:
 	 - needs control access at resource
 	 - new fields
 	"""
@@ -315,9 +315,9 @@ def set_comments():
 		issue = None
 
 	# TODO: Check if author is the same users logged !!!
-	comment = models.Comment(issue_id=issue, body=body, author=author, 
+	comment = models.Comment(issue_id=issue, body=body, author=author,
     				origin=origin)
-    	
+
 	try:
 		comment.save()
 	except:
@@ -327,11 +327,11 @@ def set_comments():
 
 	json_data = json.loads(comment.to_json())
 	data = {'comments': json_data}
-	
+
 	return jsonify(data), 201
 
 @app.route('/api/v1/comments/', methods=['GET'])
-@login_required	
+@login_required
 def get_comments():
 	start = 0
 	end = 25 # the comments retunes if not passed arg page
@@ -341,16 +341,16 @@ def get_comments():
 		page = page if page > 0 else 1
 		start = (end * (page - 1))
 		end = end * page
-	comments = models.Comment.objects[start:end] # plus closed last 
+	comments = models.Comment.objects[start:end] # plus closed last
 	json_data = json.loads(comments.to_json(current_user=current_user))
 	data = {'comments': json_data}
 	return jsonify(data), 200
 
 @app.route('/api/v1/comments/<string:register>/', methods=['GET'])
-@login_required	
+@login_required
 def get_comments_from_register(register):
 	page = request.args.get('page', None)
-	
+
 	# Workaround to return something but not comments. Because all comments
 	# is returned in the first request. This view not needs pagination on now.
 	if page:
@@ -363,21 +363,21 @@ def get_comments_from_register(register):
 	return jsonify(data), 200
 
 @app.route('/api/v1/comments/<string:oid>/', methods=['DELETE'])
-@login_required	
+@login_required
 def del_comments(oid):
 	comment = models.Comment.objects.get_or_404(pk=oid)
 	# Only user that is author can delete it
 	if str(comment.author.pk) != str(current_user.pk):
 		abort(401)
-		
+
 	comment.delete()
 	return jsonify({'msg': 'Sucessful'}), 201
 
 @app.route('/api/v1/comments/<string:oid>/', methods=['PUT'])
-@login_required	
+@login_required
 def edit_comments(oid):
 	comment = models.Comment.objects.get_or_404(pk=oid)
-	
+
 	if not request.json:
 		abort(400)
 	# json loads
@@ -385,7 +385,7 @@ def edit_comments(oid):
 	# fields allowed (the field author, issue_id, created_at is not editable)
 	# and only the user that is author can edit it
 	if str(comment.author.pk) != str(current_user.pk):
-		abort(401) 
+		abort(401)
 
 	comment.body = json_data.get('body')
 	comment.stars = json_data.get('stars')
@@ -394,7 +394,7 @@ def edit_comments(oid):
 
 	json_data = json.loads(comment.to_json())
 	data = {'comment': json_data}
-	return jsonify(data), 201	
+	return jsonify(data), 201
 
 def event_stream(channel):
 	pubsub = red.pubsub()
@@ -407,21 +407,21 @@ def event_stream(channel):
 @app.route('/api/v1/stream/comments/', methods=['GET'])
 @login_required
 def stream_comments():
-	""" Gets new issues and fire it in the Redis. 
+	""" Gets new issues and fire it in the Redis.
 
 	Specifically in Siscomando this can to be used in Navbar (sc-navbar)
-	""" 
-	return Response(event_stream('comments'), mimetype='text/event-stream', 
+	"""
+	return Response(event_stream('comments'), mimetype='text/event-stream',
 		headers=[('cache_control', 'no-cache')])
 
 @app.route('/api/v1/stream/comments/<string:issueoid>/', methods=['GET'])
 @login_required
 def stream_comments_by_issue(issueoid):
-	""" Gets new comments based in Issue Object ID and fire it in the Redis. 
-	""" 
+	""" Gets new comments based in Issue Object ID and fire it in the Redis.
+	"""
 	channel = ''.join(['comments', issueoid])
-	return Response(event_stream(channel), mimetype='text/event-stream', 
-		headers=[('cache_control', 'no-cache')])	
+	return Response(event_stream(channel), mimetype='text/event-stream',
+		headers=[('cache_control', 'no-cache')])
 
 @app.route('/api/v1/stream/issues/')
 @login_required
@@ -430,11 +430,7 @@ def stream_by_issues():
 
 	TODO: Only authenticated user could to access this API
 	"""
-	return Response(event_stream('issues'), mimetype='text/event-stream', 
-		headers=[('cache_control', 'no-cache')])	
+	return Response(event_stream('issues'), mimetype='text/event-stream',
+		headers=[('cache_control', 'no-cache')])
 
 # @app.route('/api/v1/stream/issues/<string:oid>')
-
-
-
-

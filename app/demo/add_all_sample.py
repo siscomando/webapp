@@ -6,9 +6,9 @@ from siscomando import models
 
 QTD_USERS = 50
 sups = ['SUPOP', 'SUPCD', 'SUPDE', 'SUNFJ', 'SUNNE', 'SUNAF', 'COTEC']
-sistemas = ['SIGEPE (SUNMP)', 'CENTRO DE DADOS (SUPCD)', 'SIAPNET (SUNMP)', 
-		'GUIA DE SERVIÇOS PÚBLICOS FEDERAL (SUNMP)', 'SICONV (SUNMP)', 
-		'SIORG (SUNMP)', 'SOTN (SUNAF)', 'DESTNET (SUNMP)', 
+sistemas = ['SIGEPE (SUNMP)', 'CENTRO DE DADOS (SUPCD)', 'SIAPNET (SUNMP)',
+		'GUIA DE SERVIÇOS PÚBLICOS FEDERAL (SUNMP)', 'SICONV (SUNMP)',
+		'SIORG (SUNMP)', 'SOTN (SUNAF)', 'DESTNET (SUNMP)',
 		'TRANSPARENCIA PUBLICA CLIENTE (SUNFJ)', 'SNCR CCIR WEB (SUNCE)']
 people = ['Joao', 'Antonio', 'Maria', 'DoCarmo', 'Caetano', 'Vinicius', 'Tom',
         'Juarez', 'Abidoral', 'Clerio', 'Sandra Rosa', 'Madelena', 'Jacilda']
@@ -18,6 +18,7 @@ for i in range(1, QTD_USERS):
     name = people[random.randint(0, len(people) - 1)]
     lastname = people[random.randint(0, len(people) - 1)]
     email = ''.join([name, lastname, '_', str(i), '@', lastname, '.com'])
+    email = email.replace(' ', '')
     u = models.User()
     u.email = email
     u.password = '123'
@@ -51,10 +52,10 @@ for s in range(1, 50):
     i.ugser = sups[sort]
     i.author = users[0]
     i.save(i)
-    
+
     for f in range(1, 20):
         ord_users = random.randint(0, len(users) - 1)
-        st = models.ScoreStars(score=random.randint(1,5), 
+        st = models.ScoreStars(score=random.randint(1,5),
             voter=users[ord_users])
         print st.score, st.voter
         comment = models.Comment()
@@ -63,6 +64,3 @@ for s in range(1, 50):
         comment.author = users[random.randint(0, QTD_USERS - 2)]
         comment.stars.append(st)
         comment.save()
-
-
-
