@@ -22,15 +22,15 @@
       <!-- App context mini-header: you can to put logo app, name, etc.-->
       <div class="core-header">
           <div class="appbrand" horizontal layout>
-            <span class="logo"> 
+            <span class="logo">
               <img src="/static/assets/img/logo_60.png">
             </span>
             <span class="appname">SisComando</span>
           </div>
       </div>
       <div class="baseContent">
-        <login-box action="/login/"></login-box>
-      </div>      
+        <login-box ajax="true" url="/login_api/"></login-box>
+      </div>
       {% with messages = get_flashed_messages() %}
         {% if messages %}
           {% for message in messages %}
@@ -39,6 +39,6 @@
         {% endif %}
       {% endwith %}
     </core-header-panel>
-    
+
 </body>
 </html>
