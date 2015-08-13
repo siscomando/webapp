@@ -294,6 +294,7 @@ html /deep/ [segment], html /deep/ segment {
 
 <script src="/static/components/polymer/polymer.js"></script>
 
+  
 
 
 
@@ -304,11 +305,10 @@ html /deep/ [segment], html /deep/ segment {
 
 
 
+  
 
 
-
-
-
+  
 
 
 
@@ -470,7 +470,7 @@ html /deep/ .paper-shadow-bottom-z-5 {
   need to be notified when they are resized or un-hidden by their parents in order to take
   action on their new measurements).
 
-  Elements that perform measurement should add the `Core.Resizable` mixin to their
+  Elements that perform measurement should add the `Core.Resizable` mixin to their 
   Polymer prototype definition and listen for the `core-resize` event on themselves.
   This event will be fired when they become showing after having been hidden,
   when they are resized explicitly by a `CoreResizer`, or when the window has been resized.
@@ -534,7 +534,7 @@ html /deep/ .paper-shadow-bottom-z-5 {
   action on their new measurements).
 
   Elements that cause their children to be resized (e.g. a splitter control) or hide/show
-  their children (e.g. overlay) should add the `Core.CoreResizer` mixin to their
+  their children (e.g. overlay) should add the `Core.CoreResizer` mixin to their 
   Polymer prototype definition and then call `this.notifyResize()` any time the element
   resizes or un-hides its children.
 
@@ -635,8 +635,8 @@ html /deep/ .paper-shadow-bottom-z-5 {
     // Private: Handle requests for resize
     _handleResizeRequested: function(e) {
       var target = e.path[0];
-      if ((target == this) ||
-          (target == this._resizerListener) ||
+      if ((target == this) || 
+          (target == this._resizerListener) || 
           (this._resizerPeers && this._resizerPeers.indexOf(target) < 0)) {
         return;
       }
@@ -711,14 +711,14 @@ out hidden and is displayed by setting its `opened` property to true.
 A `core-overlay's` opened state can be toggled by calling the `toggle`
 method.
 
-The `core-overlay` will, by default, show/hide itself when it's opened. The
-`target` property may be set to another element to cause that element to
+The `core-overlay` will, by default, show/hide itself when it's opened. The 
+`target` property may be set to another element to cause that element to 
 be shown when the overlay is opened.
 
 It's common to want a `core-overlay` to animate to its opened
 position. The `core-overlay` element uses a `core-transition` to handle
-animation. The default transition is `core-transition-fade` which
-causes the overlay to fade in when displayed. See
+animation. The default transition is `core-transition-fade` which 
+causes the overlay to fade in when displayed. See 
 <a href="../core-transition/">`core-transition`</a> for more
 information about customizing a `core-overlay's` opening animation. The
 `backdrop` property can be set to true to show a backdrop behind the overlay
@@ -740,14 +740,14 @@ presses the escape key. This behavior can be turned off via the
       <button core-overlay-toggle>OK</button>
     </core-overlay>
 
-`core-overlay` will automatically size and position itself according to the
+`core-overlay` will automatically size and position itself according to the 
 following rules. The overlay's size is constrained such that it does not
-overflow the screen. This is done by setting maxHeight/maxWidth on the
+overflow the screen. This is done by setting maxHeight/maxWidth on the 
 `sizingTarget`. If the `sizingTarget` already has a setting for one of these
 properties, it will not be overridden. The overlay should
 be positioned via css or imperatively using the `core-overlay-position` event.
 If the overlay is not positioned vertically via setting `top` or `bottom`, it
-will be centered vertically. The same is true horizontally via a setting to
+will be centered vertically. The same is true horizontally via a setting to 
 `left` or `right`. In addition, css `margin` can be used to provide some space
 around the overlay. This can be used to ensure
 that, for example, a drop shadow is always visible around the overlay.
@@ -1082,7 +1082,7 @@ sisComando app.
 @homepage http://siscomando.github.io/horacioibrahim/sc-header
 -->
 
-
+  
 
 
 
@@ -1102,7 +1102,7 @@ is required core-ajax.
 @homepage http://github.com/siscomando/sc-search
 -->
 
-
+  
 
 
 
@@ -1180,7 +1180,7 @@ sc-sse is webcomponent to consume stream by Server Side Events of HTML5.
 
 
 <!--
-sc-navbar is an custom element that retrieves and shows the issues. That
+sc-navbar is an custom element that retrieves and shows the response. That
 is required core-ajax.
 
 ##### Example
@@ -1198,6 +1198,7 @@ is required core-ajax.
 @homepage http://github.com/siscomando/sc-navbar
 -->
 
+  
 
 
 
@@ -1217,20 +1218,46 @@ is required core-ajax.
 
 
 
-<!--
-sc-link to fire an custom event.
+<script>
 
-##### Example
+var me = JSON.parse(window.localStorage.getItem("Account"));
+var current_user = me.message.user;
 
-      <sc-link href="#" eventname="sc-select" continue="false"></sc-link>
+PolymerExpressions.prototype.scoreSum = function (stars) {
 
-@element sc-link
-@blurb Element providing an element 'a' (link) that to fire events
-@status beta
-@homepage http://github.com/siscomando/sc-link
--->
+  if (stars !== undefined && stars !== null) {
+    var output = 0;
+    var sum = 0;
+    for (var i = 0; i < stars.length; i++) {
+       item = stars[i];
+       if (item != null && item != undefined) {
+          output += item['score'];
+       }
+    }
+    return output;
+  }
+}
 
+PolymerExpressions.prototype.checkUserExists = function (stars) {
 
+  if (typeof(stars) == 'number') {
+    return true;
+  }
+
+  if (stars !== undefined && typeof(stars) == 'object' && stars !== null) {
+    for (var i = 0; i < stars.length; i++) {
+       item = stars[i];
+       if (item != null && item != undefined) {
+          // if only 1 of the votes was done by current_user this must be readOnly
+          if (item['voter'] == current_user) {
+            return true;
+          }
+       }
+    }
+  }
+}
+
+</script>
 
 
 <!--
@@ -1246,7 +1273,7 @@ Element providing the timeline to any apps.
 @homepage http://github.com/siscomando/sc-timline
 -->
 
-
+  
 
 
 
@@ -1280,7 +1307,7 @@ slack inputs.
       <lp-input target="editable"></lp-input>
 
 @element lp-input
-@blurb Element providing a ghost operator that makes input like twitter
+@blurb Element providing a ghost operator that makes input like twitter. #tw
 @status beta
 @homepage http://github.com/horacioibrahim/lp-input
 -->
@@ -1365,7 +1392,7 @@ slack inputs.
        * Retrieves the selected item(s).
        * @method getSelection
        * @returns Returns the selected item(s). If the multi property is true,
-       * getSelection will return an array, otherwise it will return
+       * getSelection will return an array, otherwise it will return 
        * the selected item or undefined if there is no selection.
       */
       getSelection: function() {
@@ -2092,14 +2119,14 @@ core-selector:not(.narrow-layout) ::content [core-drawer-toggle] {
      * @param {Object} detail
      * @param {boolean} detail.narrow true if the panel is in narrow layout.
      */
-
+     
     /**
      * Fired when the selected panel changes.
-     *
+     * 
      * Listening for this event is an alternative to observing changes in the `selected` attribute.
      * This event is fired both when a panel is selected and deselected.
      * The `isSelected` detail property contains the selection state.
-     *
+     * 
      * @event core-select
      * @param {Object} detail
      * @param {boolean} detail.isSelected true for selection and false for deselection
@@ -2173,7 +2200,7 @@ core-selector:not(.narrow-layout) ::content [core-drawer-toggle] {
        * @default false
        */
       disableSwipe: false,
-
+      
       /**
        * If true, ignore `responsiveWidth` setting and force the narrow layout.
        *
@@ -2182,7 +2209,7 @@ core-selector:not(.narrow-layout) ::content [core-drawer-toggle] {
        * @default false
        */
       forceNarrow: false,
-
+      
       /**
        * If true, swipe from the edge is disable.
        *
@@ -2219,8 +2246,8 @@ core-selector:not(.narrow-layout) ::content [core-drawer-toggle] {
 
     // Whether the browser has support for the will-change CSS property.
     hasWillChange: true,
-
-    // The attribute on elements that should toggle the drawer on tap, also
+    
+    // The attribute on elements that should toggle the drawer on tap, also 
     // elements will automatically be hidden in wide layout.
     toggleAttribute: 'core-drawer-toggle',
 
@@ -2273,7 +2300,7 @@ core-selector:not(.narrow-layout) ::content [core-drawer-toggle] {
       this.setAttribute('touch-action', this.swipeAllowed() ? 'pan-y' : '');
       this.fire('core-responsive-change', {narrow: this.narrow});
     },
-
+    
     forceNarrowChanged: function() {
       this.queryMatchesChanged();
     },
@@ -2281,7 +2308,7 @@ core-selector:not(.narrow-layout) ::content [core-drawer-toggle] {
     swipeAllowed: function() {
       return this.narrow && !this.disableSwipe;
     },
-
+    
     isMainSelected: function() {
       return this.selected === 'main';
     },
@@ -2309,9 +2336,9 @@ core-selector:not(.narrow-layout) ::content [core-drawer-toggle] {
     upHandler: function(e) {
       this.stopEdgePeak();
     },
-
+    
     tapHandler: function(e) {
-      if (e.target && this.toggleAttribute &&
+      if (e.target && this.toggleAttribute && 
           e.target.hasAttribute(this.toggleAttribute)) {
         this.togglePanel();
       }
@@ -2379,7 +2406,7 @@ core-selector:not(.narrow-layout) ::content [core-drawer-toggle] {
       if (translateX === null) {
         return '';
       }
-      return this.hasWillChange ? 'translateX(' + translateX + 'px)' :
+      return this.hasWillChange ? 'translateX(' + translateX + 'px)' : 
           'translate3d(' + translateX + 'px, 0, 0)';
     },
 
@@ -2447,8 +2474,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   display: none;
 }
 
-/*
-mode: scroll
+/* 
+mode: scroll 
 */
 :host([mode=scroll]) #mainContainer {
   overflow: visible;
@@ -2523,7 +2550,7 @@ mode: cover
     publish: {
       /**
        * Controls header and scrolling behavior. Options are
-       * `standard`, `seamed`, `waterfall`, `waterfall-tall`, `scroll` and
+       * `standard`, `seamed`, `waterfall`, `waterfall-tall`, `scroll` and 
        * `cover`. Default is `standard`.
        *
        * `standard`: The header is a step above the panel. The header will consume the
@@ -2595,20 +2622,20 @@ mode: cover
       tallMode: {'waterfall-tall': 1},
       outerScroll: {'scroll': 1}
     },
-
+    
     ready: function() {
       this.scrollHandler = this.scroll.bind(this);
       this.addListener();
     },
-
+    
     detached: function() {
       this.removeListener(this.mode);
     },
-
+    
     addListener: function() {
       this.scroller.addEventListener('scroll', this.scrollHandler);
     },
-
+    
     removeListener: function(mode) {
       var s = this.getScrollerForMode(mode);
       s.removeEventListener('scroll', this.scrollHandler);
@@ -2643,7 +2670,7 @@ mode: cover
     get header() {
       return this.$.headerContent.getDistributedNodes()[0];
     },
-
+    
     getScrollerForMode: function(mode) {
       return this.modeConfigs.outerScroll[mode] ?
           this.$.outerContainer : this.$.mainContainer;
@@ -2688,28 +2715,28 @@ mode: cover
 <script>
 
   (function() {
-
+    
     var SKIP_ID = 'meta';
     var metaData = {}, metaArray = {};
 
     Polymer('core-meta', {
-
+      
       /**
        * The type of meta-data.  All meta-data with the same type with be
        * stored together.
-       *
+       * 
        * @attribute type
        * @type string
        * @default 'default'
        */
       type: 'default',
-
+      
       alwaysPrepare: true,
-
+      
       ready: function() {
         this.register(this.id);
       },
-
+      
       get metaArray() {
         var t = this.type;
         if (!metaArray[t]) {
@@ -2717,7 +2744,7 @@ mode: cover
         }
         return metaArray[t];
       },
-
+      
       get metaData() {
         var t = this.type;
         if (!metaData[t]) {
@@ -2725,7 +2752,7 @@ mode: cover
         }
         return metaData[t];
       },
-
+      
       register: function(id, old) {
         if (id && id !== SKIP_ID) {
           this.unregister(this, old);
@@ -2733,7 +2760,7 @@ mode: cover
           this.metaArray.push(this);
         }
       },
-
+      
       unregister: function(meta, id) {
         delete this.metaData[id || meta.id];
         var i = this.metaArray.indexOf(meta);
@@ -2741,10 +2768,10 @@ mode: cover
           this.metaArray.splice(i, 1);
         }
       },
-
+      
       /**
        * Returns a list of all meta-data elements with the same type.
-       *
+       * 
        * @property list
        * @type array
        * @default []
@@ -2752,7 +2779,7 @@ mode: cover
       get list() {
         return this.metaArray;
       },
-
+      
       /**
        * Retrieves meta-data by ID.
        *
@@ -2763,19 +2790,19 @@ mode: cover
       byId: function(id) {
         return this.metaData[id];
       }
-
+      
     });
-
+    
   })();
-
+  
 </script>
 </polymer-element>
 <polymer-element name="core-iconset" extends="core-meta" attributes="src width icons iconSize" assetpath="/static/components/core-iconset/">
-
+  
   <script>
-
+  
     Polymer('core-iconset', {
-
+  
       /**
        * The URL of the iconset image.
        *
@@ -2842,7 +2869,7 @@ mode: cover
         this.iconNames = [];
         this.themes = {};
       },
-
+  
       ready: function() {
         // TODO(sorvell): ensure iconset's src is always relative to the main
         // document
@@ -2893,7 +2920,7 @@ mode: cover
        * @param {String|Number} icon The name of the icon or the index of the
        * icon within in the icon image.
        * @param {String} theme The name of the theme.
-       * @returns {Object} An object specifying the offset of the given icon
+       * @returns {Object} An object specifying the offset of the given icon 
        * within the icon resource file; `offsetX` is the horizontal offset and
        * `offsetY` is the vertical offset. Both values are in pixel units.
        */
@@ -2915,14 +2942,14 @@ mode: cover
 
       /**
        * Applies an icon to the given element as a css background image. This
-       * method does not size the element, and it's often necessary to set
+       * method does not size the element, and it's often necessary to set 
        * the element's height and width so that the background image is visible.
        *
        * @method applyIcon
        * @param {Element} element The element to which the background is
        * applied.
        * @param {String|Number} icon The name or index of the icon to apply.
-       * @param {Number} scale (optional, defaults to 1) A scaling factor
+       * @param {Number} scale (optional, defaults to 1) A scaling factor 
        * with which the icon can be magnified.
        * @return {Element} The icon element.
        */
@@ -2933,7 +2960,7 @@ mode: cover
           var icon = element._icon || document.createElement('div');
           var style = icon.style;
           style.backgroundImage = 'url(' + this.src + ')';
-          style.backgroundPosition = (-offset.offsetX * scale + 'px') +
+          style.backgroundPosition = (-offset.offsetX * scale + 'px') + 
              ' ' + (-offset.offsetY * scale + 'px');
           style.backgroundSize = scale === 1 ? 'auto' :
              this.width * scale + 'px';
@@ -2952,10 +2979,10 @@ mode: cover
 <polymer-element name="core-icon" attributes="src icon alt" assetpath="/static/components/core-icon/">
 <script>
 (function() {
-
+  
   // mono-state
   var meta;
-
+  
   Polymer('core-icon', {
 
     /**
@@ -2984,7 +3011,7 @@ mode: cover
      * If alt is present and not empty, it will set the element's role to img and add an aria-label whose content matches alt.
      * If alt is present and is an empty string, '', it will hide the element from the accessibility layer
      * If alt is not present, it will set the element's role to img and the element will fallback to using the icon attribute for its aria-label.
-     *
+     * 
      * @attribute alt
      * @type string
      * @default ''
@@ -3085,7 +3112,7 @@ mode: cover
     }
 
   });
-
+  
 })();
 </script>
 
@@ -3179,15 +3206,15 @@ mode: cover
         root.insertBefore(svg, root.firstElementChild);
         return svg;
       },
-
+      
       /**
        * Tell users of the iconset, that the set has loaded.
-       * This finds all elements matching the selector argument and calls
+       * This finds all elements matching the selector argument and calls 
        * the method argument on them.
        * @method updateIcons
-       * @param selector {string} css selector to identify iconset users,
+       * @param selector {string} css selector to identify iconset users, 
        * defaults to '[icon]'
-       * @param method {string} method to call on found elements,
+       * @param method {string} method to call on found elements, 
        * defaults to 'updateIcon'
        */
       updateIcons: function(selector, method) {
@@ -3201,7 +3228,7 @@ mode: cover
           }
         }
       }
-
+      
 
     });
 
@@ -4226,7 +4253,7 @@ polyfill-next-selector { content: ':host .indent'; }
 (function() {
 
   Polymer('core-toolbar', {
-
+    
     /**
      * Controls how the items are aligned horizontally.
      * Options are `start`, `center`, `end`, `between` and `around`.
@@ -4236,7 +4263,7 @@ polyfill-next-selector { content: ':host .indent'; }
      * @default ''
      */
     justify: '',
-
+    
     /**
      * Controls how the items are aligned horizontally when they are placed
      * in the middle.
@@ -4247,7 +4274,7 @@ polyfill-next-selector { content: ':host .indent'; }
      * @default ''
      */
     middleJustify: '',
-
+    
     /**
      * Controls how the items are aligned horizontally when they are placed
      * at the bottom.
@@ -4258,19 +4285,19 @@ polyfill-next-selector { content: ':host .indent'; }
      * @default ''
      */
     bottomJustify: '',
-
+    
     justifyChanged: function(old) {
       this.updateBarJustify(this.$.topBar, this.justify, old);
     },
-
+    
     middleJustifyChanged: function(old) {
       this.updateBarJustify(this.$.middleBar, this.middleJustify, old);
     },
-
+    
     bottomJustifyChanged: function(old) {
       this.updateBarJustify(this.$.bottomBar, this.bottomJustify, old);
     },
-
+    
     updateBarJustify: function(bar, justify, old) {
       if (old) {
         bar.removeAttribute(this.toLayoutAttrName(old));
@@ -4279,11 +4306,11 @@ polyfill-next-selector { content: ':host .indent'; }
         bar.setAttribute(this.toLayoutAttrName(justify), '');
       }
     },
-
+    
     toLayoutAttrName: function(value) {
       return value === 'between' ? 'justified' : value + '-justified';
     }
-
+    
   });
 
 })();
@@ -4784,7 +4811,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 #offRadio {
   position: absolute;
   top: 0px;
-  left: 0px;
+  left: 0px; 
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -4849,35 +4876,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </style>
 
   <core-a11y-keys target="{{}}" keys="space" on-keys-pressed="{{tap}}"></core-a11y-keys>
-
+  
   <div id="radioContainer" class="{{ {labeled: label} | tokenList }}">
-
+  
     <div id="offRadio"></div>
     <div id="onRadio"></div>
-
+    
     <paper-ripple id="ink" class="circle recenteringTouch" checked?="{{!checked}}"></paper-ripple>
-
+    
   </div>
-
+  
   <div id="radioLabel" aria-hidden="true" hidden?="{{!label}}">{{label}}<content></content></div>
-
+  
 </template>
 <script>
 
   Polymer('paper-radio-button', {
-
+    
     /**
      * Fired when the checked state changes due to user interaction.
      *
      * @event change
      */
-
+     
     /**
      * Fired when the checked state changes.
      *
      * @event core-change
      */
-
+    
     publish: {
       /**
        * Gets or sets the state, `true` is checked and `false` is unchecked.
@@ -4887,7 +4914,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * @default false
        */
       checked: {value: false, reflect: true},
-
+      
       /**
        * The label for the radio button.
        *
@@ -4896,7 +4923,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * @default ''
        */
       label: '',
-
+      
       /**
        * Normally the user cannot uncheck the radio button by tapping once
        * checked.  Setting this property to `true` makes the radio button
@@ -4907,7 +4934,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * @default false
        */
       toggles: false,
-
+      
       /**
        * If true, the user cannot interact with this element.
        *
@@ -4917,11 +4944,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        */
       disabled: {value: false, reflect: true}
     },
-
+    
     eventDelegates: {
       tap: 'tap'
     },
-
+    
     tap: function() {
       if (this.disabled) {
         return;
@@ -4932,22 +4959,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.fire('change');
       }
     },
-
+    
     toggle: function() {
       this.checked = !this.toggles || !this.checked;
     },
-
+    
     checkedChanged: function() {
       this.setAttribute('aria-checked', this.checked ? 'true' : 'false');
       this.fire('core-change');
     },
-
+    
     labelChanged: function() {
       this.setAttribute('aria-label', this.label);
     }
-
+    
   });
-
+  
 </script>
 </polymer-element>
 <polymer-element name="paper-checkbox" extends="paper-radio-button" role="checkbox" assetpath="/static/components/paper-checkbox/">
@@ -5141,10 +5168,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </polymer-element>
 
 <polymer-element name="core-transition" extends="core-meta" assetpath="/static/components/core-transition/">
-
+  
   <script>
     Polymer('core-transition', {
-
+      
       type: 'transition',
 
       /**
@@ -5284,7 +5311,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.cacheDomLocation(n);
         this.updateEventController(n);
         insertionPoint.__contents.push(n);
-        parent.appendChild(n);
+        parent.appendChild(n);  
       }
     },
     updateEventController: function(element) {
@@ -5309,7 +5336,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         element.__contents = null;
       }
       if (element.__parentNode) {
-        var n = element.__nextElementSibling && element.__nextElementSibling
+        var n = element.__nextElementSibling && element.__nextElementSibling 
             === element.__parentNode ? element.__nextElementSibling : null;
         element.__parentNode.insertBefore(element, n);
       }
@@ -5319,7 +5346,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       element.__parentNode = element.parentNode;
     }
   });
-
+  
 })();
 </script>
 </polymer-element>
@@ -5331,7 +5358,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     publish: {
       /**
-       * The target element that will be shown when the overlay is
+       * The target element that will be shown when the overlay is 
        * opened. If unspecified, the core-overlay itself is the target.
        *
        * @attribute target
@@ -5342,11 +5369,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
       /**
-       * A `core-overlay`'s size is guaranteed to be
+       * A `core-overlay`'s size is guaranteed to be 
        * constrained to the window size. To achieve this, the sizingElement
-       * is sized with a max-height/width. By default this element is the
+       * is sized with a max-height/width. By default this element is the 
        * target element, but it can be specifically set to a specific element
-       * inside the target if that is more appropriate. This is useful, for
+       * inside the target if that is more appropriate. This is useful, for 
        * example, when a region inside the overlay should scroll if needed.
        *
        * @attribute sizingTarget
@@ -5354,7 +5381,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * @default the target element
        */
       sizingTarget: null,
-
+    
       /**
        * Set opened to true to show an overlay and to false to hide it.
        * A `core-overlay` may be made initially opened by setting its
@@ -5374,7 +5401,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * @attribute backdrop
        * @type boolean
        * @default false
-       */
+       */    
       backdrop: false,
 
       /**
@@ -5385,7 +5412,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * @default false
       */
       layered: false,
-
+    
       /**
        * By default an overlay will close automatically if the user
        * taps outside it or presses the escape key. Disable this
@@ -5429,8 +5456,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       closeSelector: '',
 
       /**
-       * The transition property specifies a string which identifies a
-       * <a href="../core-transition/">`core-transition`</a> element that
+       * The transition property specifies a string which identifies a 
+       * <a href="../core-transition/">`core-transition`</a> element that 
        * will be used to help the overlay open and close. The default
        * `core-transition-fade` will cause the overlay to fade in and out.
        *
@@ -5475,7 +5502,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       Polymer.flush();
     },
 
-    /**
+    /** 
      * Toggle the opened state of the overlay.
      * @method toggle
      */
@@ -5483,7 +5510,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       this.opened = !this.opened;
     },
 
-    /**
+    /** 
      * Open the overlay. This is equivalent to setting the `opened`
      * property to true.
      * @method open
@@ -5492,8 +5519,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       this.opened = true;
     },
 
-    /**
-     * Close the overlay. This is equivalent to setting the `opened`
+    /** 
+     * Close the overlay. This is equivalent to setting the `opened` 
      * property to false.
      * @method close
      */
@@ -5640,7 +5667,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.layer.removeElement(this.target);
         }
       }
-      this.fire('core-overlay-' + (this.opened ? 'open' : 'close') +
+      this.fire('core-overlay-' + (this.opened ? 'open' : 'close') + 
           '-completed');
       this.applyFocus();
     },
@@ -5769,7 +5796,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       var flip = (positionedBy === end);
       var m = flip ? start : end;
       var ws = window['inner' + extent];
-      var o = dims.margin[m] + (flip ? ws - rect[end] :
+      var o = dims.margin[m] + (flip ? ws - rect[end] : 
           rect[start]);
       var offset = 'offset' + extent;
       var o2 = this.target[offset] - this.sizingTarget[offset];
@@ -5778,9 +5805,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     // vertically and horizontally center if not positioned
     repositionTarget: function() {
-      // only center if position fixed.
+      // only center if position fixed.      
       if (this.dimensions.position.css !== 'fixed') {
-        return;
+        return; 
       }
       if (!this.dimensions.position.v) {
         var t = (window.innerHeight - this.target.offsetHeight) / 2;
@@ -5797,11 +5824,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     resetTargetDimensions: function() {
       if (!this.dimensions || !this.dimensions.size.v) {
-        this.sizingTarget.style.maxHeight = '';
+        this.sizingTarget.style.maxHeight = '';  
         this.target.style.top = '';
       }
       if (!this.dimensions || !this.dimensions.size.h) {
-        this.sizingTarget.style.maxWidth = '';
+        this.sizingTarget.style.maxWidth = '';  
         this.target.style.left = '';
       }
       this.dimensions = null;
@@ -5820,9 +5847,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       }
     },
-
+    
     // We use the traditional approach of capturing events on document
-    // to to determine if the overlay needs to close. However, due to
+    // to to determine if the overlay needs to close. However, due to 
     // ShadowDOM event retargeting, the event target is not useful. Instead
     // of using it, we attempt to close asynchronously and prevent the close
     // if a tap event is immediately heard on the target.
@@ -5845,7 +5872,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     /**
      * Extensions of core-overlay should implement the `resizeHandler`
-     * method to adjust the size and position of the overlay when the
+     * method to adjust the size and position of the overlay when the 
      * browser window resizes.
      * @method resizeHandler
      */
@@ -5924,11 +5951,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       setZ(overlay, '');
     }
   }
-
+  
   function applyOverlayZ(overlay, aboveZ) {
     setZ(overlay.target, aboveZ + 2);
   }
-
+  
   function setZ(element, z) {
     element.style.zIndex = z;
   }
@@ -5936,9 +5963,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   function currentOverlay() {
     return overlays[overlays.length-1];
   }
-
+  
   var DEFAULT_Z = 10;
-
+  
   function currentOverlayZ() {
     var z;
     var current = currentOverlay();
@@ -5950,7 +5977,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     return z || DEFAULT_Z;
   }
-
+  
   function focusOverlay() {
     var current = currentOverlay();
     // We have to be careful to focus the next overlay _after_ any current
@@ -6352,7 +6379,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * The horizontal alignment of the popup relative to `relatedTarget`. `left`
        * means the left edges are aligned together. `right` means the right edges
        * are aligned together.
-       *
+       * 
        * Accepted values: 'left', 'right'
        *
        * @attribute halign
@@ -7171,7 +7198,7 @@ Polymer('core-style', {
 
   publish: {
     /**
-     * The `ref` property should be set if the `core-style` element is a
+     * The `ref` property should be set if the `core-style` element is a 
      * consumer of styles. Set it to the `id` of the desired `core-style`
      * element.
      *
@@ -7187,7 +7214,7 @@ Polymer('core-style', {
   refMap: CoreStyle.refMap,
 
   /**
-   * The `list` is a map of all `core-style` producers stored by `id`. It
+   * The `list` is a map of all `core-style` producers stored by `id`. It 
    * should be considered readonly. It's useful for nesting one `core-style`
    * inside another.
    *
@@ -7206,7 +7233,7 @@ Polymer('core-style', {
       this.registerRef(this.ref);
       if (!window.ShadowDOMPolyfill) {
         this.require();
-      }
+      }  
     }
   },
 
@@ -7238,7 +7265,7 @@ Polymer('core-style', {
       }
       this.list[this.id].push(this);
     } else {
-      this.list[this.id] = this;
+      this.list[this.id] = this;  
     }
   },
 
@@ -7246,7 +7273,7 @@ Polymer('core-style', {
   _completeProvide: function() {
     this.createShadowRoot();
     this.domObserver = new MutationObserver(this.domModified.bind(this))
-        .observe(this.shadowRoot, {subtree: true,
+        .observe(this.shadowRoot, {subtree: true, 
         characterData: true, childList: true});
     this.provideContent();
   },
@@ -7347,7 +7374,7 @@ Polymer('core-style', {
 
   ensureStyleElement: function() {
     if (!this.styleElement) {
-      this.styleElement = window.ShadowDOMPolyfill ?
+      this.styleElement = window.ShadowDOMPolyfill ? 
           this.makeShimStyle() :
           this.makeRootStyle();
     }
@@ -7382,7 +7409,7 @@ Polymer('core-style', {
       if (host) {
         var typeExtension = host.hasAttribute('is');
         var name = typeExtension ? host.getAttribute('is') : host.localName;
-        selector = WebComponents.ShadowCSS.makeScopeSelector(name,
+        selector = WebComponents.ShadowCSS.makeScopeSelector(name, 
             typeExtension);
       }
       this._scopeSelector = selector;
@@ -7414,7 +7441,7 @@ Polymer('core-style', {
     }
 
     return rgb.replace(/rgb\(([^,]*),([^,]*),([^,]*)\)/, function(m, a, b, c) {
-      return 'rgb(' + cycleChannel(a) + ',' + cycleChannel(b) + ', '
+      return 'rgb(' + cycleChannel(a) + ',' + cycleChannel(b) + ', ' 
           + cycleChannel(c) + ')';
     });
   },
@@ -8217,7 +8244,7 @@ polyfill-next-selector {
 <script>
 
   Polymer('core-range', {
-
+    
     /**
      * The number that represents the current value.
      *
@@ -8226,7 +8253,7 @@ polyfill-next-selector {
      * @default 0
      */
     value: 0,
-
+    
     /**
      * The number that indicates the minimum value of the range.
      *
@@ -8235,7 +8262,7 @@ polyfill-next-selector {
      * @default 0
      */
     min: 0,
-
+    
     /**
      * The number that indicates the maximum value of the range.
      *
@@ -8244,7 +8271,7 @@ polyfill-next-selector {
      * @default 100
      */
     max: 100,
-
+    
     /**
      * Specifies the value granularity of the range's value.
      *
@@ -8253,7 +8280,7 @@ polyfill-next-selector {
      * @default 1
      */
     step: 1,
-
+    
     /**
      * Returns the ratio of the value.
      *
@@ -8262,42 +8289,42 @@ polyfill-next-selector {
      * @default 0
      */
     ratio: 0,
-
+    
     observe: {
       'value min max step': 'update'
     },
-
+    
     calcRatio: function(value) {
       return (this.clampValue(value) - this.min) / (this.max - this.min);
     },
-
+    
     clampValue: function(value) {
       return Math.min(this.max, Math.max(this.min, this.calcStep(value)));
     },
-
+    
     calcStep: function(value) {
       return this.step ? (Math.round(value / this.step) / (1 / this.step)) : value;
     },
-
+    
     validateValue: function() {
       var v = this.clampValue(this.value);
       this.value = this.oldValue = isNaN(v) ? this.oldValue : v;
       return this.value !== v;
     },
-
+    
     update: function() {
       this.validateValue();
       this.ratio = this.calcRatio(this.value) * 100;
     }
-
+    
   });
-
+  
 </script>
 </polymer-element>
 <polymer-element name="paper-progress" extends="core-range" attributes="secondaryProgress indeterminate" assetpath="/static/components/paper-progress/">
 
   <template>
-
+  
     <style>/*
 Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -8367,20 +8394,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 }
 </style>
-
+  
     <div id="progressContainer" role="progressbar" aria-valuenow="{{value}}" aria-valuemin="{{min}}" aria-valuemax="{{max}}">
-
+    
       <div id="secondaryProgress" fit=""></div>
       <div id="activeProgress" fit=""></div>
-
+      
     </div>
-
+    
   </template>
-
+  
   <script>
-
+  
     Polymer('paper-progress', {
-
+      
       /**
        * The number that represents the current secondary progress.
        *
@@ -8389,7 +8416,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * @default 0
        */
       secondaryProgress: 0,
-
+      
       /**
        * Use an indeterminate progress indicator.
        *
@@ -8400,11 +8427,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       indeterminate: false,
 
       step: 0,
-
+      
       observe: {
         'value secondaryProgress min max indeterminate': 'update'
       },
-
+      
       update: function() {
         this.super();
         this.secondaryProgress = this.clampValue(this.secondaryProgress);
@@ -8427,11 +8454,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       secondaryRatioChanged: function() {
         this.transformProgress(this.$.secondaryProgress, this.secondaryRatio);
       }
-
+      
     });
-
+    
   </script>
-
+  
 </polymer-element>
 
 <polymer-element name="paper-radio-group" extends="core-selector" role="radiogroup" assetpath="/static/components/paper-radio-group/">
@@ -8440,26 +8467,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <core-a11y-keys target="{{}}" keys="up left" on-keys-pressed="{{selectPrevious}}"></core-a11y-keys>
     <core-a11y-keys target="{{}}" keys="down right" on-keys-pressed="{{selectNext}}"></core-a11y-keys>
-
+  
     <style>
-
+    
       :host {
         display: inline-block;
       }
-
+  
       polyfill-next-selector { content: ':host > *'; }
       ::content > * {
         padding: 12px;
       }
-
+    
     </style>
-
+  
     <shadow></shadow>
-
+    
   </template>
-
+  
   <script>
-
+  
     Polymer('paper-radio-group', {
       nextIndex: function(index) {
         var items = this.items;
@@ -8493,11 +8520,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       selectedAttribute: 'checked',
       activateEvent: 'change'
-
+      
     });
-
+  
   </script>
-
+  
 </polymer-element>
 
 <polymer-element name="paper-slider" extends="core-range" attributes="snaps pin disabled secondaryProgress editable immediateValue" role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="100" assetpath="/static/components/paper-slider/">
@@ -8785,7 +8812,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      *
      * @event core-change
      */
-
+     
     /**
      * Fired when the slider's immediateValue changes.
      *
@@ -8812,8 +8839,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     snaps: false,
 
     /**
-     * If true, a pin with numeric value label is shown when the slider thumb
-     * is pressed.  Use for settings for which users need to know the exact
+     * If true, a pin with numeric value label is shown when the slider thumb 
+     * is pressed.  Use for settings for which users need to know the exact 
      * value of the setting.
      *
      * @attribute pin
@@ -8954,7 +8981,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       this.immediateValue = this.calcStep(
           this.calcKnobPosition(this._x / this._w)) || 0;
       var s =  this.$.sliderKnob.style;
-      s.transform = s.webkitTransform = 'translate3d(' + (this.snaps ?
+      s.transform = s.webkitTransform = 'translate3d(' + (this.snaps ? 
           (this.calcRatio(this.immediateValue) * this._w) - this._startx : x) + 'px, 0, 0)';
     },
 
@@ -8967,7 +8994,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       this.value = this.immediateValue;
       this.fire('change');
     },
-
+    
     knobdown: function(e) {
       e.preventDefault();
       this.expandKnob();
@@ -9539,15 +9566,15 @@ polyfill-next-selector { content: '.tab-content > a'; }
   flex-basis: 0.000000001px;
 }
 </style>
-
+  
   <div class="tab-content" flex="" auto="" center-center="" horizontal="" layout=""><content></content></div>
   <paper-ripple id="ink" initialopacity="0.95" opacitydecayvelocity="0.98"></paper-ripple>
-
+  
 </template>
 <script>
 
   Polymer('paper-tab', {
-
+    
     /**
      * If true, ink ripple effect is disabled.
      *
@@ -9556,7 +9583,7 @@ polyfill-next-selector { content: '.tab-content > a'; }
      * @default false
      */
     noink: false,
-
+    
     eventDelegates: {
       down: 'downAction',
       up: 'upAction'
@@ -9572,13 +9599,13 @@ polyfill-next-selector { content: '.tab-content > a'; }
     upAction: function() {
       this.$.ink.upAction();
     },
-
+    
     cancelRipple: function() {
       this.$.ink.upAction();
     }
-
+    
   });
-
+  
 </script>
 </polymer-element>
 <polymer-element name="paper-tabs" extends="core-selector" attributes="noink nobar noslide scrollable hideScrollButton alignBottom" role="tablist" horizontal="" center="" layout="" assetpath="/static/components/paper-tabs/">
@@ -9665,29 +9692,29 @@ polyfill-next-selector { content: '#tabsContent > *:not(#selectionBar)'; }
   height: 100%;
 }
 </style>
-
+  
   <div class="scroll-button" hidden?="{{!scrollable || hideScrollButton}}">
     <paper-icon-button icon="chevron-left" class="{{ {hidden: leftHidden} | tokenList }}" on-down="{{holdLeft}}" on-up="{{releaseHold}}"></paper-icon-button>
   </div>
-
+  
   <div id="tabsContainer" class="{{ {scrollable: scrollable} | tokenList }}" flex="" on-scroll="{{scroll}}" on-trackstart="{{trackStart}}">
-
+  
     <div id="tabsContent" horizontal="" layout?="{{!scrollable}}">
       <shadow></shadow>
       <div id="selectionBar" hidden?="{{nobar}}" class="{{ {alignBottom: alignBottom} | tokenList }}" on-transitionend="{{barTransitionEnd}}"></div>
     </div>
-
+    
   </div>
-
+  
   <div class="scroll-button" hidden?="{{!scrollable || hideScrollButton}}">
     <paper-icon-button icon="chevron-right" class="{{ {hidden: rightHidden} | tokenList }}" on-down="{{holdRight}}" on-up="{{releaseHold}}"></paper-icon-button>
   </div>
-
+    
 </template>
 <script>
 
   Polymer('paper-tabs',Polymer.mixin({
-
+    
     /**
      * If true, ink ripple effect is disabled.
      *
@@ -9696,7 +9723,7 @@ polyfill-next-selector { content: '#tabsContent > *:not(#selectionBar)'; }
      * @default false
      */
     noink: false,
-
+    
     /**
      * If true, the bottom bar to indicate the selected tab will not be shown.
      *
@@ -9705,7 +9732,7 @@ polyfill-next-selector { content: '#tabsContent > *:not(#selectionBar)'; }
      * @default false
      */
     nobar: false,
-
+    
     /**
      * If true, the slide effect for the bottom bar is disabled.
      *
@@ -9714,7 +9741,7 @@ polyfill-next-selector { content: '#tabsContent > *:not(#selectionBar)'; }
      * @default false
      */
     noslide: false,
-
+    
     /**
      * If true, tabs are scrollable and the tab width is based on the label width.
      *
@@ -9723,7 +9750,7 @@ polyfill-next-selector { content: '#tabsContent > *:not(#selectionBar)'; }
      * @default false
      */
     scrollable: false,
-
+    
     /**
      * If true, dragging on the tabs to scroll is disabled.
      *
@@ -9732,7 +9759,7 @@ polyfill-next-selector { content: '#tabsContent > *:not(#selectionBar)'; }
      * @default false
      */
     disableDrag: false,
-
+    
     /**
      * If true, scroll buttons (left/right arrow) will be hidden for scrollable tabs.
      *
@@ -9741,7 +9768,7 @@ polyfill-next-selector { content: '#tabsContent > *:not(#selectionBar)'; }
      * @default false
      */
     hideScrollButton: false,
-
+    
     /**
      * If true, the tabs are aligned to bottom (the selection bar appears at the top).
      *
@@ -9754,20 +9781,20 @@ polyfill-next-selector { content: '#tabsContent > *:not(#selectionBar)'; }
     eventDelegates: {
       'core-resize': 'resizeHandler'
     },
-
+    
     activateEvent: 'tap',
-
+    
     step: 10,
-
+    
     holdDelay: 10,
-
+    
     ready: function() {
       this.super();
       this._trackxHandler = this.trackx.bind(this);
       Polymer.addEventListener(this.$.tabsContainer, 'trackx', this._trackxHandler);
       this._tabsObserver = new MutationObserver(this.updateBar.bind(this));
     },
-
+    
     domReady: function() {
       this.async('resizeHandler');
       this._tabsObserver.observe(this, {childList: true, subtree: true, characterData: true});
@@ -9776,13 +9803,13 @@ polyfill-next-selector { content: '#tabsContent > *:not(#selectionBar)'; }
     attached: function() {
       this.resizableAttachedHandler();
     },
-
+    
     detached: function() {
       Polymer.removeEventListener(this.$.tabsContainer, 'trackx', this._trackxHandler);
       this._tabsObserver.disconnect();
       this.resizableDetachedHandler();
     },
-
+    
     trackStart: function(e) {
       if (!this.scrollable || this.disableDrag) {
         return;
@@ -9794,19 +9821,19 @@ polyfill-next-selector { content: '#tabsContent > *:not(#selectionBar)'; }
       this._startx = this.$.tabsContainer.scrollLeft;
       e.preventTap();
     },
-
+    
     trackx: function(e) {
       if (!this.scrollable || this.disableDrag) {
         return;
       }
       this.$.tabsContainer.scrollLeft = this._startx - e.dx;
     },
-
+    
     resizeHandler: function() {
       this.scroll();
       this.updateBar();
     },
-
+    
     scroll: function() {
       if (!this.scrollable) {
         return;
@@ -9816,28 +9843,28 @@ polyfill-next-selector { content: '#tabsContent > *:not(#selectionBar)'; }
       this.leftHidden = l === 0;
       this.rightHidden = l === Math.max(0, (tc.scrollWidth - tc.clientWidth));
     },
-
+    
     holdLeft: function() {
       this.holdJob = setInterval(this.scrollToLeft.bind(this), this.holdDelay);
     },
-
+    
     holdRight: function() {
       this.holdJob = setInterval(this.scrollToRight.bind(this), this.holdDelay);
     },
-
+    
     releaseHold: function() {
       clearInterval(this.holdJob);
       this.holdJob = null;
     },
-
+    
     scrollToLeft: function() {
       this.$.tabsContainer.scrollLeft -= this.step;
     },
-
+    
     scrollToRight: function() {
       this.$.tabsContainer.scrollLeft += this.step;
     },
-
+    
     /**
      * Invoke this to update the size and position of the bottom bar.  Usually
      * you only need to call this if the `paper-tabs` is initially hidden and
@@ -9848,34 +9875,34 @@ polyfill-next-selector { content: '#tabsContent > *:not(#selectionBar)'; }
     updateBar: function() {
       this.async('selectedItemChanged');
     },
-
+    
     selectedItemChanged: function(old) {
       var oldIndex = this.selectedIndex;
       this.super(arguments);
       var s = this.$.selectionBar.style;
-
+      
       if (!this.selectedItem) {
         s.width = 0;
         s.left = 0;
         return;
-      }
-
+      } 
+      
       var r = this.$.tabsContent.getBoundingClientRect();
       this._w = r.width;
       this._l = r.left;
-
+      
       r = this.selectedItem.getBoundingClientRect();
       this._sw = r.width;
       this._sl = r.left;
-      this._sOffsetLeft = this._sl - this._l;
-
+      this._sOffsetLeft = this._sl - this._l; 
+      
       if (this.noslide || old == null) {
         this.positionBarForSelected();
         return;
       }
-
+      
       var oldRect = old.getBoundingClientRect();
-
+      
       var m = 5;
       this.$.selectionBar.classList.add('expand');
       if (oldIndex < this.selectedIndex) {
@@ -9890,26 +9917,26 @@ polyfill-next-selector { content: '#tabsContent > *:not(#selectionBar)'; }
         this.scrollToSelectedIfNeeded();
       }
     },
-
+    
     scrollToSelectedIfNeeded: function() {
       var scrollLeft = this.$.tabsContainer.scrollLeft;
       // scroll to selected if needed
-      if (this._sOffsetLeft + this._sw < scrollLeft ||
+      if (this._sOffsetLeft + this._sw < scrollLeft || 
           this._sOffsetLeft - scrollLeft > this.$.tabsContainer.offsetWidth) {
         this.$.tabsContainer.scrollLeft = this._sOffsetLeft;
       }
     },
-
+    
     positionBarForSelected: function() {
       var s = this.$.selectionBar.style;
       s.width = this.calcPercent(this._sw) + '%';
       s.left = this.calcPercent(this._sOffsetLeft) + '%';
     },
-
+    
     calcPercent: function(w) {
       return 100 * w / this._w;
     },
-
+    
     barTransitionEnd: function(e) {
       this._transitionCounter--;
       var cl = this.$.selectionBar.classList;
@@ -9921,9 +9948,9 @@ polyfill-next-selector { content: '#tabsContent > *:not(#selectionBar)'; }
         cl.remove('contract');
       }
     }
-
+    
   }, Polymer.CoreResizable));
-
+  
 </script>
 </polymer-element>
 
@@ -10018,24 +10045,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <div class="toast-container" horizontal="" layout="">
 
     <div class="toast-text" flex="">{{text}}</div>
-
+    
     <div class="toast-text toast-action" on-tap="{{dismiss}}">
       <content></content>
     </div>
 
   </div>
-
+  
   <core-media-query query="max-width: {{responsiveWidth}}" querymatches="{{narrowMode}}"></core-media-query>
 
 </template>
 <script>
 
   (function() {
-
+  
     var currentToast;
-
+  
     Polymer('paper-toast', {
-
+  
       /**
        * The text shows in a toast.
        *
@@ -10044,7 +10071,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * @default ''
        */
       text: '',
-
+      
       /**
        * The duration in milliseconds to show the toast.
        *
@@ -10053,7 +10080,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * @default 3000
        */
       duration: 3000,
-
+      
       /**
        * Set opened to true to show the toast and to false to hide it.
        *
@@ -10062,7 +10089,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * @default false
        */
       opened: false,
-
+      
       /**
        * Min-width when the toast changes to narrow layout.  In narrow layout,
        * the toast fits at the bottom of the screen when opened.
@@ -10072,7 +10099,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * @default '480px'
        */
       responsiveWidth: '480px',
-
+      
       /**
        * If true, the toast can't be swiped.
        *
@@ -10081,7 +10108,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * @default false
        */
       swipeDisabled: false,
-
+      
       /**
        * By default, the toast will close automatically if the user taps
        * outside it or presses the escape key. Disable this behavior by setting
@@ -10092,23 +10119,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * @default false
        */
       autoCloseDisabled: false,
-
+      
       narrowMode: false,
-
+      
       eventDelegates: {
         trackstart: 'trackStart',
         track: 'track',
         trackend: 'trackEnd',
         transitionend: 'transitionEnd'
       },
-
+      
       narrowModeChanged: function() {
         this.classList.toggle('fit-bottom', this.narrowMode);
         if (this.opened) {
           this.$.overlay.resizeHandler();
         }
       },
-
+      
       openedChanged: function() {
         if (this.opened) {
           this.dismissJob = this.job(this.dismissJob, this.dismiss, this.duration);
@@ -10117,16 +10144,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.dismiss();
         }
       },
-
-      /**
+      
+      /** 
        * Toggle the opened state of the toast.
        * @method toggle
        */
       toggle: function() {
         this.opened = !this.opened;
       },
-
-      /**
+      
+      /** 
        * Show the toast for the specified duration
        * @method show
        */
@@ -10137,8 +10164,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         currentToast = this;
         this.opened = true;
       },
-
-      /**
+      
+      /** 
        * Dismiss the toast and hide it.
        * @method dismiss
        */
@@ -10152,7 +10179,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }
       },
-
+      
       trackStart: function(e) {
         if (!this.swipeDisabled) {
           e.preventTap();
@@ -10163,7 +10190,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.classList.add('dragging');
         }
       },
-
+      
       track: function(e) {
         if (this.dragging) {
           var s = this.style;
@@ -10178,7 +10205,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }
       },
-
+      
       trackEnd: function(e) {
         if (this.dragging) {
           this.classList.remove('dragging');
@@ -10195,22 +10222,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.dragging = false;
         }
       },
-
+      
       transitionEnd: function() {
         var cl = this.classList;
-        if (cl.contains('fade-out-right') || cl.contains('fade-out-left') ||
+        if (cl.contains('fade-out-right') || cl.contains('fade-out-left') || 
             cl.contains('fade-out-down') || cl.contains('fade-out-up')) {
           this.dismiss();
-          cl.remove('fade-out-right', 'fade-out-left',
+          cl.remove('fade-out-right', 'fade-out-left', 
               'fade-out-down', 'fade-out-up');
         } else if (this.shouldDismiss) {
           this.dismiss();
         }
         this.shouldDismiss = false;
       }
-
+  
     });
-
+    
   })();
 
 </script>
@@ -10319,7 +10346,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <core-a11y-keys target="{{}}" keys="space" on-keys-pressed="{{tap}}"></core-a11y-keys>
 
   <div id="toggleContainer" checked?="{{checked}}" disabled?="{{disabled}}">
-
+  
     <div id="toggleBar" class="toggle toggle-bar"></div>
 
     <div id="toggleButton" class="toggle toggle-button">
@@ -10332,13 +10359,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script>
 
   Polymer('paper-toggle-button', {
-
+    
     /**
      * Fired when the checked state changes due to user interaction.
      *
      * @event change
      */
-
+     
     /**
      * Fired when the checked state changes.
      *
@@ -10402,7 +10429,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     },
 
     trackx: function(e) {
-      this._x = Math.min(this._w,
+      this._x = Math.min(this._w, 
           Math.max(0, this.checked ? this._w + e.dx : e.dx));
       this.$.toggleButton.classList.add('dragging');
       var s =  this.$.toggleButton.style;
@@ -10419,7 +10446,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.fire('change');
       }
     },
-
+    
     checkedChanged: function() {
       this.setAttribute('aria-pressed', Boolean(this.checked));
       this.fire('core-change');
@@ -10479,7 +10506,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         return xhr;
       },
-
+    
       toQueryString: function(params) {
         var r = [];
         for (var n in params) {
@@ -10493,7 +10520,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       isBodyMethod: function(method) {
         return this.bodyMethods[(method || '').toUpperCase()];
       },
-
+      
       bodyMethods: {
         POST: 1,
         PUT: 1,
@@ -10520,7 +10547,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
 
   </script>
-
+  
 </polymer-element>
 <polymer-element name="core-ajax" hidden="" attributes="url handleAs auto params response error method headers body contentType withCredentials progress loading" assetpath="/static/components/core-ajax/">
 <script>
@@ -10866,11 +10893,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       var hasContentType = Object.keys(args.headers).some(function (header) {
         return header.toLowerCase() === 'content-type';
       });
-      // No Content-Type should be specified if sending `FormData`.
+      // No Content-Type should be specified if sending `FormData`.  
       // The UA must set the Content-Type w/ a calculated  multipart boundary ID.
       if (args.body instanceof FormData) {
         delete args.headers['Content-Type'];
-      }
+      } 
       else if (!hasContentType && this.contentType) {
         args.headers['Content-Type'] = this.contentType;
       }
@@ -11435,7 +11462,7 @@ the animation.
   display: none; /* bug: when initiated as none its not select tab */;
   font-family: 'RobotoDraft', sans-serif;
   background: #47CACC;
-  padding-bottom: 12px;
+  padding-bottom: 12px; 
 }
 
 /*
@@ -11532,15 +11559,15 @@ core-toolbar paper-icon-button {
     <div class="container-header" vertical="" layout="">
       <core-toolbar>
         <div class="issues-info">
-          <span class="issues-header">{{issueInfo.issue.title}}</span>
+          <span class="issues-header">{{issue.title}}</span>
           <label class="first-child">Registro:</label>
-            <span class="issues-details">{{issueInfo.issue.register}}</span>
+            <span class="issues-details">{{issue.register}}</span>
           <label>UG Atendimento:</label>
-            <span class="issues-details">{{issueInfo.issue.ugat}}</span>
+            <span class="issues-details">{{issue.ugat}}</span>
           <label>UG Serviço:</label>
-            <span class="issues-details">{{issueInfo.issue.ugser}}</span>
+            <span class="issues-details">{{issue.ugser}}</span>
           <label>Acionado:</label>
-            <span class="issues-details">{{issueInfo.issue.created_at}}</span>
+            <span class="issues-details">{{issue.created_at}}</span>
         </div>
       </core-toolbar>
       <!--
@@ -11568,12 +11595,10 @@ core-toolbar paper-icon-button {
       </core-toobar>
       -->
     </div>
-    <core-ajax id="coreAjaxHeader" auto="" url="{{url}}" contenttype="application/json" response="{{response}}" handleas="json">
-    </core-ajax>
+    <core-ajax id="coreAjaxHeader" auto="" url="{{url}}" response="{{response}}" handleas="json" headers="{{ headerRequest() }}" contenttype="application/json"></core-ajax>
   </template>
 
   <script>
-
     Polymer('sc-header',{
       /**
        * The `author` attribute sets an initial author
@@ -11584,63 +11609,30 @@ core-toolbar paper-icon-button {
        */
       author: 'Horacio Ibrahim',
       /**
-       * The `issueInfo` attribute sets the header info. It to require preset
-       * fields as: register, title, uga, ugs, created_at.
+       * The `issue` attribute sets the header info. It to require preset
+       * fields as: register, title, ugat, ugser, created_at.
        *
-       * Details:
-       *
-       *
-       *    `register`: ticket number or ID
-       *
-       *    `title`: service name (e.: systems, services as Expresso)
-       *
-       *    `uga`: responsible sector by treatment
-       *
-       *    `ugs`: responsible sector by customer agreement
-       *
-       *    `create_at`: date that the ticket was created by final customer
-       *
-       *
-       * @attribute issueInfo
+       * @attribute issue
        * @type object
        * @default  {}
        */
-      issueInfo: {},
-      publish: {
-        // publics properties
-      },
-      /* the best place to the constructor for array or object */
-      created: function() {
-        // initialize but it not is turned public to use by users of the element
-        // to turn public to use attributes or publish.
-        this.issueInfo = {};
+      issue: {},
+      create: function () {
+        var hasSiscomando = siscomando || false;
+        if (hasSiscomando === false) {
+          console.error("Siscomando library not found <sc-header>");
+        }
       },
       ready: function() {
-
+        var self = this;
         // var scnavbar = document.querySelector('sc-navbar');
         document.addEventListener('sc-select', function(e){
-            var mythis = document.querySelector('sc-header');
-            var ajax = mythis.$.coreAjaxHeader;
+            // var self = document.querySelector('sc-header');
+            var ajax = self.$.coreAjaxHeader;
             var registerNumber = e.detail.issue;
-            ajax.url = "/api/v1/issues/" + registerNumber;
+            // ajax.url = "/api/v1/issues/" + registerNumber;
+            ajax.url = siscomando.helpers.issues.item.getUrl(registerNumber);
         });
-      },
-      issueInfoChanged: function () {
-        if (!(this.style.display == "block")) {
-          var animation = new CoreAnimation();
-          animation.duration = 220;
-          animation.keyframes = [
-            {opacity: 0.3},
-            {opacity: 1}
-          ];
-          animation.target = this;
-          animation.play();
-          this.style.display = "block";
-          this.selected = "comments";
-        }
-        if (this.issueInfo) {
-          this.issueInfo.issue.created_at = this.converter(this.issueInfo.issue.created_at.$date);
-        }
       },
       converter: function(timestamp) {
           // create a new javascript Date object based on the timestamp
@@ -11670,8 +11662,33 @@ core-toolbar paper-icon-button {
           return formattedTime;
       },
       responseChanged: function() {
-            this.issueInfo = this.response;
-      }
+          this.issue = this.response;
+
+          if (!(this.style.display == "block")) {
+            var animation = new CoreAnimation();
+            animation.duration = 220;
+            animation.keyframes = [
+              {opacity: 0.3},
+              {opacity: 1}
+            ];
+            animation.target = this;
+            animation.play();
+            this.style.display = "block";
+            this.selected = "comments";
+          }
+          /*
+          if (this.issue) {
+            this.issue.created_at = this.converter(this.issue.created_at);
+          }
+          */
+      },
+      headerRequest: function(payload) {
+        // TODO: if not exists Account in localStorage
+        var accountData = JSON.parse(window.localStorage.getItem("Account"));
+        var token = accountData.message.token;
+        var b64Token = btoa(token + ":");
+        return JSON.stringify({"Authorization": "Basic " + b64Token});
+      },
     });
 
   </script>
@@ -11772,7 +11789,7 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
 
 </style>
 
-    <core-ajax id="coreAjax" url="{{url}}" handleas="json" response="{{response}}" params="{&quot;term&quot;:&quot;&quot;, &quot;register&quot;:&quot;&quot;}" method="POST" contenttype="application/json"></core-ajax>
+    <core-ajax id="coreAjax" url="{{url}}" handleas="json" response="{{response}}" params="{&quot;term&quot;:&quot;&quot;, &quot;register&quot;:&quot;&quot;}" method="GET" headers="{{ headerRequest() }}" contenttype="application/json"></core-ajax>
 
     <core-iconset id="sc-icons-png" src="/static/components/sc-icons/sc-icons.png" width="96" iconsize="24" icons="hashtag hashtag-red notifications notifications-red">
     </core-iconset>
@@ -11783,7 +11800,7 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
         <paper-icon-button id="menu" icon="menu" on-tap="{{toggleMenu}}"></paper-icon-button>
         <div></div>
         <paper-input-decorator id="parentsearch" label="Pesquise qualquer coisa..." flex="">
-          <input id="search" is="core-input" name="s" on-blur="{{onDisplaySearch}}" on-change="{{getSearch}}" on-focus="{{setIn}}" value="">
+          <input id="search" is="core-input" name="s" on-blur="{{onDisplaySearch}}" on-keyup="{{getSearch}}" on-focus="{{setIn}}" value="">
         </paper-input-decorator>
         <!-- <paper-icon-button id="backspace" icon="backspace" on-tap="{{resetInput}}" on-blur=""></paper-icon-button> -->
         <!-- <core-icon icon="search" on-tap="{{onDisplaySearch}}">
@@ -11826,6 +11843,12 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
       author: 'Horacio Ibrahim',
       publish: {
           displaySearch: {value: false, reflect: true},
+      },
+      create: function () {
+        var hasSiscomando = siscomando || false;
+        if (hasSiscomando === false) {
+          console.error("Siscomando library not found <sc-search>");
+        }
       },
       ready: function() {
         var self = this;
@@ -11895,15 +11918,10 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
        */
       getSearch: function(e) {
         // var threshold = 3; // minimal qtd chars to make requests
+        var header = document.querySelector('sc-header');
         var ajax = this.$.coreAjax;
         var term = this.$.search.value;
-        var params = JSON.parse(ajax.params);
-        // TODO this?
-        var header = document.querySelector('sc-header');
-
-        data = {};
-        data['term'] = term;
-        data['register'] = params.register;
+        this.url = siscomando.helpers.comments.resources.getUrlToSearch(term);
 
         if (term.indexOf('in:') === 0) {
           // threshold = threshold * 2;
@@ -11911,7 +11929,6 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
           header.style.display = "none";
         }
 
-        ajax.body = JSON.stringify(data);
         ajax.go();
       },
       /**
@@ -11926,17 +11943,10 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
        * @param element the current custom element
        */
       changeParamRegister: function(source, event, element) {
+        var self = this;
         source.addEventListener(event, function(e){
               var register = e.detail.issue;
-              var ajax = element.$.coreAjax;
-              var params = JSON.parse(ajax.params);
-              // removes slash within register number
-              // 2015/0000123 to 20150000123
-              register = register.replace('/', '');
-              // changes objects (like dict)
-              params.register = register;
-              // converts objects to JSON-like
-              ajax.params = JSON.stringify(params);
+              self.register = register.replace('/', '');
         });
       },
       resetInput: function(){
@@ -11966,7 +11976,14 @@ paper-input-decorator /deep/ :-ms-input-placeholder {
       */
       showHashtags: function() {
         location.href = '/hashtags';
-      }
+      },
+      headerRequest: function(payload) {
+        // TODO: if not exists Account in localStorage
+        var accountData = JSON.parse(window.localStorage.getItem("Account"));
+        var token = accountData.message.token;
+        var b64Token = btoa(token + ":");
+        return JSON.stringify({"Authorization": "Basic " + b64Token});
+      },
     });
 
   </script>
@@ -12204,7 +12221,7 @@ polyfill-next-selector { content: ':host > a'; }
 <script>
 
   Polymer('core-item', {
-
+    
     /**
      * The URL of an image for the icon.
      *
@@ -12246,19 +12263,19 @@ polyfill-next-selector { content: ':host > a'; }
 
     /**
      * Fired when the `core-collapse`'s `opened` property changes.
-     *
+     * 
      * @event core-collapse-open
      */
 
     /**
      * Fired when the target element has been resized as a result of the opened
      * state changing.
-     *
+     * 
      * @event core-resize
      */
 
     /**
-     * The target element that will be opened when the `core-collapse` is
+     * The target element that will be opened when the `core-collapse` is 
      * opened. If unspecified, the `core-collapse` itself is the target.
      *
      * @attribute target
@@ -12296,7 +12313,7 @@ polyfill-next-selector { content: ':host > a'; }
 
     /**
      * If true, the size of the target element is fixed and is set
-     * on the element.  Otherwise it will try to
+     * on the element.  Otherwise it will try to 
      * use auto to determine the natural size to use
      * for collapsing/expanding.
      *
@@ -12305,11 +12322,11 @@ polyfill-next-selector { content: ':host > a'; }
      * @default false
      */
     fixedSize: false,
-
+    
     /**
      * By default the collapsible element is set to overflow hidden. This helps
      * avoid element bleeding outside the region and provides consistent overflow
-     * style across opened and closed states. Set this property to true to allow
+     * style across opened and closed states. Set this property to true to allow 
      * the collapsible element to overflow when it's opened.
      *
      * @attribute allowOverflow
@@ -12321,7 +12338,7 @@ polyfill-next-selector { content: ':host > a'; }
     created: function() {
       this.transitionEndListener = this.transitionEnd.bind(this);
     },
-
+    
     ready: function() {
       this.target = this.target || this;
     },
@@ -12403,7 +12420,7 @@ polyfill-next-selector { content: ':host > a'; }
       this.hasClosedClass = closed;
       this.target.classList.toggle('core-collapse-closed', closed);
     },
-
+    
     toggleOpenedStyle: function(opened) {
       this.target.style.overflow = this.allowOverflow && opened ? '' : 'hidden';
     },
@@ -12425,7 +12442,7 @@ polyfill-next-selector { content: ':host > a'; }
         return;
       }
       if (!this.isTargetReady) {
-        this.targetChanged();
+        this.targetChanged(); 
       }
       this.horizontalChanged();
       this[this.opened ? 'show' : 'hide']();
@@ -12494,7 +12511,7 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS
 */
 
-:host {
+:host { 
   display: block;
   height: auto;
 }
@@ -12508,7 +12525,7 @@ core-item {
 }
 
 ::content > core-item {
- cursor: default;
+ cursor: default; 
 }
 
 :host(.font-scalable) > core-item {
@@ -12572,7 +12589,7 @@ core-item {
         this.unselectAllItems();
       }
     },
-
+    
     toggle: function() {
       this.opened = !this.opened;
     },
@@ -12583,7 +12600,7 @@ core-item {
         this.unselectAllItems();
       }
     }
-
+    
   });
 
 </script>
@@ -12633,8 +12650,9 @@ core-toolbar paper-icon-button, core-toolbar paper-icon {
 </style>
     <paper-item>
         <core-icon icon="{{icons[icon]}}">
+        </core-icon>
         <!-- CONTENT MUST HAVE 20 CHARS -->
-        </core-icon><content></content>
+        <content></content>
     </paper-item>
   </template>
 
@@ -12693,35 +12711,35 @@ core-toolbar paper-icon-button, core-toolbar paper-icon {
 
 <polymer-element name="sc-sse" hidden="" attributes="notitle author stream channel alias" assetpath="/static/components/sc-sse/">
   <script>
-    Polymer('sc-sse', {
+    Polymer('sc-sse', { 
        /**
        * Fired when a reply is returned by Server Side Event.
        *
        *
        * @event sc-sse-response
-       */
+       */        
       /**
        * The `author` attribute sets an initial author
        *
        * @attribute author
        * @type String
        * @default 'Horacio Ibrahim'
-       */
-      author: 'Horacio Ibrahim',
+       */ 
+      author: 'Horacio Ibrahim', 
       /**
        * The `alias` is name for recognize one of multiple sc-sse element fired.
        *
        * @attribute alias
        * @type String
        * @default default
-       */
+       */       
       /**
        * The `stream` attribute sets an url to get updates
        *
        * @attribute stream
        * @type String
        * @default ''
-       */
+       */                   
       publish: {
         stream: '',
         channel: 'message',
@@ -12734,7 +12752,7 @@ core-toolbar paper-icon-button, core-toolbar paper-icon {
         var el = this;
 
         try {
-          var source = new EventSource(stream);
+          var source = new EventSource(stream);  
           this.makeRead(source, channel, callback, el);
         } catch (x) {
           console.warn('sc-sse caught an exception trying create new EventSource.');
@@ -12744,13 +12762,13 @@ core-toolbar paper-icon-button, core-toolbar paper-icon {
       /**
        * The `makeRead` make connection with Server Side Event stream.
        *
-       *
+       * 
        * @method makeRead
        * @param source an instance of EventSource
-       * @param channel a type of event
+       * @param channel a type of event 
        * @param callback a callback for to work with polymer objects
        * @param onNode this current polymer element
-       */
+       */       
       makeRead: function(source, channel, callback, onNode) {
         source.addEventListener(channel, function(e) {
           callback('sc-sse-response', {response: e.data, alias: onNode.alias}, onNode);
@@ -12825,7 +12843,7 @@ paper-dropdown core-menu {
 }
 .mainContent {
   height: 100%;
-  position: relative;
+  position: relative;    
   display: block;
   padding-right: 12px;
 }
@@ -12844,17 +12862,17 @@ core-menu h5 {
 	opacity: 0.6;
 }
 core-menu .counterItems {
-	font-size: 0.65em;
-	border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	padding: 2px;
-	background: rgba(255,255,255,0.5);
-	float: left;
-	margin-top: 12px;
-	margin-right: 5px;
-	color: #3B4D64;
-	min-width: 10px;
+	font-size: 0.65em; 
+	border-radius: 4px; 
+	-webkit-border-radius: 4px; 
+	-moz-border-radius: 4px; 
+	padding: 2px; 
+	background: rgba(255,255,255,0.5); 
+	float: left; 
+	margin-top: 12px; 
+	margin-right: 5px; 
+	color: #3B4D64; 
+	min-width: 10px; 
 	text-align: center;
 }
 core-submenu {
@@ -12868,10 +12886,10 @@ core-submenu::shadow #submenu {
 	cursor: pointer;
 }
 core-submenu div.item-content{
-	cursor: pointer;
+	cursor: pointer;	
 }
 core-submenu.core-selected {
-	font-weight: 300;
+	font-weight: 300;	
 }
 /* box profile */
 .profileMenu {
@@ -12880,7 +12898,7 @@ core-submenu.core-selected {
 	float: left;
 	left: 0;
 	bottom: 0;
-	padding: 12px;
+	padding: 12px; 	
 	height: 42px; /* height total is 54px */
 	background-color: #19293E;
 	color: #FFF;
@@ -12888,7 +12906,7 @@ core-submenu.core-selected {
 }
 #avatar {
 	width: 47px;
-	height: 47px;
+	height: 47px;	
 	padding: 0px 5px 5px 5px;
 }
 #avatar img {
@@ -12940,8 +12958,7 @@ core-toolbar paper-icon-button {
 </style>
     <!-- get from remote -->
     <sc-sse stream="{{stream}}" channel="{{channel}}" alias="{{alias}}"></sc-sse>
-    <core-ajax id="coreAjax" auto="" url="{{url}}" response="{{response}}" handleas="json" method="{{method ? method : 'GET'}}">
-    </core-ajax>
+    <core-ajax id="coreAjax" auto="" url="{{url}}" response="{{response}}" handleas="json" method="{{method ? method : 'GET'}}" headers="{{ headerRequest() }}" contenttype="application/json"></core-ajax>
 
     <!-- presentation issues -->
     <div class="mainContent">
@@ -12958,15 +12975,15 @@ core-toolbar paper-icon-button {
       <!-- menu item: This object fire core-select event -->
       <core-menu id="coreMenu">
           <h5>Em andamento <!--({{totalOpened}})--></h5>
-          <template repeat="{{ issue in _groupedIssues}}">
+          <template repeat="{{ issue in _grouped}}">
             <div class="counterItems">{{issue.issues.length}}</div>
             <core-submenu>
                   <div class="item-content">
-                    {{issue.name}}
+                    {{issue.title}}
                   </div>
                   <template repeat="{{ item in issue.issues }}">
-                    <sc-item scid="{{ item }}">
-                  	 {{ item }}</sc-item>
+                    <sc-item scid="{{ item.register }}">
+                  	 {{ item.register }}</sc-item>
                   </template>
             </core-submenu>
           </template>
@@ -13002,10 +13019,24 @@ core-toolbar paper-icon-button {
 
   <script>
     function search(string, myList){
+        // newArray returns grouped issues
         var newArray = [];
+
         for (var i=0; i < myList.length; i++) {
-            if (myList[i].register.indexOf(string) > -1) {
-                newArray.push(myList[i]);
+            _arr = myList[i]['issues'];
+            newObject = {};
+            newObject['issues'] = [];
+            // makes a loop within issues and test if one or more elements from
+            // arr[i]['issues'] match with string. If matched to add item[order]
+            // from myList into newArray.
+            for (var n=0; n < _arr.length; n++) {
+              if (_arr[n]['register'].indexOf(string) > -1) {
+                  newObject['issues'].push(_arr[n]); // issues
+              }
+            }
+            if (newObject['issues'].length > 0) {
+                newObject['title'] = myList[i]['title'];
+                newArray.push(newObject); // {title:"XXX", issues:[]}
             }
         }
         return newArray;
@@ -13048,7 +13079,7 @@ core-toolbar paper-icon-button {
       publish: {
           displaySearch: {value: false, reflect: true},
           select: 0,
-          _groupedIssues: [],
+          _grouped: [],
           avatar: null,
           avatarSize: "42px",
           gravatarEnabled: true,
@@ -13073,12 +13104,16 @@ core-toolbar paper-icon-button {
             // toggle drawer
             var coreDrawer = document.querySelector('core-drawer-panel');
             // access storage
-            var localIssues = JSON.parse(window.localStorage.getItem("dbIssues"));
-            for (var i=0; i< localIssues.length; i++) {
-              // field to store id (_id, primary key) is register
-              if (localIssues[i]['register'] === this.scid) {
-                this.fire('sc-select', {issue: localIssues[i]['register']});
-                coreDrawer.togglePanel();
+            var localIssues = JSON.parse(window.localStorage.getItem("Issues"));
+
+            // This `for ` is to validate if the 'core-select' was done in the
+            // level of the item (register).
+            for (var i=0; i < localIssues.length; i++) {
+              for (var n=0; n < localIssues[i]['issues'].length; n++) {
+                if (localIssues[i]['issues'][n]['register'] === this.scid) {
+                  this.fire('sc-select', {issue: localIssues[i]['issues'][n]['register']});
+                  coreDrawer.togglePanel();
+                }
               }
             }
           }
@@ -13089,27 +13124,34 @@ core-toolbar paper-icon-button {
           doc =  e.detail.response;
           if (!(doc == 1)) {
             doc = JSON.parse(e.detail.response);
-            db = window.localStorage.getItem("dbIssues");
+            db = window.localStorage.getItem("Issues");
             db = JSON.parse(db);
 
             // if doc is closed to remove from view (navbar)
             if (doc.closed == true) {
               for (item in db) {
-                if (db[item].register == doc.register) {
-                    db.splice(item, 1);
-                }
-                if (this.scid == doc.register) {
-                    location.href = '/'; // to prevent sc-header with old issue selected. Go back home.
+                _issues = db[item]['issues'];
+                for (subitem in _issues) {
+                  if (_issues[subitem]['register'] == doc.register) {
+                      db.splice(item, 1);
+                  }
+                  if (this.scid == doc.register) {
+                      location.href = '/'; // to prevent sc-header with old issue selected. Go back home.
+                  }
                 }
               }
             } else {
-              db.push(doc);
+              for (item in db) {
+                if (db[item]['title'] == doc['title']) {
+                  db[item]['issues'].push(doc);
+                }
+              }
               // when doc is added in db to change issuesOrig. It was initiated
               // in first request.
               this.issuesOrig = db;
             }
-
-            window.localStorage.setItem("dbIssues",JSON.stringify(db));
+            //after sse
+            window.localStorage.setItem("Issues",JSON.stringify(db));
             this.updateIssues();
           }
         });
@@ -13121,16 +13163,20 @@ core-toolbar paper-icon-button {
         }
       },
       responseChanged: function() {
-      	  this.issuesOrig = this.issues = this.response['issues'];
-      	  window.localStorage.setItem("dbIssues",JSON.stringify(this.issues));
-          this.updateIssues();
+      	  this.issuesOrig = this._grouped = this.response['_grouped'];
+      	  window.localStorage.setItem("Issues",JSON.stringify(this._grouped));
+          // this.updateIssues(); This call must be changed by response with
+          // grouped issues with status opened (closed=false)
 
       },
       updateIssues: function() {
-          db = JSON.parse(window.localStorage.getItem("dbIssues"));
-          db.forEach(this.cleanerClosed);
-          window.localStorage.setItem("dbIssues", JSON.stringify(db));
-          this.sortByScope();
+          db = JSON.parse(window.localStorage.getItem("Issues"));
+          for (i in db) {
+            _issues = db[i]['issues'];
+            _issues.forEach(this.cleanerClosed);
+          }
+          window.localStorage.setItem("Issues", JSON.stringify(db));
+          this._grouped = db;
       },
       menuReferrer: function(name) {
         // t.split(' ').join('')
@@ -13162,63 +13208,21 @@ core-toolbar paper-icon-button {
           this.$.avatar.innerHTML = '<core-icon icon="account-box"></core-icon>';
         }
       },
-      /**
-       * The `sortByScope` sort and grouping attachField by field.
-       *
-       *
-       * @method sortByScope
-       * @param field [string]
-       * @default 'title'
-       */
-      sortByScope: function(field, attachField) {
-          // initializing variables default
-          // TODO: fix this implementation in backend
-          field = field ? field : "title";
-          attachField = attachField ? attachField : "register";
-          var localIssues = JSON.parse(window.localStorage.getItem("dbIssues"));
-          var scopeList = [];
-          for (item in localIssues) {
-               var obj = {};
-               var newField = localIssues[item][field]; // is value of the title
-               obj[newField] = {};
-               obj[newField]['name'] = newField; // monkey patch
-               obj[newField]['issues'] = []; // arrary that receives issues
-
-               if (scopeList.length === 0) {
-                  scopeList.push(obj)
-               }
-
-               var found = false;
-               for (nf in scopeList) {
-                   if (newField in scopeList[nf]) {
-                      scopeList[nf][newField]['name'] = newField; // monkey patch
-                      scopeList[nf][newField]['issues']
-                                          .push(localIssues[item][attachField]);
-                      found = true;
-                   }
-               }
-
-               if (found === false) {
-                 obj[newField]['issues'].push(localIssues[item][attachField]);
-                 scopeList.push(obj);
-               }
-          }
-        this._groupedIssues = [];
-        for (elem in scopeList) {
-          this._groupedIssues.push(scopeList[elem][Object.keys(scopeList[elem])[0]]);
-        }
-        // return scopeList; // to comment this in production enviroment
-    },
       filterChanged: function(){
         var issuesOrig = this.issuesOrig;
 
         if(this.filter) {
-          issuesFiltered = (search(this.filter, issuesOrig).length > 0) ?
-          search(this.filter, issuesOrig) : [];
-          window.localStorage.setItem("dbIssues", JSON.stringify(issuesFiltered));
+          issuesFiltered = []; // useful if not found string
+
+          if (search(this.filter, issuesOrig).length > 0) {
+             issuesFiltered = search(this.filter, issuesOrig);
+          }
+
+          window.localStorage.setItem("Issues", JSON.stringify(issuesFiltered));
           this.updateIssues();
+
         } else {
-          window.localStorage.setItem("dbIssues", JSON.stringify(issuesOrig));
+          window.localStorage.setItem("Issues", JSON.stringify(issuesOrig));
           this.updateIssues();
         }
       },
@@ -13233,8 +13237,14 @@ core-toolbar paper-icon-button {
       showText: function() {
         this.$.inputFilter.hidden = false;
       },
-      _groupedIssuesChanged: function() {
-        this.totalOpened = this._groupedIssues.length;
+      _groupedChanged: function() {
+        this.totalOpened = this._grouped.length;
+      },
+      headerRequest: function(payload) {
+        var accountData = JSON.parse(window.localStorage.getItem("Account"));
+        var token = accountData.message.token;
+        var b64Token = btoa(token + ":");
+        return JSON.stringify({"Authorization": "Basic " + b64Token});
       }
     });
   </script>
@@ -13281,11 +13291,11 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
   var IOS_TOUCH_SCROLLING = IOS && IOS[1] >= 8;
 
   Polymer('core-list',Polymer.mixin({
-
+    
     publish: {
       /**
        * Fired when an item element is tapped.
-       *
+       * 
        * @event core-activate
        * @param {Object} detail
        *   @param {Object} detail.item the item element
@@ -13334,7 +13344,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
       groups: null,
 
       /**
-       *
+       * 
        * An optional element on which to listen for scroll events.
        *
        * @attribute scrollTarget
@@ -13344,7 +13354,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
       scrollTarget: null,
 
       /**
-       *
+       * 
        * When true, tapping a row will select the item, placing its data model
        * in the set of selected items retrievable via the `selection` property.
        *
@@ -13358,7 +13368,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
       selectionEnabled: true,
 
       /**
-       *
+       * 
        * Set to true to support multiple selection.  Note, existing selection
        * state is maintained only when changing `multi` from `false` to `true`;
        * it is cleared when changing from `true` to `false`.
@@ -13370,7 +13380,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
       multi: false,
 
       /**
-       *
+       * 
        * Data record (or array of records, if `multi: true`) corresponding to
        * the currently selected set of items.
        *
@@ -13381,7 +13391,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
        selection: null,
 
       /**
-       *
+       * 
        * When true, the list is rendered as a grid.  Grid items must be fixed
        * height and width, with the width of each item specified in the `width`
        * property.
@@ -13393,7 +13403,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
        grid: false,
 
       /**
-       *
+       * 
        * When `grid` is used, `width` determines the width of each grid item.
        * This property has no meaning when not in `grid` mode.
        *
@@ -13407,7 +13417,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
        * The approximate height of a list item, in pixels. This is used only for determining
        * the number of physical elements to render based on the viewport size
        * of the list.  Items themselves may vary in height between each other
-       * depending on their data model.  There is typically no need to adjust
+       * depending on their data model.  There is typically no need to adjust 
        * this value unless the average size is much larger or smaller than the default.
        *
        * @attribute height
@@ -13437,7 +13447,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
 
     // Local cache of scrollTop
     _scrollTop: 0,
-
+    
     observe: {
       'isAttached data grid width template scrollTarget': 'initialize',
       'multi selectionEnabled': '_resetSelection'
@@ -13497,8 +13507,8 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
     },
 
     _resetSelection: function() {
-      if (((this._oldMulti != this.multi) && !this.multi) ||
-          ((this._oldSelectionEnabled != this.selectionEnabled) &&
+      if (((this._oldMulti != this.multi) && !this.multi) || 
+          ((this._oldSelectionEnabled != this.selectionEnabled) && 
             !this.selectionEnabled)) {
         this._clearSelection();
         this.refresh();
@@ -13575,7 +13585,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
         return;
       }
 
-      // TODO(kschaaf): Checking arguments.length currently the only way to
+      // TODO(kschaaf): Checking arguments.length currently the only way to 
       // know that the array was mutated as opposed to newly assigned; need
       // a better API for Polymer observers
       var splices;
@@ -13756,7 +13766,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
       if (!groupUpdate) {
         this.updateGroupObservers(splices);
       }
-
+      
       // Add physical items up to a max based on data length, viewport size, and extra item overhang
       var currentCount = this._physicalCount || 0;
       var height = this._target.offsetHeight;
@@ -13816,7 +13826,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
         physicalDatum.model = virtualDatum;
         physicalDatum.index = virtualIndex;
         physicalDatum.physicalIndex = physicalIndex;
-        physicalDatum.selected = this.selectionEnabled && virtualDatum ?
+        physicalDatum.selected = this.selectionEnabled && virtualDatum ? 
             this._selectedData.get(virtualDatum) : null;
         // Set group-related fields
         if (this._grouped) {
@@ -13851,7 +13861,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
         // iOS sends multiple scroll events per rAF
         // Align work to rAF to reduce overhead & artifacts
         if (!this._raf) {
-          this._raf = requestAnimationFrame(function() {
+          this._raf = requestAnimationFrame(function() { 
             this._raf = null;
             this.refresh();
           }.bind(this));
@@ -14047,10 +14057,10 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
              (this._dir < 0 && this._scrollTop < flipBound))) {
           var flipSize = Math.abs(this._scrollTop - flipBound);
           for (i=0; (i<this._physicalCount) && (flipSize > 0) &&
-              ((this._dir < 0 && this._virtualStart > 0) ||
+              ((this._dir < 0 && this._virtualStart > 0) || 
                (this._dir > 0 && this._virtualStart < this._virtualCount-this._physicalCount)); i++) {
-            var idx = this._virtualToPhysical(this._dir > 0 ?
-              this._virtualStart :
+            var idx = this._virtualToPhysical(this._dir > 0 ? 
+              this._virtualStart : 
               this._virtualStart + this._physicalCount -1);
             var size = this._physicalSizes[idx];
             flipSize -= size;
@@ -14090,7 +14100,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
         virtualIndex = this._virtualStart + i;
         physicalIndex = this._virtualToPhysical(virtualIndex);
         // Update physical item with new user data and list metadata
-        needsReposition =
+        needsReposition = 
           this._updateItemData(force, physicalIndex, virtualIndex, groupIndex, groupItemIndex) || needsReposition;
         // Increment
         groupItemIndex++;
@@ -14219,7 +14229,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
         // Gambit: only select the item if the tap wasn't on a focusable child
         // of the list (since anything with its own action should be focusable
         // and not result in result in list selection).  To check this, we
-        // asynchronously check that shadowRoot.activeElement is null, which
+        // asynchronously check that shadowRoot.activeElement is null, which 
         // means the tapped item wasn't focusable. On polyfill where
         // activeElement doesn't follow the data-hinding part of the spec, we
         // can check that document.activeElement is the list itself, which will
@@ -14227,17 +14237,17 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
         // the list focusable (tabindex="-1") for this purpose.  Note we also
         // allow the list items themselves to be focusable if desired, so those
         // are excluded as well.
-        var active = window.ShadowDOMPolyfill ?
+        var active = window.ShadowDOMPolyfill ? 
             wrap(document.activeElement) : this.shadowRoot.activeElement;
-        if (active && (active != this) && (active.parentElement != this) &&
+        if (active && (active != this) && (active.parentElement != this) && 
             (document.activeElement != document.body)) {
           return;
         }
         // Unfortunately, Safari does not focus certain form controls via mouse,
         // so we also blacklist input, button, & select
         // (https://bugs.webkit.org/show_bug.cgi?id=118043)
-        if ((p[0].localName == 'input') ||
-            (p[0].localName == 'button') ||
+        if ((p[0].localName == 'input') || 
+            (p[0].localName == 'button') || 
             (p[0].localName == 'select')) {
           return;
         }
@@ -14271,7 +14281,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
      * Select the list item at the given index.
      *
      * @method selectItem
-     * @param {number} index
+     * @param {number} index 
      */
     selectItem: function(index) {
       if (!this.selectionEnabled) {
@@ -14287,8 +14297,8 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
      * Set the selected state of the list item at the given index.
      *
      * @method setItemSelected
-     * @param {number} index
-     * @param {boolean} isSelected
+     * @param {number} index 
+     * @param {boolean} isSelected 
      */
     setItemSelected: function(index, isSelected) {
       var data = this.data[index];
@@ -14370,7 +14380,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
      * within a group, use the `scrollToGroupItem` API.
      *
      * @method scrollToItem
-     * @param {number} index
+     * @param {number} index 
      */
     scrollToItem: function(index) {
       this.scrollToGroupItem(null, index);
@@ -14380,7 +14390,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
      * Scroll to a group.
      *
      * @method scrollToGroup
-     * @param {number} group
+     * @param {number} group 
      */
     scrollToGroup: function(group) {
       this.scrollToGroupItem(group, 0);
@@ -14390,8 +14400,8 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
      * Scroll to an item within a group.
      *
      * @method scrollToGroupItem
-     * @param {number} group
-     * @param {number} index
+     * @param {number} group 
+     * @param {number} index 
      */
     scrollToGroupItem: function(group, index) {
       if (group != null) {
@@ -14608,7 +14618,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
   <template>
     <div id="starRating">
     </div>
-    <core-ajax id="rateAjax" url="{{url}}" response="{{response}}" contenttype="application/json" handleas="json" method="POST">
+    <core-ajax id="rateAjax" url="{{url}}" response="{{response}}" contenttype="application/json" handleas="json" method="POST" headers="{{ headerRequest() }}">
     </core-ajax>
     <style>
       #starRating {
@@ -14664,7 +14674,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
         this._addAtributtes();
         this.changeStatus(this._getIndex());
         this.addEventListener('mouseleave', function(){
-          // TODO: over leave to back initial score
+
           if (this.readOnly) {
             return false;
           }
@@ -14689,7 +14699,7 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
         }
       },
       /**
-      * Creates the `a` elements and update stars propertie. Each star has your
+      * Creates the `a` elements and update stars properties. Each star has your
       * own link and events associated.
       */
       _makeStars: function() {
@@ -14771,11 +14781,18 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
       send: function(score) {
         var ajax = this.$.rateAjax;
         data = {};
-        data['pk'] = this.pk;
+        data['comment'] = this.pk;
         data['score'] = score;
         ajax.body = JSON.stringify(data);
         ajax.go();
-      }
+      },
+      headerRequest: function(payload) {
+        // TODO: if Account is not exits.
+        var accountData = JSON.parse(window.localStorage.getItem("Account"));
+        var token = accountData.message.token;
+        var b64Token = btoa(token + ":");
+        return JSON.stringify({"Authorization": "Basic " + b64Token});
+      },
     });
   </script>
 
@@ -14823,23 +14840,26 @@ polyfill-next-selector { content: ':host(:not([grid])) .core-list-viewport > *';
     <script>
         Polymer('sc-contentHTML', {
             publish: {
-              htmldata: '',
+              htmldata: '',  
             },
             ready: function(){
                 this.innerHTML = this['htmldata'];
             },
             htmldataChanged: function() {
-                this.innerHTML = this['htmldata'];
+                this.innerHTML = this['htmldata'];                
             }
         });
     </script>
-</polymer-element><polymer-element name="sc-timeline" attributes="notitle author data emptyavatar url sseurl ssechannel ssealias scope gravatarEnabled" assetpath="/static/components/sc-timeline/">
+</polymer-element>
+<polymer-element name="sc-timeline" attributes="notitle author data emptyavatar url sseurl ssechannel ssealias scope gravatarEnabled urlrate" assetpath="/static/components/sc-timeline/">
 
   <template>
-  <!-- for get latest comments -->
-  <core-ajax auto="" url="{{url}}" handleas="json" response="{{response}}"></core-ajax>
-  <!-- for updates comments oldest -->
-  <core-ajax auto="" id="oldestComments" url="{{urlOldest}}" handleas="json" response="{{_responseOldest}}"></core-ajax>
+  <!-- for get latest comments. The main `requester` for
+  get new comments when is loaded the app both general feed
+  or specific issue's feed -->
+  <core-ajax auto="" url="{{url}}" handleas="json" response="{{response}}" headers="{{ headerRequest() }}" contenttype="application/json"></core-ajax>
+  <!-- for updates comments oldest. This is pagination `requester`  -->
+  <core-ajax auto="" id="oldestComments" url="{{urlOldest}}" handleas="json" response="{{_responseOldest}}" headers="{{ headerRequest() }}" contenttype="application/json"></core-ajax>
 
   <sc-sse stream="{{sseurl}}" channel="{{ssechannel}}" alias="{{ssealias}}">
   </sc-sse>
@@ -14873,6 +14893,11 @@ polyfill-next-selector { content: ':host > h2'; }
   /* margin-bottom: 35px; */
   /* min-height: 300px;  this is defined by shottime */
 }
+
+core-scroll-threshold {
+  width: 100%;
+}
+
 #coreList {
   height: 100%;
 }
@@ -15016,18 +15041,17 @@ core-icon .pallete-icon-color .autumn {
       font-size: 14px;
     }
 }
-
 </style>
     <div class="mainContent" flex="" horizontal="" layout="">
       <br>
       <core-scroll-threshold id="threshold" lowerthreshold="100">
       <div id="coreList" touch-action="pan-y" flex="">
         <br>
-        <template id="scroller" repeat="{{model in response.comments}}">
+        <template id="scroller" repeat="{{model in response._items}}">
           <!-- begin post
           TODO: new core-list template to support list users
           -->
-          <div id="id{{ model._id.$oid }}" class="row timeline-post {{ {selected: selected} | tokenList }} item-{{ model._id.$oid }}" horizontal="" layout="">
+          <div id="id{{ model._id }}" class="row timeline-post {{ {selected: selected} | tokenList }} item-{{ model._id }}" horizontal="" layout="">
             <div class="columns shottime">{{ model.shottime }}</div>
             <div class="columns division-icon">
               <core-icon icon="{{ setIcon(model.origin) }}" class="pallete-icon-color autumn"></core-icon>
@@ -15037,25 +15061,32 @@ core-icon .pallete-icon-color .autumn {
                   <div class="thumbnail">
                     <!-- if gravatarEnabled -->
                     <template bind="" if="{{ gravatarEnabled == 'true' }}">
-                      <img src="{{ getGravatarUrl(model.author.User.md5_email) }}">
+                      <img src="{{ getGravatarUrl(model.author.md5_email) }}">
                     </template>
                     <template bind="" if="{{ gravatarEnabled != 'true' }}">
-                      <img src="{{ model.author.User.avatar || emptyavatar }}">
+                      <img src="{{ model.author.avatar || emptyavatar }}">
                     </template>
                   </div>
                   <div class="author-info" flex="">
-                    <div class="username">{{ model.author.User.username }}
-                      <span class="title">at {{ model.title }} <template if="{{model.issue_id.Issue.register}}">|</template> <sc-link>{{model.issue_id.Issue.register}}</sc-link></span>
+                    <div class="username">{{ model.author.username }}
+                      <span class="title">at {{ model.title }} <template if="{{model.issue.register}}">|</template> <sc-link>{{model.issue.register}}</sc-link></span>
                     </div>
-                    <div class="location">{{ model.author.User.location }}</div>
+                    <div class="location">{{ model.author.location }}</div>
                     <!-- TODO: This approach with created_at-human can be
                     totally changed because Eve will to return something as
                     "Tue, 02 Apr 2013 10:29:13 GMT" -->
-                    <div class="timepost">{{ model.created_at_human }}</div>
+                    <div class="timepost">{{ model.created_at }}</div>
                   </div>
                 </div>
                 <div class="stars">
-                    <star-rating votes="{{model.stars.votes}}" score="{{model.stars.score}}" readonly="{{model.stars.readOnly}}" url="/api/v1/stars/comments/" pk="{{ model._id.$oid }}"></star-rating>
+                    <template if="{{model.stars}}">
+                      <star-rating votes="{{model.stars.length}}" score="{{ model.stars | scoreSum }}" readonly="{{model.stars | checkUserExists }}" url="{{ urlrate }}" pk="{{ model._id }}">
+                      </star-rating>
+                    </template>
+                    <template if="{{!model.stars}}">
+                      <star-rating votes="{{model.stars.length}}" score="{{ model.stars }}" readonly="false" url="{{ urlrate }}" pk="{{ model._id }}">
+                      </star-rating>
+                    </template>
                 </div>
                 <div class="post" on-click="{{getFullContent}}" on-dblclick="{{collpaseContent}}">
                     <sc-contenthtml htmldata="{{ellipsis(model.body) }}"></sc-contenthtml>
@@ -15072,8 +15103,11 @@ core-icon .pallete-icon-color .autumn {
     </core-scroll-threshold>
 
     </div>
-
-      <core-ajax id="coreAjaxIssues" url="" handleas="json" on-core-response="{{getIssue}}">
+      <!--
+        * The `coreAjaxIssues` is the requester to get issues.
+        * `on-core-response` where is the handler when response is fired.
+      -->
+      <core-ajax id="coreAjaxIssues" url="" handleas="json" on-core-response="{{getIssue}}" headers="{{ headerRequest() }}" contenttype="application/json">
       </core-ajax>
 
   </template>
@@ -15111,10 +15145,17 @@ core-icon .pallete-icon-color .autumn {
         ssealias: 'sseTimeline',
         sseurlOriginal: null,
         urlOriginal: null,
-        response: '{"comments": "[]"}',
+        response: '{"_items": "[]"}',
         scope: null,
         urlOldest: '',
         currentPage: 1,
+        urlrate: ''
+      },
+      create: function () {
+        var hasSiscomando = siscomando || false;
+        if (hasSiscomando === false) {
+          console.error("Siscomando library not found <sc-timeline>");
+        }
       },
       ready: function() {
         var self = this;
@@ -15142,25 +15183,39 @@ core-icon .pallete-icon-color .autumn {
         this.$.coreList.focus();
       },
       /**
-       * The `changeURL` change URL of the core-ajax to get data from specif
+       * The `changeURL` change url of the core-ajax to get data from a specif
        * item.
        *
        * @method changeURL
        * @param source the instance that will to generate an event
        * @param eventName the name of the event generated by source
-       * @param callback a callback function or this custom element
+       * @param callback a function or an element that stores some
+       * properties.
        */
       changeURL: function(source, eventName, callback) {
         source.addEventListener(eventName, function(e){
+              self = callback;
               var ajaxLocal = callback.$.coreAjaxIssues;
               register = e.detail.issue;
               register = register.replace('/', '');
-              callback.scope = register;
-              new_url = callback.urlOriginal + register + '/';
-              callback.url = new_url;
-              ajaxLocal.url = '/api/v1/issues/' + register;
+              // Change scope is like to exit from feed general to feed of
+              // the issue...
+              self.scope = register;
+              //... because is needs to update the urls for the requests with
+              // base in the current selected Issue...
+              self.url = siscomando.helpers.comments.resources.getUrlByRegister(register);
+              //... it's now update the issue info.
+              ajaxLocal.url = siscomando.helpers.issues.item.getUrl(register);
               ajaxLocal.go();
         });
+      },
+      /**
+       * `getIssue` get the number from register (or issue) and updates sse.
+       * This is useful when the issue is opened.
+      */
+      getIssue: function() {
+          var ajaxLocal = this.$.coreAjaxIssues;
+          this.sseurl = siscomando.helpers.comments.stream.getUrlByIssue(ajaxLocal.response._id);
       },
       /**
        * `setUrlOldest` defines an url with querystring page defined. The
@@ -15169,7 +15224,7 @@ core-icon .pallete-icon-color .autumn {
       */
       setUrlOldest: function(plus) {
         this.currentPage += parseInt(plus);
-        var urlOld = this.url + '?page=' + this.currentPage;
+        var urlOld = this.url + '&page=' + this.currentPage;
         return urlOld;
       },
       /**
@@ -15190,9 +15245,9 @@ core-icon .pallete-icon-color .autumn {
           return ;
         }
         try {
-          if (('comments' in self._responseOldest) &&
-               (self._responseOldest.comments.length > 0)) {
-            self.response.comments = self.response.comments.concat(self._responseOldest.comments);
+          if (('_items' in self._responseOldest) &&
+               (self._responseOldest._items.length > 0)) {
+            self.response._items = self.response._items.concat(self._responseOldest._items);
             self.$.threshold.clearLower();
           }
 
@@ -15200,14 +15255,7 @@ core-icon .pallete-icon-color .autumn {
           console.info("Error at trying loadNextPage: " + err);
         }
       },
-      /**
-       * `getIssue` get the number from register (or issue)
-      */
-      getIssue: function() {
-          var ajaxLocal = this.$.coreAjaxIssues;
-          this.sseurl = this.sseurlOriginal + ajaxLocal.response.issue._id.$oid;
-      },
-      /** `The updateTimeline` updates the timeline based in returned data from
+      /** The `updateComment` updates the timeline based in returned data from
       * sse event (emit): `sc-sse-response`
       *
       * @param ontop if true the payload is added in top of the timeline. Rather
@@ -15217,9 +15265,9 @@ core-icon .pallete-icon-color .autumn {
       updateComment: function(source) {
         var self = this;
         source.addEventListener('sc-sse-response', function(e){
-
+          console.log(e);
           // If not exists the array with comments (response from requests).
-          self.response = self.response == null ? {"comments": []} : self.response;
+          self.response = self.response == null ? {"_items": []} : self.response;
 
           // if not exists `alias` is not sc-sse-response defined to sc-timeline OR
           // if not exists `sseTimeline` also.
@@ -15242,18 +15290,19 @@ core-icon .pallete-icon-color .autumn {
           // wrapper to fix two types of responses sent by sc-sse. One with
           // multiple `commentS` another with only one `comment`. Because it
           // can to generate updates stream for only one comment.
-          if ('comments' in  newComment) {
-              newComment = newComment.comments;
+          // TODO: TEST FOR NEWS COMMENTS if is _items
+          if ('_items' in  newComment) {
+              newComment = newComment._items;
           }
           // This point begins the real update
           if (!(newComment == false)) {
               var containsComment = false; // content of the comment
               var order = null;
 
-              for (var i=0; i < self.response.comments.length; i++) {
-                item = self.response.comments[i];
-                itemId = item._id.$oid;
-                commentId = newComment._id ? newComment._id.$oid : null;
+              for (var i=0; i < self.response._items.length; i++) {
+                item = self.response._items[i];
+                itemId = item._id;
+                commentId = newComment._id ? newComment._id : null;
 
                 if (itemId == commentId ) {
                     containsComment = true;
@@ -15264,12 +15313,12 @@ core-icon .pallete-icon-color .autumn {
               // check scope (register) will verify if the comments returned are children
               // from current 'open' register/issue view.
               if ((self.scope === null) ||
-                      (self.scope == newComment.issue_id.Issue.register)) {
+                      (self.scope == newComment.register)) {
 
                   if (containsComment == false) {
-                     self.response.comments.unshift(newComment);
+                     self.response._items.unshift(newComment);
                   } else {
-                     self.response.comments[order] = newComment;
+                     self.response._items[order] = newComment;
                   }
                    // DESCEND ORDER. The last is first.
                    // Applying effects.
@@ -15378,7 +15427,14 @@ core-icon .pallete-icon-color .autumn {
       getGravatarUrl: function(md5) {
         gravatarUrl = '//www.gravatar.com/avatar/' + md5 + "?s=" + 48;
         return gravatarUrl
-      }
+      },
+      headerRequest: function(payload) {
+        // TODO: if not exists Account in localStorage
+        var accountData = JSON.parse(window.localStorage.getItem("Account"));
+        var token = accountData.message.token;
+        var b64Token = btoa(token + ":");
+        return JSON.stringify({"Authorization": "Basic " + b64Token});
+      },
     });
 
   </script>
@@ -15398,34 +15454,34 @@ core-menu {
 	float: left;
 }
 .thumb  {
-	width: 32px;
-	height: 32px;
+	width: 32px; 
+	height: 32px; 
 }
 .content {
-	margin-left: 8px;
-	padding-top: 2px;
+	margin-left: 8px; 
+	padding-top: 2px; 
 	font-size: 0.98em;
 }
 #dropdop {
-	font-family: 'RobotoDraft', sans-serif;
-	display: none;
-	z-index:1000;
-	float: left;
-	position: absolute;
+	font-family: 'RobotoDraft', sans-serif; 
+	display: none; 
+	z-index:1000; 
+	float: left; 
+	position: absolute; 
 	background: white;
     box-shadow: 0 13px 25px 0 rgba(0, 0, 0, 0.3);"
 }
 #dropdop paper-item {
 	min-height: 60.7813px;
-}</style>
+}</style>     
     <core-a11y-keys target="{{coreMenu}}" keys="enter" on-keys-pressed="{{selection}}"></core-a11y-keys>
 
       <div id="dropdop" class="boxselect">
-        <core-menu id="coreMenu" class="menu">
+        <core-menu id="coreMenu" class="menu"> 
           <template repeat="{{item in iterable}}">
             <paper-item on-blur="{{close}}">
               <template bind="" if="{{showThumbs}}">
-                <div class="expo thumb" style="background: url({{item.thumbnail}});
+                <div class="expo thumb" style="background: url({{item.thumbnail}}); 
                 background-size: cover; background-repeat: no-repeat;">
                 </div>
               </template>
@@ -15434,52 +15490,52 @@ core-menu {
           </template>
         </core-menu>
       </div>
-
+  
   </template>
   <script>
-    Polymer('sc-boxselect', {
+    Polymer('sc-boxselect', { 
        /**
        * Fired when an item is selected.
        *
        *
        * @event selected-user
-       */
+       */        
       /*
        * The `author` attribute sets an initial author
        *
        * @attribute author
        * @type String
        * @default 'Horacio Ibrahim'
-       */
+       */ 
       /**
        * The `showThumbs` attribute show/hide thumbnail before the content.
        *
        * @attribute showThumbs
        * @type Boolean
        * @default true
-       */
+       */  
       /**
        * The `opened` attribute sets if show (open) or not the box dialog.
        *
        * @attribute opened
        * @type Boolean
        * @default false
-       */
+       */ 
       /**
        * The `target` attribute sets an element for align the box dialog.
        *
        * @attribute target
        * @type String
        * @default null
-       */
+       */ 
       /**
        * The `limit` attribute sets the limit lines.
        *
        * @attribute limit
        * @type integer
        * @default 5
-       */
-      author: 'Horacio Ibrahim',
+       */               
+      author: 'Horacio Ibrahim',                  
       publish: {
         showThumbs: true,
         iterable: [],
@@ -15491,16 +15547,16 @@ core-menu {
       ready: function() {
         this.coreMenu = this.$.coreMenu;
         this.$.dropdop.style.margin = 0;
-        this.$.coreMenu.style.margin = 0;
+        this.$.coreMenu.style.margin = 0;  
         this.targetElem = document.querySelector('#' + this.target);
-
+        
         // ACAO QUANDO SELECIONADO ATIVO
         this.addEventListener('core-activate', function(){
           // var mythis = this.querySelector('sc-boxselect');
           this.selection();
         });
 
-      },
+      }, 
       iterableChanged: function() {
         this.renewMaxHeight();
         this.setPosition(this.target, this.$.dropdop);
@@ -15513,12 +15569,12 @@ core-menu {
       },
       openedChanged: function() {
         if (this.opened == true) {
-          this.$.dropdop.style.display = "block";
+          this.$.dropdop.style.display = "block";  
           this.setPosition(this.target, this.$.dropdop);
         } else {
           this.$.dropdop.style.display = "none";
         }
-
+        
       },
       /**
       * Close box dialog. Useful also to simulate blur event.
@@ -15535,7 +15591,7 @@ core-menu {
       */
       selectPrevious: function() {
         this.$.coreMenu.selectPrevious();
-      },
+      },  
       /**
       * Selects next item.
       *
@@ -15543,12 +15599,12 @@ core-menu {
       */
       selectNext: function() {
         this.$.coreMenu.selectNext();
-      },
+      },         
       selection: function() {
         var model = this.$.coreMenu.selectedModel;
         this.opened = false;
         try {
-            this.fire('selected-user', {response: {'content': model.item.content,
+            this.fire('selected-user', {response: {'content': model.item.content, 
                                         'thumbnail': model.item.thumbnail}});
         } catch (err) {
           console.log("Warning: " + err + "(User not selected.)"); // TODO error-handling
@@ -15557,10 +15613,10 @@ core-menu {
       /**
        * Adds one-time elements in box dialog but limited at limit attribute.
        *
-       * @param thumbnail - sets the thumbnail
-       * @param content - sets the content
+       * @param thumbnail - sets the thumbnail 
+       * @param content - sets the content 
        * @method setItem
-       */
+       */ 
       setItem: function(thumbnail, content) {
         var data = {'thumbnail': thumbnail, 'content': content};
         this.iterable.unshift(data); // TODO add/push testesj
@@ -15569,29 +15625,29 @@ core-menu {
       /**
        * Adds elements in box dialog but limited at limit attribute.
        *
-       * @param thumbnail - sets the thumbnail
-       * @param content - sets the content
+       * @param thumbnail - sets the thumbnail 
+       * @param content - sets the content 
        * @method setItems
-       */
+       */ 
       setItems: function(arrayOfHash) {
         this.iterable = arrayOfHash;
         this.iterable = this.iterable.slice(0, this.limit);
-      },
+      },      
       /**
        * Clear all elements in box dialog.
        *
        * @method clearItems
-       */
+       */       
       clearItems: function() {
         this.iterable = [];
-      },
+      },      
       setPosition: function(targetElem, overlay) {
         var targetElem = targetElem;
 
         if (typeof targetElem == "string") {
           targetElem = document.querySelector('#' + targetElem);
         }
-
+                
         topTarget = targetElem.offsetTop;
         overlay.style.top = (topTarget - this.maxHeight) +  "px";
         overlay.style.left = targetElem.offsetLeft + "px";
@@ -15613,14 +15669,14 @@ core-menu {
   display: none;
   -webkit-box-shadow: 0px -1px 5px 0px rgba(50, 50, 50, 0.31);
   -moz-box-shadow: 0px -1px 5px 0px rgba(50, 50, 50, 0.31);
-  box-shadow: 0px -1px 5px 0px rgba(50, 50, 50, 0.31);
+  box-shadow: 0px -1px 5px 0px rgba(50, 50, 50, 0.31); 
   -webkit-border-radius: 5px 5px 0px 0px;
   -moz-border-radius: 5px 5px 0px 0px;
-  border-radius: 5px 5px 0px 0px;
+  border-radius: 5px 5px 0px 0px;            
   margin-bottom: 0px;
   background-color: #FFF;
   border: 0px solid #CCC;
-  z-index: 10;
+  z-index: 10;            
   box-sizing: border-box;
   width: 100%;
   right: auto;
@@ -15631,7 +15687,7 @@ core-menu {
   list-style: none;
   padding: 0;
   margin: 0;
- }
+ }  
  ul li {
   min-height: 37px;
   padding: 8px;
@@ -15646,14 +15702,14 @@ core-menu {
  }
  .mentions .avatar {
       float: left;
- }
+ }    
  .mentions .avatar img {
    width: 33px;
    height: 33px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
-  border-radius: 3px;
- }
+  border-radius: 3px;              
+ } 
  .mentions .info {
       display: inline-block;
       position: relative;
@@ -15696,9 +15752,9 @@ core-menu {
       </paper-action-dialog>
 
       <!-- ajax -->
-      <core-ajax auto="true" id="mentionsAjax" url="{{ _mentions }}" response="{{responseUsers}}"></core-ajax>
-      <core-ajax id="tagsAjax" url="{{ tagsURL }}" response="{{responseTags}}"></core-ajax>
-      <core-ajax id="coreAjaxInput" url="{{url}}" handleas="json" response="{{responseComments}}" method="{{ method }}" contenttype="application/json">
+      <core-ajax auto="true" id="mentionsAjax" url="{{ _mentions }}" response="{{responseUsers}}" headers="{{ headerRequest() }}" contenttype="application/json"></core-ajax>
+      <core-ajax id="tagsAjax" url="{{ tagsURL }}" response="{{responseTags}}" headers="{{ headerRequest() }}" contenttype="application/json"></core-ajax>
+      <core-ajax id="coreAjaxInput" url="{{url}}" handleas="json" response="{{responseComments}}" method="{{ method }}" headers="{{ headerRequest() }}" contenttype="application/json">
       </core-ajax>
 
 
@@ -15733,7 +15789,7 @@ core-menu {
           * @type string
           * @default ''
           */
-          mentionsURL: '',
+          mentionsURL: '', // DEPRECATED. In the future will be removed. 
           /*
           * The isNewNode persists boolean that contains info if the typed data
           * must be to generate a new node. This occurs when the user types
@@ -15791,9 +15847,11 @@ core-menu {
           */
           method: 'POST',
         },
-        created: function() {
-          // initialize but it not is turned public to use by users of the element
-          // to turn public to use attributes or publish.
+        create: function () {
+          var hasSiscomando = siscomando || false;
+          if (hasSiscomando === false) {
+            console.error("Siscomando library not found <lp-input>");
+          }
         },
         ready: function () {
           // get the div#editable passed by user
@@ -15837,13 +15895,6 @@ core-menu {
         * @method valueTextChanged
         */
         valueTextChanged: function() {
-          // console.log("# Entrou valueTextChanged");
-         /*  if (this.isKey == this.isChar) {
-            this.checkInput();
-          }
-          this.isKey = false;
-          this.isChar = false;
-          */
           var selection = document.getSelection();
           var range = selection.getRangeAt(0);
           var currentNode = range.startContainer;
@@ -15876,14 +15927,7 @@ core-menu {
         */
         getMentions: function(expr) {
             var mentionsAjax = this.$.mentionsAjax;
-            var url = '';
-
-            if (/\/$/.test(this.mentionsURL)) {
-              url = this.mentionsURL + expr;
-            } else {
-              url = this.mentionsURL.concat('/', expr);
-            }
-             url = url.concat('/', '5')
+            var url = siscomando.helpers.users.resources.getUrlToSearch(expr);
             this._mentions = url;
         },
         responseUsersChanged: function() {
@@ -15892,9 +15936,10 @@ core-menu {
            data = JSON.parse(this.responseUsers);
 
            if (data != null) {
-             var users = data["Users"];
+             var users = data["_items"]; // Isso nao retorna mais user TODO: here
              function callbackUsers(elem, index, array) {
-               hash = {'thumbnail': elem.avatar, 'content': elem.shortname};
+               gravatarUrl = '//www.gravatar.com/avatar/' + elem.md5_email + "?s=" + "32px";
+               hash = {'thumbnail': gravatarUrl, 'content': elem.username};
                arrayOfHashes.push(hash);
              }
              users.forEach(callbackUsers);
@@ -16131,8 +16176,6 @@ core-menu {
             // By last...changes the shadow/copy of the target
             this.$.editableFilter.innerHTML = newText;
             // Restores the caret with this function
-            // console.log("[checkInput] nodeIndex and nodeOffset: ", + nodeIndex + " " + nodeOffset);
-            // console.log("[checkInput] nodes (before) and nodes (after): ", + nodes + " " + this._targetElem.childNodes.length);
             this._restoreSelection(nodeIndex, nodeOffset);
         },
         /*
@@ -16171,6 +16214,10 @@ core-menu {
         sendTo: function(){
             var ajax = this.$.coreAjaxInput;
             var data = {};
+            // debug
+            // this.addEventListener('core-complete', function(res){
+              //console.log(res);
+            // })
             var dataUser = JSON.parse(window.localStorage.getItem('User'));
             if (!dataUser) {
               var dataUser = {}
@@ -16180,7 +16227,7 @@ core-menu {
             body = this._targetElem.textContent;
             data['body'] = body;
             data['register'] = this.register;
-            data['author'] = dataUser['pk']; // TODO: fix it
+            // data['author'] = dataUser['pk']; // TODO: fix it. uhu! Fixed!
             if (body.length > 0 && this.boxSelect.opened == false) {
               ajax.body = JSON.stringify(data);
               if (this.register) {
@@ -16193,8 +16240,6 @@ core-menu {
                 this._targetElem.innerHTML = ''
                 return false;
               } else {
-                console.log("body is:");
-                console.log(body);
                 // Handling error messages
                 var dialogMessage = this.$.dialogMessage;
                 // TODO: put this messages to dialog in backend
@@ -16219,6 +16264,7 @@ core-menu {
         },
         responseCommentsChanged: function() {
           // to fire a 'sc-sse-response' fake similar at sc-sse
+          // console.log(this.responseComments);
           this.fire('sc-sse-response', {response: this.responseComments, alias: 'sseTimeline'});
         },
         selectPrevious: function() {
@@ -16229,6 +16275,13 @@ core-menu {
         },
         boxclose: function() {
           this.boxSelect.close();
+        },
+        headerRequest: function(payload) {
+          // TODO: if not exists Account in localStorage
+          var accountData = JSON.parse(window.localStorage.getItem("Account"));
+          var token = accountData.message.token;
+          var b64Token = btoa(token + ":");
+          return JSON.stringify({"Authorization": "Basic " + b64Token});
         },
       });
     })();
@@ -16254,16 +16307,17 @@ core-menu {
             </div>
         </div>
         <!-- App context mini-header: END -->
-        <sc-navbar username="%% g.user.shortname %%" avatar="%% g.user.md5_email %%" gravatarenabled="true" online="%% g.user.status_online %%" url="/api/v1/issues/" stream="/api/v1/stream/issues/" channel="message"></sc-navbar>
+        <!-- TODO: attributes must be consumed by REST and not Render via backend -->
+        <sc-navbar username="%% g.user.shortname %%" avatar="%% g.user.md5_email %%" gravatarenabled="true" online="%% g.user.status_online %%" channel="message"></sc-navbar>
       </core-header-panel>
     </div>
     <div main="">
       <core-header-panel>
-        <sc-search url="/api/v1/search/"></sc-search>
+        <sc-search></sc-search>
         <sc-header></sc-header>
         <div class="panelContent" vertical="" layout="" fit="">
-          <sc-timeline url="/api/v1/comments/" sseurl="/api/v1/stream/comments/" gravatarenabled="true"></sc-timeline>
-          <lp-input target="editable" boxtarget="editableRect" mentionsurl="/api/v1/users/" url="/api/v1/comments/" method="POST" eventfired="click-submit-lp-input">
+          <sc-timeline gravatarenabled="true"></sc-timeline>
+          <lp-input target="editable" boxtarget="editableRect" method="POST" eventfired="click-submit-lp-input">
           &gt;</lp-input>
           <div id="editableRect" class="sc-input-section" flex="">
           <div id="editable" contenteditable="true"></div>
@@ -16276,7 +16330,7 @@ core-menu {
 
   </core-drawer-panel>
 
-  <!-- <script src="assets/js/app.js"></script> -->
+  <script src="/static/assets/js/app.js"></script>
   <script>
       var userData = {};
       var pk = "%% g.user.pk %%";
@@ -16284,6 +16338,7 @@ core-menu {
       userData['avatar'] = "%% g.user.avatar %%";
       userData['shortname'] = "%% g.user.shortname %%";
       userData['email'] = "%% g.user.email %%";
+      // TODO: stores token after authenticated successful
       window.localStorage.setItem("User", JSON.stringify(userData));
 
       // Reload page
@@ -16291,6 +16346,7 @@ core-menu {
         location.href = "/app";
       }
   </script>
+
 
 
 </body></html>
