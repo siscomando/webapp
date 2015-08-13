@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-import logging, json, re, base64
+import logging, json, re, base64, datetime
 from flask.views import View
 from flask import (jsonify, request, make_response, abort, Response, flash,
 					render_template, flash, url_for, redirect, session, g)
 from flask.ext.login import login_required, current_user, login_user, logout_user
 from flask.ext.babel import lazy_gettext as _
 # APP
-from siscomando import app, red, models, login_manager
+from siscomando import app, red, models, login_manager, utils
+from siscomando.utils import generate_token
 
 #
 # Setup flask-login
@@ -54,8 +55,7 @@ def logout():
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
-	# TODO: FAZER LOGIN
-	# TODO: REDIRECT HOME
+
 	if request.method == 'POST':
 		email = request.form['identifier']
 		password = request.form['password']
@@ -72,6 +72,44 @@ def login():
 
 	# return jsonify({'msg': 'Sucessful'}), 201
 	return render_template('login.html')
+
+@app.route('/login_api/', methods=['POST'])
+def login_api():
+
+	if not request.json:
+		abort(400)
+
+	if request.method == 'POST':
+		data = request.get_json()
+		email = data['identifier']
+		password = data['password']
+		registered_user = models.User.objects.filter(email=email).first()
+
+		if registered_user is None or \
+			registered_user.check_password(password) is not True:
+			return  jsonify({
+					'message': {
+						'type': 'error',
+						'status': 'Username or Password is invalid',
+						'_links': url_for('login_api')
+					}
+			}), 401
+
+		login_user(registered_user, remember=True)
+		token = generate_token(registered_user.email)
+		registered_user.token = token
+		registered_user.save()
+
+		return  jsonify({
+				'message': {
+					'type': 'info',
+					'status': 'Logged in successfully',
+					'_links': url_for('application'),
+					'token': token,
+					'user': str(registered_user.pk),
+					'created_at': str(datetime.datetime.now())
+				}
+		}), 200
 
 @app.route('/register/<string:token>/', methods=['GET'])
 def register(token):
@@ -134,7 +172,7 @@ def request_invite():
 @app.route('/app/', methods=['GET'])
 @login_required
 def application():
-        
+
 	if current_user.is_authenticated():
 		return render_template('app.html')
 	else:

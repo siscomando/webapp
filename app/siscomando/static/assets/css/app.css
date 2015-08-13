@@ -86,7 +86,7 @@ paper-spinner.blue::shadow .circle {
   outline: none;
   min-height: 30px;
   max-height: 180px !important;
-  resize: none !important;  
+  resize: none !important;
   width: 100%;
   margin: 12px;
   overflow-y: scroll;
@@ -97,7 +97,7 @@ paper-spinner.blue::shadow .circle {
 #editable em {
 font-style: normal;
 color: #47CACC !important;
-} 
+}
 
 .user-data{
   display: none;
@@ -120,4 +120,3 @@ html /deep/ .mentions.shortname  {
   text-decoration: none;
   font-weight: 300 !important;
 }
-  

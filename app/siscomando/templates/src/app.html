@@ -47,16 +47,17 @@
             </div>
         </div>
         <!-- App context mini-header: END -->
-        <sc-navbar username="%% g.user.shortname %%" avatar="%% g.user.md5_email %%" gravatarenabled="true" online="%% g.user.status_online %%" url="/api/v1/issues/" stream="/api/v1/stream/issues/" channel="message"></sc-navbar>
+        <!-- TODO: attributes must be consumed by REST and not Render via backend -->
+        <sc-navbar username="%% g.user.shortname %%" avatar="%% g.user.md5_email %%" gravatarenabled="true" online="%% g.user.status_online %%" channel="message"></sc-navbar>
       </core-header-panel>
     </div>
     <div main="">
       <core-header-panel>
-        <sc-search url="/api/v1/search/"></sc-search>
+        <sc-search></sc-search>
         <sc-header></sc-header>
         <div class="panelContent" vertical="" layout="" fit="">
-          <sc-timeline url="/api/v1/comments/" sseurl="/api/v1/stream/comments/" gravatarenabled="true"></sc-timeline>
-          <lp-input target="editable" boxtarget="editableRect" mentionsurl="/api/v1/users/" url="/api/v1/comments/" method="POST" eventfired="click-submit-lp-input">
+          <sc-timeline gravatarenabled="true"></sc-timeline>
+          <lp-input target="editable" boxtarget="editableRect" method="POST" eventfired="click-submit-lp-input">
           &gt;</lp-input>
           <div id="editableRect" class="sc-input-section" flex="">
           <div id="editable" contenteditable="true"></div>
@@ -69,7 +70,7 @@
 
   </core-drawer-panel>
 
-  <!-- <script src="assets/js/app.js"></script> -->
+  <script src="/static/assets/js/app.js"></script>
   <script>
       var userData = {};
       var pk = "%% g.user.pk %%";
@@ -77,6 +78,7 @@
       userData['avatar'] = "%% g.user.avatar %%";
       userData['shortname'] = "%% g.user.shortname %%";
       userData['email'] = "%% g.user.email %%";
+      // TODO: stores token after authenticated successful
       window.localStorage.setItem("User", JSON.stringify(userData));
 
       // Reload page
