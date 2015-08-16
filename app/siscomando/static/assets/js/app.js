@@ -17,7 +17,7 @@ var siscomando = siscomando || {};
 siscomando.apiSERVER = "http://localhost:9014"; // YOUR_URL_API_ADDRESS
 siscomando.apiPREFIX = "/api/v2"; // YOUR_URL_API_PREFIX. Removes slash from the end.
 siscomando.apiURL = siscomando.apiSERVER + siscomando.apiPREFIX;
-// Push Notifications Settins: stream for server side events.
+// Push Notifications Settings: stream for server side events.
 siscomando.streamSERVER = "http://notes.local"; // YOUR_URL_API_ADDRESS
 siscomando.streamPREFIX = "/v1"; // YOUR_URL_API_PREFIX. Removes slash from the end.
 siscomando.streamURL = siscomando.streamSERVER + siscomando.streamPREFIX;
@@ -30,26 +30,34 @@ siscomando.streamURL = siscomando.streamSERVER + siscomando.streamPREFIX;
  * All urls point to resources scope. The three main are: `comments`, `issues`
  * and `users`. Each pointer have the properties:
  *
- * @property {pattern} string for match with replace. It'll change to itemId.
- * @property {item} url with pattern before change. e.g: /resource/<itemId>
- * @property {resources} url with ? before change. e.g: /resource?
+ * @property {pattern} string for match in regex/replace. It'll change to itemId.
+ * @property {item} url with `pattern` before to be changed. e.g: /resource/<itemId>
+ * @property {resources} url that point to resource. It has `?` at the end. e.g: /resource?
+ * @property {stream} url that point to consume stream data of the resource.
  * @property {create} url to create (POST) item.
  * @property {update} url to update (PATCH) item.
  * @property {delete} url to delete (DELETE) item.
  *
  * ******* NOTE *******
  * Some of this properties can never be used or not implemented or will be implemented
- * in the future. We must to do an introspect before the use to check current
- * implementation.
+ * in the future. We must to do an introspect before of to use it.
  *
+ * Basic Philosophy
+ * ================
+ *
+ * All here is thinking RESTful API. Basically exist two concepts `resources` and
+ * `item` where the first is a collection of data and the second is a specific
+ * item or an unit of data from resource.
+ * So we have to think as a CRUD solution. With actions as Create, Read, Update and
+ * Delete.
+ * Thinking in CRUD ... our `Read` is a default action directly defined into
+ * `resources` and `item`, respectively.
  */
 siscomando.urls = {
   comments: {
     pattern: "COMMENT_ID", // The pattern to replace by ID
     item: "/comments/COMMENT_ID?", // define item url to comments
-    resources: "/comments?", // define item url to comments
-    // Actions. read is a default action so are directly defined in `item` and
-    // `resources`
+    resources: "/comments?", // define resource url to comments
     create: "/comments/new", // HTTP POST verb
     update: "/comments/edit/COMMENT_ID", // HTTP PATCH verb
     delete: "/comments/edit/COMMENT_ID", // HTTP DELETE verb
@@ -313,9 +321,10 @@ siscomando.behaviors = {
   hashLink: {
     exec: function() {
       links = document.querySelectorAll("html /deep/  a.hashLink");
-    };
-  },
+    }
+  }
 }
+
 /**
  *
  * ALIAS
