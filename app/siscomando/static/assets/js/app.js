@@ -50,40 +50,151 @@ siscomando.streamURL = siscomando.streamSERVER + siscomando.streamPREFIX;
  * item or an unit of data from resource.
  * So we have to think as a CRUD solution. With actions as Create, Read, Update and
  * Delete.
- * Thinking in CRUD ... our `Read` is a default action directly defined into
- * `resources` and `item`, respectively.
+ *
+ * URLS
+ * =====
+ * Thinking in CRUD, the urls define several actions. So our action `Read` is a
+ * default action directly defined into `resources` and `item`, respectively.
+ * Others actions have your own urls or follow RESTful specifications, so
+ * changing only the HTTP verbs.
+ *
+ *       e.g:
+ *       comments: {
+                      'item': 'http[s]://api.example/comments/comment_id',
+                      'resources': 'http[s]://api.example/comments'
+                    }
+ *
+ *
+ * HATEAOS
+ * =======
+ * This release of the webapp not have the feature activated.
+ * http://siscomando.github.io/api/index.html#hypermedia
  */
 siscomando.urls = {
   comments: {
     pattern: "COMMENT_ID", // The pattern to replace by ID
+    /**
+     * Method GET
+     * Output: http://siscomando.github.io/api/comments.html#get-a-single-comment
+     * HATEAOS: No needs in this release.
+     **/
     item: "/comments/COMMENT_ID?", // define item url to comments
+    /**
+     * Method GET
+     * Output: http://siscomando.github.io/api/comments.html#list-comments-expanded
+     * HATEAOS: No needs in this release.
+     * NOTE: This payload have sublevels.
+     **/
     resources: "/comments?", // define resource url to comments
+    /**
+     * Method POST
+     * Input (fields): http://siscomando.github.io/api/comments.html#create-a-comment
+     * Output (data): http://siscomando.github.io/api/comments.html#create-a-comment
+     * HATEAOS: No needs in this release.
+     * NOTE: This return is important for Webapp. It is loaded instantly.
+     **/
     create: "/comments/new", // HTTP POST verb
+    /**
+     * Method PATCH
+     * Input: http://siscomando.github.io/api/comments.html#edit-a-comment
+     * Not implemented #NOIM
+     **/
     update: "/comments/edit/COMMENT_ID", // HTTP PATCH verb
+    /**
+     * Method DELETE
+     * Url: http://siscomando.github.io/api/comments.html#delete-a-comment
+     * Not implemented #NOIM
+     **/
     delete: "/comments/edit/COMMENT_ID", // HTTP DELETE verb
+    /**
+     * *****************************  NOTE  ***********************************
+     * GET Sever side events.
+     *
+     * This url is not defined because I have thought that this could be other
+     * server. It's required!
+     **/
     stream: "/comments"
   },
   issues: {
     pattern: "ISSUE_ID", // The pattern to replace by ID
+    /**
+     * Method GET
+     * Output: http://siscomando.github.io/api/issues.html#get-an-issue
+     * HATEAOS: No needs in this release.
+     **/
     item: "/issues/ISSUE_ID?", // define item url to issues
+    /**
+     * Method GET
+     * Output http://siscomando.github.io/api/issues.html#list-grouped-issues
+     * NOTE: The resources are grouped by title. Title should be `Sistemas`.
+     * HATEAOS: No needs in this release.
+     **/
     resources: "/issues?", // define item url to issues
+    /**
+     * Method POST
+     * Input (fields): http://siscomando.github.io/api/issues.html#create-an-issue
+     * HATEAOS: No needs in this release.
+     * NOTE: This `returns` NOT is important for `webapp`.
+     **/
     create: "/issues/", // HTTP POST verb
+    /**
+     * Method PATCH
+     * Url: http://siscomando.github.io/api/issues.html#edit-an-issue
+     * Not implemented in webapp #NOIM.
+     * HATEAOS: No needs in this release.
+     **/
     update: "/issues/", // HTTP PATCH verb
+    /**
+     * Method DELETE
+     * Not implemented. Low-level management ;)
+     **/
     delete: "/issues/", // HTTP DELETE verb
+    /**
+     * *****************************  NOTE  ***********************************
+     * GET Sever side events.
+     *
+     * This url is not defined because I have thought that this could be other
+     * server. It's required!
+     **/
     stream: "/issues"
   },
   users: {
     pattern: "USER_ID", // The pattern to replace by ID
+    /**
+     * GET: http://siscomando.github.io/api/users.html#single-user
+     * HATEAOS: No needs in this release.
+     * NOTE: For gets is allows user_id or username. For webapp `username`
+     * is localpart (user) from e-mail. See:
+     * https://en.wikipedia.org/wiki/Email_address#Local_part
+     **/
     item: "/users/USER_ID?", // define item url to users
+    /**
+     * Method GET
+     * Output: http://siscomando.github.io/api/users.html#all-users
+     * HATEAOS: No needs in this release.
+     * NOTE: This url must allow handling of max_results querystring.
+     * This property is required for lp-input element.
+     **/
     resources: "/users?", // define item url to users
     create: "/users", // POST must be used by client.
     update: undefined, // not implemented
     delete: undefined, // not implemented
+    /**
+     * *****************************  NOTE  ***********************************
+     * GET Sever side events.
+     *
+     * This url is not defined because I have thought that this could be other
+     * server. It's NOT required!
+     **/
     stream: undefined // not implemented
   },
   // `me` scope is useful for current actions. Gets /me will return always an item.
   me: {
     pattern: "USER_ID", // The pattern to replace by ID
+    /**
+     * Method GET
+     * Output: http://siscomando.github.io/api/users.html#authenticated-user
+     **/
     item: "/me/",
     resource: "/me/",
     create: undefined, // not implemented
@@ -91,15 +202,33 @@ siscomando.urls = {
     // item scope.
     update: "/me/USER_ID",
     delete: undefined, // not implemented
+    /**
+     * *****************************  NOTE  ***********************************
+     * GET Sever side events.
+     *
+     * This url is not defined because I have thought that this could be other
+     * server. It's NOT required!
+     **/
     stream: undefined // not implemented
   },
   stars: {
     pattern: "STAR_ID", // The pattern to replace by ID
     item: "/stars/STAR_ID?", // define item url to users
     resources: "/stars?", // define item url to users
+    /**
+     * Method POST
+     * url: No defined yet.
+     **/
     create: "/stars/new", // POST must be used by client.
     update: undefined, // not implemented
     delete: undefined, // not implemented
+    /**
+     * *****************************  NOTE  ***********************************
+     * GET Sever side events.
+     *
+     * This url is not defined because I have thought that this could be other
+     * server. It's NOT required!
+     **/
     stream: undefined // not implemented
   },
 }
