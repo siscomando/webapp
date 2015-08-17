@@ -15215,7 +15215,9 @@ core-icon .pallete-icon-color .autumn {
       */
       getIssue: function() {
           var ajaxLocal = this.$.coreAjaxIssues;
-          this.sseurl = siscomando.helpers.comments.stream.getUrlByIssue(ajaxLocal.response._id);
+          if (ajaxLocal !== null) {
+              this.sseurl = siscomando.helpers.comments.stream.getUrlByIssue(ajaxLocal.response._id);
+          }          
       },
       /**
        * `setUrlOldest` defines an url with querystring page defined. The
