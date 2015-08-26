@@ -136,7 +136,7 @@ def register_new():
 		flash('The typed User or Password is invalid', 'error')
 
 	try:
-		user.save()
+		user.save(to_change_pass=True)
 		flash('Account created with successfully!')
 		return redirect(url_for('login'))
 	except:
