@@ -12788,7 +12788,7 @@ core-toolbar paper-icon-button, core-toolbar paper-icon {
   height: 100%;
   font-family: 'RobotoDraft', sans-serif;
   background-color: #3B4D64;
-  overflow: scroll;
+  overflow: auto;
  }
 
 /* To ensure your styling works under the Shadow DOM polyfill, see
@@ -12843,7 +12843,7 @@ paper-dropdown core-menu {
 }
 .mainContent {
   height: 100%;
-  position: relative;    
+  position: relative;
   display: block;
   padding-right: 12px;
 }
@@ -12862,17 +12862,17 @@ core-menu h5 {
 	opacity: 0.6;
 }
 core-menu .counterItems {
-	font-size: 0.65em; 
-	border-radius: 4px; 
-	-webkit-border-radius: 4px; 
-	-moz-border-radius: 4px; 
-	padding: 2px; 
-	background: rgba(255,255,255,0.5); 
-	float: left; 
-	margin-top: 12px; 
-	margin-right: 5px; 
-	color: #3B4D64; 
-	min-width: 10px; 
+	font-size: 0.65em;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	padding: 2px;
+	background: rgba(255,255,255,0.5);
+	float: left;
+	margin-top: 12px;
+	margin-right: 5px;
+	color: #3B4D64;
+	min-width: 10px;
 	text-align: center;
 }
 core-submenu {
@@ -12886,10 +12886,10 @@ core-submenu::shadow #submenu {
 	cursor: pointer;
 }
 core-submenu div.item-content{
-	cursor: pointer;	
+	cursor: pointer;
 }
 core-submenu.core-selected {
-	font-weight: 300;	
+	font-weight: 300;
 }
 /* box profile */
 .profileMenu {
@@ -12898,7 +12898,7 @@ core-submenu.core-selected {
 	float: left;
 	left: 0;
 	bottom: 0;
-	padding: 12px; 	
+	padding: 12px;
 	height: 42px; /* height total is 54px */
 	background-color: #19293E;
 	color: #FFF;
@@ -12906,7 +12906,7 @@ core-submenu.core-selected {
 }
 #avatar {
 	width: 47px;
-	height: 47px;	
+	height: 47px;
 	padding: 0px 5px 5px 5px;
 }
 #avatar img {
@@ -12954,7 +12954,6 @@ core-toolbar paper-icon-button {
 @media (min-width: 481px) {
 
 }
-
 </style>
     <!-- get from remote -->
     <sc-sse stream="{{stream}}" channel="{{channel}}" alias="{{alias}}"></sc-sse>
