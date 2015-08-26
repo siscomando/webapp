@@ -38,9 +38,9 @@ class User(db.Document):
     avatar = db.StringField() # URL
     status_online = db.BooleanField(default=True)
     md5_email = db.StringField()
-    token = db.StringField()
+    token = db.StringField(unique=True)
     roles = db.ListField(db.StringField()) # users, admins, superusers
-    owner = db.StringField()
+    owner = db.ReferenceField('User')
 
 
     meta = {'queryset_class': CustomQuerySet}
@@ -95,9 +95,13 @@ class User(db.Document):
         return check_password_hash(self.password, password)
 
     def save(self, *args, **kwargs):
+        # to_change_pass is argument that works as workaround to set
+        # new password intentionally by user. Default is False.
+        to_change_pass = kwargs.get('to_change_pass', False)
         self.validate_email()
         self.set_shortname()
-        self.set_password(self.password)
+        if to_change_pass:
+            self.set_password(self.password)
         self.md5_email = md5.md5(self.email).hexdigest()
         super(User, self).save(*args, **kwargs)
 
