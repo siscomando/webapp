@@ -14,13 +14,13 @@
 var siscomando = siscomando || {};
 
 // RESTApi Settings
-siscomando.apiSERVER = "http://localhost:9014"; // YOUR_URL_API_ADDRESS
+siscomando.apiSERVER = new URL("http://localhost:9014").toString(); // YOUR_URL_API_ADDRESS
 siscomando.apiPREFIX = "/api/v2"; // YOUR_URL_API_PREFIX. Removes slash from the end.
-siscomando.apiURL = siscomando.apiSERVER + siscomando.apiPREFIX;
+siscomando.apiURL = new URL(siscomando.apiPREFIX, siscomando.apiSERVER).toString();
 // Push Notifications Settings: stream for server side events.
-siscomando.streamSERVER = "http://notes.local"; // YOUR_URL_API_ADDRESS
+siscomando.streamSERVER = new URL("http://notes.local").toString(); // YOUR_URL_API_ADDRESS
 siscomando.streamPREFIX = "/v1"; // YOUR_URL_API_PREFIX. Removes slash from the end.
-siscomando.streamURL = siscomando.streamSERVER + siscomando.streamPREFIX;
+siscomando.streamURL = new URL(siscomando.streamPREFIX, siscomando.streamSERVER);
 
 /**
  * This `urls` are based in the documentation Siscomando's API. The goal here is
